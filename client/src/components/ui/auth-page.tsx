@@ -1,19 +1,84 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./button";
-import {
-  AppleIcon,
-  AtSignIcon,
-  ChevronLeftIcon,
-  GithubIcon,
-  Grid2x2PlusIcon,
-} from "lucide-react";
-import { Input } from "./input";
+import { ChevronLeftIcon } from "lucide-react";
 import TransitionLink from "../transitionLink";
+import FormStepper from "../formStepper";
+import { IUser, USER_ROLE } from "@/types/user.types";
+import { Input } from "./input";
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./card";
+import { uploadJSONToPinata } from "@/lib/pinata";
+import { profileContract } from "@/abi";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function AuthPage() {
+  const [currentStep, setCurrentStep] = useState(1);
+  const steps = [1, 2, 3];
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+  const router = useRouter();
+
+  const { address } = useAccount();
+  const { writeContractAsync } = useWriteContract();
+  const { isSuccess } = useWaitForTransactionReceipt({
+    hash: txHash,
+  });
+
+  const [formData, setFormData] = useState<IUser>({
+    username: "",
+    userAddress: "",
+    role: "client",
+  });
+
+  const updateFormData = (newData: Partial<IUser>) => {
+    setFormData((prev) => ({
+      ...prev,
+      ...newData,
+    }));
+  };
+
+  const handleRoleSelect = (role: USER_ROLE) => {
+    updateFormData({ role: role });
+    updateFormData({ userAddress: address });
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  const handleUserDetails = (username: string) => {
+    updateFormData({ username });
+    setCurrentStep((prev) => prev + 1);
+  };
+
+  async function handleSave() {
+    const profileCid = await uploadJSONToPinata(formData);
+
+    const hash = await writeContractAsync({
+      address: profileContract.address,
+      abi: profileContract.abi,
+      functionName: "setProfile",
+      args: [formData.username, profileCid, formData.role],
+    });
+    setTxHash(hash);
+  }
+
+  // const handleFormSubmit = () => {
+  //   // console.log("Form submitted with data:", formData);
+  // };
+
+  React.useEffect(() => {
+    if (isSuccess && txHash) {
+      toast.success("Profile saved!");
+      router.push(`/user/${formData.userAddress}`);
+      setTxHash(undefined);
+    }
+  }, [isSuccess, txHash]);
+
   // Variants for staggering
   const container = {
     hidden: { opacity: 0 },
@@ -59,100 +124,113 @@ export function AuthPage() {
         animate="show"
         exit="exit"
       >
-        <motion.div className="flex items-center gap-2" variants={item}>
-          <Grid2x2PlusIcon className="size-6" />
-          <p className="text-xl font-semibold">Acme</p>
-        </motion.div>
+        <FormStepper
+          setCurrentStep={setCurrentStep}
+          steps={steps}
+          currentStep={currentStep}
+        />
+        {currentStep === 1 && (
+          <>
+            <h1 className="text-2xl my-4 text-center font-medium tracking-tight">
+              Join as a client or freelancer
+            </h1>
 
-        <motion.div className="flex flex-col space-y-1" variants={item}>
-          <h1 className="font-heading text-2xl font-bold tracking-wide">
-            Sign In or Join Now!
-          </h1>
-          <p className="text-muted-foreground text-base">
-            login or create your asme account.
-          </p>
-        </motion.div>
+            <motion.div className="space-y-2" variants={item}>
+              <Button
+                type="button"
+                size="lg"
+                className="w-full"
+                onClick={() => handleRoleSelect("client")}
+              >
+                Continue as a client
+              </Button>
+              <Button
+                type="button"
+                size="lg"
+                className="w-full"
+                onClick={() => handleRoleSelect("freelancer")}
+              >
+                Continue as a freelancer
+              </Button>
+            </motion.div>
 
-        <motion.div className="space-y-2" variants={item}>
-          <Button type="button" size="lg" className="w-full">
-            <GoogleIcon className="size-4 me-2" />
-            Continue with Google
-          </Button>
-          <Button type="button" size="lg" className="w-full">
-            <AppleIcon className="size-4 me-2" />
-            Continue with Apple
-          </Button>
-          <Button type="button" size="lg" className="w-full">
-            <GithubIcon className="size-4 me-2" />
-            Continue with GitHub
-          </Button>
-        </motion.div>
-
-        <motion.div variants={item}>
-          <AuthSeparator />
-        </motion.div>
-
-        <motion.form className="space-y-2" variants={item}>
-          <p className="text-muted-foreground text-start text-xs">
-            Enter your email address to sign in or create an account
-          </p>
-          <div className="relative h-max">
+            <motion.p
+              className="text-muted-foreground mt-8 text-sm"
+              variants={item}
+            >
+              By clicking continue, you agree to our{" "}
+              <a
+                href="#"
+                className="hover:text-primary underline underline-offset-4"
+              >
+                Terms of Service
+              </a>{" "}
+              and{" "}
+              <a
+                href="#"
+                className="hover:text-primary underline underline-offset-4"
+              >
+                Privacy Policy
+              </a>
+              .
+            </motion.p>
+          </>
+        )}
+        {currentStep === 2 && (
+          <>
+            <h1>How do you want to be seen on this platform.</h1>
             <Input
-              placeholder="your.email@example.com"
-              className="peer ps-9"
-              type="email"
+              type="text"
+              placeholder="Enter your username"
+              onChange={(e) =>
+                setFormData({ ...formData, username: e.target.value })
+              }
             />
-            <div className="text-muted-foreground pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
-              <AtSignIcon className="size-4" aria-hidden="true" />
-            </div>
-          </div>
-          <Button type="button" className="w-full">
-            <span>Continue With Email</span>
-          </Button>
-        </motion.form>
-
-        <motion.p
-          className="text-muted-foreground mt-8 text-sm"
-          variants={item}
-        >
-          By clicking continue, you agree to our{" "}
-          <a
-            href="#"
-            className="hover:text-primary underline underline-offset-4"
-          >
-            Terms of Service
-          </a>{" "}
-          and{" "}
-          <a
-            href="#"
-            className="hover:text-primary underline underline-offset-4"
-          >
-            Privacy Policy
-          </a>
-          .
-        </motion.p>
+            <Button onClick={() => handleUserDetails(formData.username)}>
+              Confirm Username
+            </Button>
+          </>
+        )}
+        {currentStep === 3 && (
+          <ReviewFormDetailsCard
+            formData={formData}
+            handleSubmit={handleSave}
+          />
+        )}
       </motion.div>
     </main>
   );
 }
 
-const GoogleIcon = (props: React.ComponentProps<"svg">) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    {...props}
-  >
-    <path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669   C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62   c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401   c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
-  </svg>
-);
-
-const AuthSeparator = () => {
+interface ReviewFormDetailsCardProps {
+  formData: IUser;
+  handleSubmit: () => void;
+}
+const ReviewFormDetailsCard = ({
+  formData,
+  handleSubmit,
+}: ReviewFormDetailsCardProps) => {
   return (
-    <div className="flex w-full items-center justify-center">
-      <div className="bg-border h-px w-full" />
-      <span className="text-muted-foreground px-2 text-xs">OR</span>
-      <div className="bg-border h-px w-full" />
-    </div>
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="font-medium">Review your details</CardTitle>
+      </CardHeader>
+
+      <CardContent className="space-y-2">
+        <p>
+          <span className="font-semibold">Role:</span> {formData.role}
+        </p>
+        <p>
+          <span className="font-semibold">Username:</span> {formData.username}
+        </p>
+        <p className="truncate">
+          <span className="font-semibold">Address:</span> {formData.address}
+        </p>
+      </CardContent>
+
+      <CardFooter className="flex flex-col items-start gap-2">
+        <Button onClick={handleSubmit}>Submit</Button>
+      </CardFooter>
+    </Card>
   );
 };

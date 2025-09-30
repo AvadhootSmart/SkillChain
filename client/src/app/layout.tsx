@@ -1,5 +1,6 @@
 import { Providers } from "@/providers/provider";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 export default function RootLayout({
   children,
@@ -12,6 +13,7 @@ export default function RootLayout({
         <Providers>
           <main className="max-w-7xl mx-auto">{children}</main>
         </Providers>
+        <Toaster />
       </body>
     </html>
   );

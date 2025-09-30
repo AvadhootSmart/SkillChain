@@ -5,6 +5,7 @@ import Page from "@/components/pageWrapper";
 import { Hero } from "@/components/ui/animated-hero";
 
 export default function HomePage() {
+
   return (
     <>
       <Navbar />
