@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/navigation";
-import { MoveRight } from "lucide-react";
+import { MoveRight, ToolCase } from "lucide-react";
+import Link from "next/link";
 
 function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
@@ -85,6 +86,11 @@ function Hero() {
             <Button onClick={handleGetStarted} size="lg" className="gap-4">
               Get Started <MoveRight className="w-4 h-4" />
             </Button>
+            <Link href="/explore/jobs">
+              <Button size="lg" className="gap-4">
+                View Jobs <ToolCase className="w-4 h-4" />
+              </Button>
+            </Link>
             {/* </TransitionLink> */}
           </div>
         </div>

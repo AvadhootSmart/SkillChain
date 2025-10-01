@@ -74,7 +74,7 @@ export function AuthPage() {
   React.useEffect(() => {
     if (isSuccess && txHash) {
       toast.success("Profile saved!");
-      router.push(`/user/${formData.userAddress}`);
+      router.push(`/dashboard`);
       setTxHash(undefined);
     }
   }, [isSuccess, txHash]);
@@ -224,7 +224,7 @@ const ReviewFormDetailsCard = ({
           <span className="font-semibold">Username:</span> {formData.username}
         </p>
         <p className="truncate">
-          <span className="font-semibold">Address:</span> {formData.address}
+          <span className="font-semibold">Address:</span> {formData.userAddress}
         </p>
       </CardContent>
 

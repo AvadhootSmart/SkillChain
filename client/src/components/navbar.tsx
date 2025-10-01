@@ -12,13 +12,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import TransitionLink from "./transitionLink";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/", label: "Home", active: true },
   { href: "/", label: "About" },
-  { href: "/", label: "Contact" },
-  { href: "/playground", label: "Playground" },
+  { href: "/dashboard", label: "Dashboard" },
 ];
 
 export function Navbar() {
@@ -95,12 +95,10 @@ export function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <a href="#">Sign In</a>
-          </Button>
-          <Button asChild size="sm" className="text-sm">
-            <a href="#">Get Started</a>
-          </Button>
+          <ConnectButton />
+          {/* <Button asChild size="sm" className="text-sm"> */}
+          {/*   <a href="#">Get Started</a> */}
+          {/* </Button> */}
         </div>
       </div>
     </header>
