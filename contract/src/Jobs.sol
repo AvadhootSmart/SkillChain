@@ -89,6 +89,7 @@ contract JobsContract {
 
     
     function getJobsByClientAddress(address clientAddress) external view returns (Job[] memory jobs){
+        require(_clientJobs[clientAddress].length > 0, "No jobs found");
         return _clientJobs[clientAddress];
     }
 

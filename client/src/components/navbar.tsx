@@ -1,4 +1,4 @@
-// import Logo from "@/components/navbar-components/logo"
+'use client'
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -13,15 +13,17 @@ import {
 } from "@/components/ui/popover";
 import TransitionLink from "./transitionLink";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useConnection } from "wagmi";
 
 // Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
-  { href: "/", label: "Home", active: true },
-  { href: "/", label: "About" },
-  { href: "/dashboard", label: "Dashboard" },
-];
 
 export function Navbar() {
+  const { isConnected, address } = useConnection();
+  const navigationLinks = [
+    { href: "/", label: "Home", active: true },
+    { href: "/explore/jobs", label: "Explore" },
+    { href: address ? "/dashboard" : "/sign-up", label: address ? "Dashboard" : "Sign Up" },
+  ];
   return (
     <header className="px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 // import TransitionLink from "../transitionLink";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useConnection } from "wagmi";
 import { useRouter } from "next/navigation";
 import { MoveRight, ToolCase } from "lucide-react";
 import Link from "next/link";
@@ -14,7 +14,7 @@ function Hero() {
 
   const router = useRouter();
   const { openConnectModal } = useConnectModal();
-  const { isConnected, address } = useAccount();
+  const { isConnected, address } = useConnection();
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {

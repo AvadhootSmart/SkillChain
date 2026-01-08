@@ -1,6 +1,6 @@
-import { Providers } from "@/providers/provider";
+import { Navbar } from "@/components/navbar";
 import "./globals.css";
-import { Toaster } from "sonner";
+import ClientRoot from "@/lib/config";
 
 export default function RootLayout({
   children,
@@ -10,10 +10,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>
-          <main className="max-w-7xl mx-auto">{children}</main>
-        </Providers>
-        <Toaster />
+        <ClientRoot>
+          <Navbar />
+          {children}
+        </ClientRoot>
       </body>
     </html>
   );

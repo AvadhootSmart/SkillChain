@@ -9,7 +9,7 @@ interface TransitionState {
 
 export const useTransitionStore = create<TransitionState>((set) => ({
   isTransitioning: false,
-  duration: 400,
+  duration: 800,
   startTransition: () => set({ isTransitioning: true }),
   endTransition: () => set({ isTransitioning: false }),
 }));

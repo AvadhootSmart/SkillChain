@@ -3,20 +3,19 @@
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { foundry, localhost } from "wagmi/chains";
-import { WagmiProvider } from "wagmi";
-import { http } from "viem";
+import { foundry } from "wagmi/chains";
+import { WagmiProvider , http} from "wagmi";
 
 const foundryRpcUrl = "http://127.0.0.1:8545";
-const config = getDefaultConfig({
-  appName: "SkillChain",
-  projectId: "your-project-id",
+
+export const config = getDefaultConfig({
+    appName: "SkillChain",
+    projectId: "YOUR_PROJECT_ID",
   // chains: [foundry, sepolia],
   chains: [foundry],
   transports: {
     // [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_URL!),
     [foundry.id]: http(foundryRpcUrl),
-    // [localhost.id]: http("http://127.0.0.1:8545"),
   },
 });
 

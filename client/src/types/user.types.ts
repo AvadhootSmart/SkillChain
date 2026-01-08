@@ -1,10 +1,13 @@
-export type USER_ROLE = "client" | "freelancer";
+export enum UserRole {
+  Client = 0,
+  Freelancer = 1
+}
 
 export interface IUser {
   userAddress: string;
   username: string;
   email?: string;
-  role: USER_ROLE;
+  role: UserRole;
 }
 
 

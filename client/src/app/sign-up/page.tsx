@@ -3,9 +3,9 @@ import { AuthPage } from "@/components/ui/auth-page";
 
 const page = () => {
   return (
-    <Page>
+    <main>
       <AuthPage />
-    </Page>
+    </main>
   );
 };
 

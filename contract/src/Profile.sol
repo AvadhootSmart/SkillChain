@@ -3,11 +3,15 @@ pragma solidity ^0.8.24;
 
 contract UserProfile {
     uint256 private userID_counter;
+    enum Role {
+        Client,
+        Freelancer
+    }
     struct Profile {
         uint256 userID;
         string username;
         string cid; 
-        string role; //client, freelancer
+        Role role; 
         address userAddress;
     }
 
@@ -16,7 +20,7 @@ contract UserProfile {
     mapping(address userAddress => Profile) private _profiles;
     mapping(string username => address) private _usernameOwner;
 
-    function setProfile(string calldata username, string calldata cid, string calldata role) external {
+    function setProfile(string calldata username, string calldata cid, Role role) external {
         require(bytes(username).length > 0, "Username required");
         require(bytes(cid).length > 0, "CID required");
 
@@ -49,6 +53,7 @@ contract UserProfile {
     }
 
     function getProfileByAddress(address user) external view returns (Profile memory userProfile) {
+        require(_profiles[user].userAddress == user, "User not found");
         return _profiles[user];
     }
 
