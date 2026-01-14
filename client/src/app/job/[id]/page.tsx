@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useReadContract, useAccount } from "wagmi";
-import { jobsContract } from "@/abi";
-import { fetchFromPinata } from "@/lib/pinata";
+import { useReadContract, useConnection, useWaitForTransactionReceipt } from "wagmi";
+import { jobsContract, proposalsContract } from "@/abi";
+import { fetchFromPinata, uploadJSONToPinata } from "@/lib/pinata";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,11 +18,9 @@ import {
   ChevronLeft,
   Clock,
   ShieldCheck,
-  User,
   Briefcase,
   Send,
   FileText,
-  ArrowLeft,
   Calendar,
   Wallet,
   CheckCircle2,
@@ -35,6 +33,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import TransitionLink from "@/components/transitionLink";
 import { useUserStore } from "@/store/user.store";
+import { toast } from "sonner";
+import { simulateContract, writeContract } from "@wagmi/core";
+import { config } from "@/providers/provider";
 
 interface IJob {
   title: string;
@@ -50,11 +51,16 @@ interface IJob {
 const JobDetailsPage = () => {
   const { id } = useParams();
   const router = useRouter();
-  const { isConnected } = useAccount();
+  const { isConnected } = useConnection();
   const [job, setJob] = useState<IJob | null>(null);
   const [loading, setLoading] = useState(true);
   const [proposalText, setProposalText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
+
+  const { isLoading: isTxLoading, isSuccess } = useWaitForTransactionReceipt({
+    hash: txHash,
+  });
   const { user } = useUserStore();
 
   // Contract Read for job metadata
@@ -97,15 +103,43 @@ const JobDetailsPage = () => {
     getJobDetails();
   }, [jobData]);
 
-  const handleSendProposal = async () => {
-    setIsSubmitting(true);
-    // Logic for sending proposal will go here
-    setTimeout(() => {
+  React.useEffect(() => {
+    if (isSuccess) {
+      toast.success("Proposal submitted successfully!");
+      setTxHash(undefined);
+    }
+  }, [isSuccess]);
+
+  async function handleSendProposal() {
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const proposalCid = await uploadJSONToPinata({
+        description: proposalText,
+        timestamp: new Date().toISOString(),
+      });
+
+      const { request } = await simulateContract(config, {
+        address: proposalsContract.address,
+        abi: proposalsContract.abi,
+        functionName: "CreateProposal",
+        args: [proposalCid, BigInt(id as string)],
+      });
+
+      const hash = await writeContract(config, request);
+
+      setTxHash(hash);
+    } catch (error: any) {
+      console.error("Proposal creation error:", error);
+      toast.error(error.message || "Failed to create proposal");
+    } finally {
       setIsSubmitting(false);
-      setProposalText("");
-      // toast.success("Proposal sent successfully!");
-    }, 2000);
-  };
+    }
+  }
 
   if (loading) {
     return (
@@ -233,7 +267,6 @@ const JobDetailsPage = () => {
               </Card>
             </motion.div>
 
-
             {user?.role === 1 && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -274,14 +307,15 @@ const JobDetailsPage = () => {
                       className="w-full h-14 rounded-2xl font-bold text-lg bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all active:scale-[0.98] gap-2"
                       onClick={handleSendProposal}
                       disabled={
-                        !isConnected || isSubmitting || proposalText.length < 50
+                        !isConnected || isSubmitting || proposalText.length < 50 || txHash !== undefined
                       }
                     >
                       {isSubmitting
                         ? "Processing..."
                         : isConnected
                           ? "Send Proposal"
-                          : "Connect Wallet to Apply"}
+                          : "Connect Wallet to Apply"
+                        }
                       <Send
                         size={20}
                         className={cn(isSubmitting ? "animate-pulse" : "")}
@@ -369,7 +403,6 @@ const JobDetailsPage = () => {
                 </CardContent>
               </Card>
             </motion.div>
-
           </div>
         </div>
       </div>

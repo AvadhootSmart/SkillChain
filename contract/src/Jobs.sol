@@ -19,7 +19,6 @@ contract JobsContract {
 
     mapping (uint256 jobID => Job) private _jobs;
     mapping(address clientAddress => Job[]) private _clientJobs;
-    mapping(uint256 jobID => address) private _jobOwner;
 
     event JobCreated(address indexed clientAddress, uint256 jobID, string jobCID, uint256 amount);
     event FreelancerHired(address indexed freelancerAddress, uint256 jobID);
@@ -43,8 +42,7 @@ contract JobsContract {
 
         _jobs[jobID] = job;
         _clientJobs[msg.sender].push(job);
-        _jobOwner[jobID] = msg.sender;
-
+        
         emit JobCreated(msg.sender, jobID, jobCID, msg.value);
     }
 
@@ -94,7 +92,7 @@ contract JobsContract {
     }
 
     function getJobOwner(uint256 jobID) external view returns (address client){
-        return _jobOwner[jobID];
+        return _jobs[jobID].client;
     }
 }
 

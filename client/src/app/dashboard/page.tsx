@@ -1,6 +1,6 @@
 "use client";
 
-import { jobsContract, profileContract } from "@/abi";
+import { jobsContract, profileContract, proposalsContract } from "@/abi";
 import { CreateJobDialog } from "@/components/popups/createJobPopup";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,8 @@ import {
   LayoutDashboard,
   CheckCircle2,
   User,
+  Clock,
+  FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
@@ -32,6 +34,8 @@ import { IconEthereum } from "@/icons/ethereum";
 import { JobCard } from "@/components/job-card";
 
 import { useUserStore } from "@/store/user.store";
+import { Badge } from "@/components/ui/badge";
+import { formatDistanceToNow } from "date-fns";
 
 const DashboardPage = () => {
   const { isConnected, address } = useConnection();
@@ -45,6 +49,7 @@ const DashboardPage = () => {
   });
 
   const [allJobs, setAllJobs] = React.useState<any>([]);
+  const [allProposals, setAllProposals] = React.useState<any>([]);
   const [hasProfile, setHasProfile] = React.useState(false);
 
   // Query profile
@@ -61,7 +66,7 @@ const DashboardPage = () => {
     },
   });
 
-  // Query jobs
+  // Query jobs (Client view)
   const {
     data: jobs,
     isLoading: jobsLoading,
@@ -71,7 +76,21 @@ const DashboardPage = () => {
     functionName: "getJobsByClientAddress",
     args: address ? [address] : undefined,
     query: {
-      enabled: !!address && hasProfile,
+      enabled: !!address && hasProfile && profile.role === UserRole.Client,
+    },
+  });
+
+  // Query proposals (Freelancer view)
+  const {
+    data: proposals,
+    isLoading: proposalsLoading,
+    error: proposalsError,
+  } = useReadContract({
+    ...proposalsContract,
+    functionName: "getFreelancersProposals",
+    args: address ? [address] : undefined,
+    query: {
+      enabled: !!address && hasProfile && profile.role === UserRole.Freelancer,
     },
   });
 
@@ -97,7 +116,9 @@ const DashboardPage = () => {
 
   // Fetch jobs from Pinata
   React.useEffect(() => {
-    async function fetchData(jobInfos: { jobID: string; jobCID: string }[]) {
+    async function fetchJobData(
+      jobInfos: { jobID: string; jobCID: string }[],
+    ) {
       try {
         const data = await Promise.all(
           jobInfos.map(async (info) => {
@@ -107,7 +128,7 @@ const DashboardPage = () => {
         );
         setAllJobs(data);
       } catch (error) {
-        console.error("Error fetching from Pinata:", error);
+        console.error("Error fetching jobs from Pinata:", error);
       }
     }
 
@@ -118,19 +139,77 @@ const DashboardPage = () => {
           jobID: job.jobID.toString(),
           jobCID: job.jobCID,
         }));
-        
+
       if (jobInfos.length > 0) {
-        fetchData(jobInfos);
+        fetchJobData(jobInfos);
       } else {
         setAllJobs([]);
       }
     }
   }, [jobs, jobsLoading, jobsError]);
 
+  // Fetch proposals from Pinata
+  React.useEffect(() => {
+    async function fetchProposalData(
+      proposalInfos: {
+        proposalID: string;
+        proposalCID: string;
+        jobID: string;
+        approved: boolean;
+      }[],
+    ) {
+      try {
+        const data = await Promise.all(
+          proposalInfos.map(async (info) => {
+            const pinataData = await fetchFromPinata(info.proposalCID);
+            return {
+              ...pinataData,
+              proposalID: info.proposalID,
+              jobID: info.jobID,
+              approved: info.approved,
+              cid: info.proposalCID,
+            };
+          }),
+        );
+        setAllProposals(data);
+      } catch (error) {
+        console.error("Error fetching proposals from Pinata:", error);
+      }
+    }
+
+    if (
+      proposals &&
+      !proposalsLoading &&
+      !proposalsError &&
+      Array.isArray(proposals)
+    ) {
+      const proposalInfos = proposals
+        .filter((p: any) => p.proposalCID)
+        .map((p: any) => ({
+          proposalID: p.proposalID.toString(),
+          proposalCID: p.proposalCID,
+          jobID: p.jobID.toString(),
+          approved: p.approved,
+        }));
+
+      if (proposalInfos.length > 0) {
+        fetchProposalData(proposalInfos);
+      } else {
+        setAllProposals([]);
+      }
+    }
+  }, [proposals, proposalsLoading, proposalsError]);
+
   const filteredJobs = allJobs.filter(
     (job: any) =>
       job.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       job.category?.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const filteredProposals = allProposals.filter(
+    (p: any) =>
+      p.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.jobID?.toString().includes(searchQuery),
   );
 
   if (!isConnected) {
@@ -181,6 +260,10 @@ const DashboardPage = () => {
     );
   }
 
+  const isClient = profile.role === UserRole.Client;
+  const isLoading = isClient ? jobsLoading : proposalsLoading;
+  const displayItems = isClient ? filteredJobs : filteredProposals;
+
   return (
     <div className="container mx-auto max-w-7xl pt-8 pb-20 px-4">
       {/* Header Section */}
@@ -195,13 +278,13 @@ const DashboardPage = () => {
           <p className="text-muted-foreground mt-1 flex items-center gap-2">
             <User size={16} />
             <span className="capitalize">
-              {profile.role === UserRole.Client ? "Client" : "Freelancer"}
+              {isClient ? "Client" : "Freelancer"}
             </span>{" "}
             Profile • {address?.slice(0, 6)}...{address?.slice(-4)}
           </p>
         </div>
         <div className="flex gap-3">
-          {isConnected && hasProfile && profile.role === UserRole.Client && (
+          {isConnected && hasProfile && isClient && (
             <CreateJobDialog>
               <Button
                 size="lg"
@@ -219,30 +302,25 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
         {[
           {
-            label:
-              profile.role === UserRole.Client
-                ? "Active Jobs"
-                : "Assigned Jobs",
-            value: allJobs.length,
+            label: isClient ? "Active Jobs" : "Proposals Sent",
+            value: isClient ? allJobs.length : allProposals.length,
             icon: Briefcase,
             color: "text-blue-500",
           },
           {
-            label: "Completed",
+            label: isClient ? "Completed" : "Jobs Won",
             value: "0",
             icon: CheckCircle2,
             color: "text-green-500",
           },
           {
-            label:
-              profile.role === UserRole.Client ? "Total Spent" : "Total Earned",
+            label: isClient ? "Total Spent" : "Total Earned",
             value: "0.00 ETH",
             icon: IconEthereum,
             color: "text-purple-500",
           },
           {
-            label:
-              profile.role === UserRole.Client ? "Proposals" : "Invitations",
+            label: isClient ? "Proposals Recieved" : "Pending Actions",
             value: "0",
             icon: Search,
             color: "text-orange-500",
@@ -279,9 +357,9 @@ const DashboardPage = () => {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <h2 className="text-2xl font-semibold flex items-center gap-3">
-            Your Job Postings
+            {isClient ? "Your Job Postings" : "Your Proposals"}
             <span className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium">
-              {allJobs.length}
+              {displayItems.length}
             </span>
           </h2>
           <div className="relative w-full md:w-72">
@@ -290,7 +368,7 @@ const DashboardPage = () => {
               size={18}
             />
             <Input
-              placeholder="Search jobs..."
+              placeholder={isClient ? "Search jobs..." : "Search proposals..."}
               className="pl-10 rounded-full bg-card"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -298,7 +376,7 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {jobsLoading ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <Card key={i} className="animate-pulse border-border/50">
@@ -311,40 +389,100 @@ const DashboardPage = () => {
               </Card>
             ))}
           </div>
-        ) : filteredJobs.length === 0 ? (
+        ) : displayItems.length === 0 ? (
           <div className="text-center py-20 bg-card/30 rounded-3xl border border-dashed border-border">
             <div className="mx-auto w-16 h-16 bg-muted/20 rounded-full flex items-center justify-center mb-4">
               <Search className="text-muted-foreground" size={32} />
             </div>
-            <h3 className="text-xl font-medium">No jobs found</h3>
+            <h3 className="text-xl font-medium">
+              {isClient ? "No jobs found" : "No proposals sent"}
+            </h3>
             <p className="text-muted-foreground mt-2 mb-6">
               {searchQuery
                 ? "No results match your search criteria."
-                : "You haven't posted any jobs yet."}
+                : isClient
+                  ? "You haven't posted any jobs yet."
+                  : "You haven't submitted any proposals yet."}
             </p>
-            {!searchQuery && (
+            {!searchQuery && isClient && (
               <CreateJobDialog>
                 <Button variant="outline" className="rounded-full">
                   Post your first job
                 </Button>
               </CreateJobDialog>
             )}
+             {!searchQuery && !isClient && (
+               <Link href="/explore">
+                <Button variant="outline" className="rounded-full">
+                  Explore Jobs
+                </Button>
+               </Link>
+             )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
-              {filteredJobs.map((job: any, index: number) => (
-                <motion.div
-                  key={job.cid || index}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <JobCard job={job} />
-                </motion.div>
-              ))}
+              {isClient ? (
+                filteredJobs.map((job: any, index: number) => (
+                  <motion.div
+                    key={job.cid || index}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <JobCard job={job} />
+                  </motion.div>
+                ))
+              ) : (
+                filteredProposals.map((proposal: any) => (
+                   <motion.div
+                    key={proposal.cid || proposal.proposalID}
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Card className="hover:shadow-lg transition-all h-full flex flex-col border-border/50 bg-card/50 backdrop-blur-sm group">
+                      <CardHeader className="pb-3">
+                         <div className="flex justify-between items-start mb-2">
+                             <Badge variant="outline" className="font-mono text-xs">Job #{proposal.jobID}</Badge>
+                             <Badge variant={proposal.approved ? "default" : "secondary"} className={proposal.approved ? "bg-green-500 hover:bg-green-600" : "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20"}>
+                                 {proposal.approved ? "Approved" : "Pending"}
+                             </Badge>
+                         </div>
+                        <CardTitle className="text-lg font-bold line-clamp-1">
+                           Application
+                        </CardTitle>
+                         <CardDescription className="flex items-center gap-2 text-xs">
+                          <Clock size={12} />
+                          {proposal.timestamp
+                            ? formatDistanceToNow(new Date(proposal.timestamp), {
+                                addSuffix: true,
+                              })
+                            : "Recently"}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="flex-1">
+                          <div className="prose prose-sm dark:prose-invert">
+                             <p className="line-clamp-3 text-muted-foreground text-sm">
+                                 {proposal.description}
+                             </p>
+                          </div>
+                      </CardContent>
+                      <div className="p-6 pt-0 mt-auto">
+                        <Link href={`/job/${proposal.jobID}`} className="w-full">
+                             <Button variant="secondary" className="w-full gap-2 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                                 View Job Details
+                             </Button>
+                        </Link>
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))
+              )}
             </AnimatePresence>
           </div>
         )}

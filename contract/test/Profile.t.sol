@@ -19,7 +19,7 @@ contract ProfileTest is Test{
         profile.setProfile({
             username: "john",
             cid: "bafy....foldCid",
-            role: "client"
+            role: UserProfile.Role.Client
         });
         vm.stopPrank();
 
@@ -27,7 +27,7 @@ contract ProfileTest is Test{
         profile.setProfile({
             username: "jake",
             cid: "bafy....foldCid",
-            role: "freelancer"
+            role: UserProfile.Role.Freelancer
         });
         vm.stopPrank();
 
@@ -36,13 +36,13 @@ contract ProfileTest is Test{
 
         assertEq(johnProfile.username, "john");
         assertEq(johnProfile.cid, "bafy....foldCid");
-        assertEq(johnProfile.role, "client");
+        assertEq(uint8(johnProfile.role), uint8(UserProfile.Role.Client));
         assertEq(johnProfile.userAddress, john);
 
         //Jake
         assertEq(jakeProfile.username, "jake");
         assertEq(jakeProfile.cid, "bafy....foldCid");
-        assertEq(jakeProfile.role, "freelancer");
+        assertEq(uint8(jakeProfile.role), uint8(UserProfile.Role.Freelancer));
         assertEq(jakeProfile.userAddress, jake);
 
     }
@@ -52,7 +52,7 @@ contract ProfileTest is Test{
         profile.setProfile({
             username: "john",
             cid: "bafy....foldCid",
-            role: "client"
+            role: UserProfile.Role.Client 
         });
         vm.stopPrank();
         assertEq(profile.getUserByUsername("john"), john);
