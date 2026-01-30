@@ -17,10 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "../datePicker";
-import { useWriteContract } from "wagmi";
+import { useWaitForTransactionReceipt } from "wagmi";
 import { jobsContract } from "@/abi";
 import { uploadJSONToPinata } from "@/lib/pinata";
 import { parseEther } from "viem";
+import { simulateContract, writeContract } from "@wagmi/core";
+import { config } from "@/providers/provider";
 
 // --- Zod schema ---
 const jobSchema = z.object({
@@ -44,10 +46,9 @@ export function CreateJobDialog({ children }: { children: React.ReactNode }) {
     budget: 0,
   });
 
-  const { writeContractAsync, isPending } = useWriteContract();
-  // const { isSuccess, isLoading } = useWaitForTransactionReceipt({
-  //   hash: txHash,
-  // });
+  const { isSuccess, isLoading: isTxLoading } = useWaitForTransactionReceipt({
+    hash: txHash,
+  });
 
   const handleChange = (
     key: keyof JobForm,
@@ -63,8 +64,7 @@ export function CreateJobDialog({ children }: { children: React.ReactNode }) {
     const parsed = jobSchema.safeParse(form);
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
-      //eslint-disable-next-line
-      parsed.error.issues.forEach((err: any) => {
+      parsed.error.issues.forEach((err) => {
         if (err.path[0]) {
           fieldErrors[err.path[0] as string] = err.message;
         }
@@ -75,16 +75,17 @@ export function CreateJobDialog({ children }: { children: React.ReactNode }) {
     }
 
     try {
-      // console.log("Submitting job:", parsed.data);
-      const cid = await uploadJSONToPinata(parsed.data);
+      const jobCid = await uploadJSONToPinata(parsed.data);
 
-      const hash = await writeContractAsync({
+      const { request } = await simulateContract(config, {
         address: jobsContract.address,
         abi: jobsContract.abi,
         functionName: "CreateJob",
-        args: [cid],
+        args: [jobCid],
         value: parseEther(parsed.data.budget.toString()),
       });
+
+      const hash = await writeContract(config, request);
       setTxHash(hash);
 
       setForm({
@@ -179,8 +180,11 @@ export function CreateJobDialog({ children }: { children: React.ReactNode }) {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button onClick={handleSubmit} disabled={submitting}>
-            {submitting ? "Creating..." : "Create"}
+          <Button
+            onClick={handleSubmit}
+            disabled={submitting || isTxLoading || isSuccess}
+          >
+            {isTxLoading ? "Confirming..." : submitting ? "Creating..." : "Create"}
           </Button>
         </DialogFooter>
       </DialogContent>

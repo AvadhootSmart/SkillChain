@@ -26,8 +26,8 @@ export async function uploadJSONToPinata(obj: any): Promise<string> {
 
 export async function fetchFromPinata(cid: string): Promise<any> {
   const res = await fetch(
-    // `https://${process.env.NEXT_PUBLIC_PINATA_GATEWAY}/ipfs/${cid}`,
-    `https://gateway.pinata.cloud/ipfs/${cid}`,
+    `https://${process.env.NEXT_PUBLIC_PINATA_GATEWAY}/ipfs/${cid}`,
+    // `https://gateway.pinata.cloud/ipfs/${cid}`,
   );
   const data = await res.json();
   return data;

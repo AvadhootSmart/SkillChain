@@ -1,8 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useReadContract, useConnection, useWaitForTransactionReceipt } from "wagmi";
+import {
+  useReadContract,
+  useConnection,
+  useWaitForTransactionReceipt,
+} from "wagmi";
 import { jobsContract, proposalsContract } from "@/abi";
 import { fetchFromPinata, uploadJSONToPinata } from "@/lib/pinata";
 import { Button } from "@/components/ui/button";
@@ -36,6 +40,7 @@ import { useUserStore } from "@/store/user.store";
 import { toast } from "sonner";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { config } from "@/providers/provider";
+import Link from "next/link";
 
 interface IJob {
   title: string;
@@ -50,7 +55,6 @@ interface IJob {
 
 const JobDetailsPage = () => {
   const { id } = useParams();
-  const router = useRouter();
   const { isConnected } = useConnection();
   const [job, setJob] = useState<IJob | null>(null);
   const [loading, setLoading] = useState(true);
@@ -111,14 +115,16 @@ const JobDetailsPage = () => {
   }, [isSuccess]);
 
   async function handleSendProposal() {
-    if (!isConnected) {
-      toast.error("Please connect your wallet first");
+        if (!isConnected) {
+            toast.error("Please connect your wallet first");
       return;
     }
 
     try {
       setIsSubmitting(true);
       const proposalCid = await uploadJSONToPinata({
+        freelancerName: user?.username,
+        freelancerAddress: user?.userAddress,
         description: proposalText,
         timestamp: new Date().toISOString(),
       });
@@ -170,7 +176,7 @@ const JobDetailsPage = () => {
           animate={{ opacity: 1, x: 0 }}
           className="mb-8"
         >
-          <TransitionLink href="/explore/jobs">
+          <Link href="/explore/jobs">
             <Button
               variant="ghost"
               className="hover:bg-primary/10 transition-colors gap-2 rounded-full"
@@ -178,7 +184,7 @@ const JobDetailsPage = () => {
               <ChevronLeft size={20} />
               Back to Explore
             </Button>
-          </TransitionLink>
+          </Link>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
@@ -307,15 +313,17 @@ const JobDetailsPage = () => {
                       className="w-full h-14 rounded-2xl font-bold text-lg bg-primary hover:bg-primary/90 shadow-xl shadow-primary/20 transition-all active:scale-[0.98] gap-2"
                       onClick={handleSendProposal}
                       disabled={
-                        !isConnected || isSubmitting || proposalText.length < 50 || txHash !== undefined
+                        !isConnected ||
+                        isSubmitting ||
+                        proposalText.length < 50 ||
+                        txHash !== undefined
                       }
                     >
                       {isSubmitting
                         ? "Processing..."
                         : isConnected
                           ? "Send Proposal"
-                          : "Connect Wallet to Apply"
-                        }
+                          : "Connect Wallet to Apply"}
                       <Send
                         size={20}
                         className={cn(isSubmitting ? "animate-pulse" : "")}

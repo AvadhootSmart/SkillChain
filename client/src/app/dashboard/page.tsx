@@ -25,7 +25,6 @@ import {
   CheckCircle2,
   User,
   Clock,
-  FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
@@ -432,7 +431,7 @@ const DashboardPage = () => {
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <JobCard job={job} />
+                    <JobCard job={job} showProposals={true} />
                   </motion.div>
                 ))
               ) : (

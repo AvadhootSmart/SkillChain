@@ -8,18 +8,20 @@ import {
 import { Button } from "./ui/button";
 import { IconEthereum } from "@/icons/ethereum";
 import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
-import { Clock, ExternalLink } from "lucide-react";
+import { Clock, ExternalLink, FileText } from "lucide-react";
 import Link from "next/link";
+import { ProposalsPopup } from "./popups/proposalsPopup";
 
 interface JobCardProps {
   job: any;
+  showProposals?: boolean;
 }
 
-export const JobCard = ({ job }: JobCardProps) => {
-  const jobUrl = `/job/${job.jobID}`;
+export const JobCard = ({ job, showProposals }: JobCardProps) => {
+  const jobUrl = showProposals ? `track/job/${job.jobID}` : `/job/${job.jobID}`;
 
   return (
-    <Card className="group hover:border-primary/50 transition-all duration-300 overflow-hidden bg-card/50 backdrop-blur-sm">
+    <Card className="group hover:border-primary/50 transition-all duration-300 h-full flex flex-col overflow-hidden bg-card/50 backdrop-blur-sm">
       <CardHeader className="pb-4">
         <div className="flex justify-between items-start">
           <span className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-semibold uppercase tracking-wider">
@@ -68,12 +70,23 @@ export const JobCard = ({ job }: JobCardProps) => {
           </div>
         </div>
       </CardContent>
-      <div className="px-6 mt-auto">
-        <Link href={jobUrl}>
+      <div className="px-6 mt-auto pb-6 flex flex-col gap-3">
+        <Link href={jobUrl} className="w-full">
           <Button className="w-full rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-all">
             View Details
           </Button>
         </Link>
+        {showProposals && (
+          <ProposalsPopup jobId={job.jobID}>
+            <Button
+              variant="outline"
+              className="w-full rounded-xl border-primary/20 hover:bg-primary/10 transition-all gap-2"
+            >
+              <FileText size={16} />
+              View Proposals
+            </Button>
+          </ProposalsPopup>
+        )}
       </div>
     </Card>
   );
