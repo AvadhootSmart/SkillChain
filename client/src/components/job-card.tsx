@@ -70,23 +70,12 @@ export const JobCard = ({ job, showProposals }: JobCardProps) => {
           </div>
         </div>
       </CardContent>
-      <div className="px-6 mt-auto pb-6 flex flex-col gap-3">
+      <div className="px-6 mt-auto flex flex-col gap-3">
         <Link href={jobUrl} className="w-full">
-          <Button className="w-full rounded-xl group-hover:bg-primary group-hover:text-primary-foreground transition-all">
+          <Button className="w-full rounded-md group-hover:bg-primary group-hover:text-primary-foreground transition-all">
             View Details
           </Button>
         </Link>
-        {showProposals && (
-          <ProposalsPopup jobId={job.jobID}>
-            <Button
-              variant="outline"
-              className="w-full rounded-xl border-primary/20 hover:bg-primary/10 transition-all gap-2"
-            >
-              <FileText size={16} />
-              View Proposals
-            </Button>
-          </ProposalsPopup>
-        )}
       </div>
     </Card>
   );

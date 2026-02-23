@@ -26,6 +26,7 @@ contract JobsTest is Test{
 
     function testHireFreelancer() public {
         vm.startPrank(john);
+        jobs.CreateJob{value: 1 ether}("job1");
         jobs.HireFreelancer(jane, 1);
 
         assertEq(jobs.getJobByJobID(1).freelancer, jane);
@@ -35,11 +36,11 @@ contract JobsTest is Test{
         vm.startPrank(john);
         jobs.CreateJob{value: 5 ether}("bafy....foldCid");
         jobs.HireFreelancer(jane, 1);
-        jobs.MarkJobCompleted(1);
+        jobs.MarkClientJobCompleted(1);
         vm.stopPrank();
 
         vm.startPrank(jane);
-        jobs.MarkJobCompleted(1);
+        jobs.MarkFLJobCompleted(1, "deliverableCID");
         vm.stopPrank();
 
         assertEq(jobs.getJobByJobID(1).clientApproved, true);

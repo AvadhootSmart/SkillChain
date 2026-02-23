@@ -35,7 +35,6 @@ import { IconEthereum } from "@/icons/ethereum";
 import { formatDistanceToNow } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import TransitionLink from "@/components/transitionLink";
 import { useUserStore } from "@/store/user.store";
 import { toast } from "sonner";
 import { simulateContract, writeContract } from "@wagmi/core";
@@ -50,7 +49,8 @@ interface IJob {
   category: string;
   clientAddress: string;
   amount: string;
-  requirements?: string[];
+  skills?: string[];
+  deliverables?: string;
 }
 
 const JobDetailsPage = () => {
@@ -89,13 +89,6 @@ const JobDetailsPage = () => {
             ...metadata,
             clientAddress: jobInfo.client,
             amount: jobInfo.amount.toString(),
-            // Mocking requirements if they don't exist in metadata
-            requirements: metadata.requirements || [
-              "Solidity",
-              "Tailwind CSS",
-              "Next.js",
-              "Web3.js",
-            ],
           });
         } catch (error) {
           console.error("Error fetching job details:", error);
@@ -115,8 +108,8 @@ const JobDetailsPage = () => {
   }, [isSuccess]);
 
   async function handleSendProposal() {
-        if (!isConnected) {
-            toast.error("Please connect your wallet first");
+    if (!isConnected) {
+      toast.error("Please connect your wallet first");
       return;
     }
 
@@ -258,16 +251,26 @@ const JobDetailsPage = () => {
                       Skill Requirements
                     </h3>
                     <div className="flex flex-wrap gap-3">
-                      {job?.requirements?.map((req, i) => (
+                      {job?.skills?.map((skill, i) => (
                         <Badge
                           key={i}
                           variant="outline"
                           className="px-5 py-2 rounded-xl border-primary/20 bg-primary/5 text-primary hover:bg-primary/10 transition-colors text-sm font-medium"
                         >
-                          {req}
+                          {skill}
                         </Badge>
                       ))}
                     </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-foreground">
+                      <FileText size={20} className="text-primary" />
+                      Key Deliverables
+                    </h3>
+                    <p className="text-muted-foreground leading-relaxed text-lg whitespace-pre-wrap">
+                      {job?.deliverables}
+                    </p>
                   </div>
                 </CardContent>
               </Card>

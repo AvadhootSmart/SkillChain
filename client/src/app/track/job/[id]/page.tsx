@@ -19,6 +19,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
   ChevronLeft,
@@ -27,22 +28,21 @@ import {
   XCircle,
   Users,
   Loader2,
+  Package,
+  ExternalLink,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { IconEthereum } from "@/icons/ethereum";
 import TransitionLink from "@/components/transitionLink";
-import { useUserStore } from "@/store/user.store";
 import { toast } from "sonner";
-import { simulateContract, writeContract } from "@wagmi/core";
+import {
+  simulateContract,
+  writeContract,
+  waitForTransactionReceipt,
+} from "@wagmi/core";
 import { config } from "@/providers/provider";
-
-interface IJob {
-  title: string;
-  description: string;
-  budget: string;
-  category: string;
-  clientAddress: string;
-}
+import { IJob } from "@/types/job.types";
+import { ContractStatusSidebar } from "@/components/contract-status-card";
 
 interface ProposalMetadata {
   freelancerName: string;
@@ -58,57 +58,72 @@ interface ProposalWithMetadata {
   approved: boolean;
   freelancer: string;
   metadata?: ProposalMetadata;
+  rejected?: boolean;
 }
 
 const TrackJobPage = () => {
   const { id } = useParams();
   const { isConnected, address } = useConnection();
-  const { user } = useUserStore();
   const [job, setJob] = useState<IJob | null>(null);
   const [proposals, setProposals] = useState<ProposalWithMetadata[]>([]);
+  const [deliverables, setDeliverables] = useState<Record<
+    string,
+    string
+  > | null>(null);
   const [loading, setLoading] = useState(true);
-  const [dataLoaded, setDataLoaded] = useState({ job: false, proposals: false });
-  const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
-  const [actionLoading, setActionLoading] = useState<bigint | null>(null);
-
-  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
-    hash: txHash,
+  const [dataLoaded, setDataLoaded] = useState({
+    job: false,
+    proposals: false,
+    deliverables: false,
   });
+  const [actionLoading, setActionLoading] = useState<bigint | null>(null);
 
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (isSuccess) {
-      toast.success("Proposal approved successfully!");
-      setTxHash(undefined);
-      queryClient.invalidateQueries({ queryKey: ["proposals", id] });
-      queryClient.invalidateQueries({ queryKey: ["proposalsData", id] });
-    }
-  }, [isSuccess, queryClient, id]);
+  // Removing conflicting global transaction monitoring
+  // Each handler now manages its own transaction lifecycle independently
 
-  useEffect(() => {
-    if (txHash && isConfirming) {
-      setActionLoading(null);
-    }
-  }, [txHash, isConfirming]);
 
-  const { data: jobData, isFetched: isJobFetched, isError: isJobError } = useReadContract({
+  const {
+    data: jobData,
+    isFetched: isJobFetched,
+    isError: isJobError,
+  } = useReadContract({
     ...jobsContract,
     functionName: "getJobByJobID",
     args: id ? [BigInt(id as string)] : undefined,
     query: { enabled: !!id },
   });
 
-  const { data: proposalsData, isFetched: isProposalsFetched, isError: isProposalsError } = useReadContract({
+  const {
+    data: proposalsData,
+    isFetched: isProposalsFetched,
+    isError: isProposalsError,
+  } = useReadContract({
     ...proposalsContract,
     functionName: "getProposalsByJobID",
     args: id ? [BigInt(id as string)] : undefined,
     query: { enabled: !!id },
   });
 
-  // console.log("Job Data:", jobData, "Fetched:", isJobFetched, "Error:", isJobError);
-  // console.log("Proposals Data:", proposalsData, "Fetched:", isProposalsFetched, "Error:", isProposalsError);
+  // console.log(
+  //   "Job Data:",
+  //   jobData,
+  //   "Fetched:",
+  //   isJobFetched,
+  //   "Error:",
+  //   isJobError,
+  // );
+  // console.log(
+  //   "Proposals Data:",
+  //   proposalsData,
+  //   "Fetched:",
+  //   isProposalsFetched,
+  //   "Error:",
+  //   isProposalsError,
+  // );
 
+  //fetches job details
   useEffect(() => {
     if (isJobFetched && jobData) {
       const typedJob = jobData as any;
@@ -116,14 +131,22 @@ const TrackJobPage = () => {
         setJob({
           ...metadata,
           clientAddress: typedJob.client,
+          amount: typedJob.amount,
         });
         setDataLoaded((prev) => ({ ...prev, job: true }));
+      });
+
+      fetchFromPinata(typedJob.deliverableCID).then((metadata) => {
+        console.log("Deliverables:", metadata);
+        setDeliverables(metadata);
+        setDataLoaded((prev) => ({ ...prev, deliverables: true }));
       });
     } else if (isJobFetched && !jobData) {
       setDataLoaded((prev) => ({ ...prev, job: true }));
     }
   }, [jobData, isJobFetched]);
 
+  //loads and sets proposal
   useEffect(() => {
     if (isProposalsFetched && proposalsData) {
       const loadProposals = async () => {
@@ -135,7 +158,7 @@ const TrackJobPage = () => {
               ...proposal,
               metadata,
             } as ProposalWithMetadata;
-          })
+          }),
         );
         setProposals(proposalsWithMetadata);
         setDataLoaded((prev) => ({ ...prev, proposals: true }));
@@ -146,6 +169,7 @@ const TrackJobPage = () => {
     }
   }, [proposalsData, isProposalsFetched]);
 
+  //manages loading state
   useEffect(() => {
     if (dataLoaded.job && dataLoaded.proposals) {
       setLoading(false);
@@ -160,13 +184,13 @@ const TrackJobPage = () => {
       console.log("ProposalApproved event received:", logs);
       logs.forEach((log) => {
         const parsed = log as any;
-        const approvedProposalID = parsed.args.proposalID;
-        console.log("Approved proposal ID:", approvedProposalID, "Type:", typeof approvedProposalID);
+        const approvedProposalID = BigInt(parsed.args.proposalID);
+        console.log("Approved proposal ID:", approvedProposalID);
         setProposals((prev) =>
           prev.map((p) => {
-            console.log("Comparing:", p.proposalID, "===", approvedProposalID, "Result:", p.proposalID === approvedProposalID);
-            return p.proposalID === approvedProposalID ? { ...p, approved: true } : p;
-          })
+            const pID = BigInt(p.proposalID);
+            return pID === approvedProposalID ? { ...p, approved: true } : p;
+          }),
         );
       });
     },
@@ -178,8 +202,9 @@ const TrackJobPage = () => {
     }
   }, [isConnected]);
 
-  const isClient = user?.role === 1;
-  const isOwner = address && job?.clientAddress?.toLowerCase() === address.toLowerCase();
+  // const isClient = user?.role === 1;
+  const isOwner =
+    address && job?.clientAddress?.toLowerCase() === address.toLowerCase();
 
   const handleApprove = async (proposalID: bigint) => {
     if (!isConnected) {
@@ -189,6 +214,9 @@ const TrackJobPage = () => {
 
     try {
       setActionLoading(proposalID);
+
+      // 1. Accept Proposal (Auto-hires freelancer)
+      toast.info("Accepting proposal...");
       const { request } = await simulateContract(config, {
         address: proposalsContract.address,
         abi: proposalsContract.abi,
@@ -196,13 +224,85 @@ const TrackJobPage = () => {
         args: [proposalID],
       });
 
-      const hash = await writeContract(config, request);
-      setTxHash(hash);
+      const approveProposalHash = await writeContract(config, request);
+      // setTxHash(approveProposalHash); // Removed to avoid global state conflict
+
+      // Wait for approval confirmation
+      toast.loading("Confirming on-chain...");
+      await waitForTransactionReceipt(config, { hash: approveProposalHash });
+      toast.success("Proposal accepted & Freelancer hired!");
+
+      // Invalidate queries to refresh data from chain
+      queryClient.invalidateQueries({ queryKey: ["proposals", id] });
+      queryClient.invalidateQueries({ queryKey: ["proposalsData", id] });
+      queryClient.invalidateQueries({ queryKey: ["deliverables", id] });
+      queryClient.invalidateQueries({ queryKey: ["job", id] }); // Also refresh job status
+
+      // Optimistic update
       setProposals((prev) =>
-        prev.map((p) => (p.proposalID === proposalID ? { ...p, approved: true } : p))
+        prev.map((p) =>
+          BigInt(p.proposalID) === BigInt(proposalID)
+            ? { ...p, approved: true }
+            : p,
+        ),
       );
     } catch (error: any) {
+      console.error(error);
       toast.error(error.message || "Failed to approve proposal");
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleReject = (proposalID: bigint) => {
+    // Only local optimistic rejection since there is no on-chain reject
+    setProposals((prev) =>
+      prev.map((p) =>
+        BigInt(p.proposalID) === BigInt(proposalID)
+          ? { ...p, rejected: true }
+          : p,
+      ),
+    );
+    toast.success("Proposal rejected locally");
+  };
+
+  const handleMarkCompleted = async () => {
+    if (!isConnected) {
+      toast.error("Please connect your wallet");
+      return;
+    }
+
+    if (!job) return;
+
+    try {
+      setActionLoading(BigInt(id as string)); // Using job ID for loading state
+      const toastId = toast.loading("Marking job as complete...");
+
+      const { request } = await simulateContract(config, {
+        address: jobsContract.address,
+        abi: jobsContract.abi,
+        functionName: "MarkClientJobCompleted",
+        args: [BigInt(id as string)],
+      });
+
+      const hash = await writeContract(config, request);
+      
+      toast.loading("Confirming completion on-chain...", { id: toastId });
+      await waitForTransactionReceipt(config, { hash });
+      
+      toast.success("Job marked as complete!", { id: toastId });
+      
+      // Update local state
+      setJob((prev) => (prev ? { ...prev, clientApproved: true } : null));
+
+      // Refresh data
+      queryClient.invalidateQueries({ queryKey: ["job", id] });
+      queryClient.invalidateQueries({ queryKey: ["deliverables", id] });
+      
+    } catch (error: any) {
+      console.error(error.message);
+      toast.error(error.message || "Failed to mark job as complete");
+    } finally {
       setActionLoading(null);
     }
   };
@@ -304,7 +404,9 @@ const TrackJobPage = () => {
                   </div>
                   <div className="flex items-center gap-2 bg-muted/30 px-4 py-3 rounded-full border border-border/50 w-fit">
                     <IconEthereum size={18} className="text-primary" />
-                    <span className="font-bold text-lg">{job?.budget || "0"} ETH</span>
+                    <span className="font-bold text-lg">
+                      {job?.budget || "0"} ETH
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -315,104 +417,249 @@ const TrackJobPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <Card className="shadow-xl bg-card/50 backdrop-blur-xl rounded-2xl overflow-hidden">
-                <CardHeader className="px-8 border-b border-border/50">
-                  <CardTitle className="flex items-center gap-2">
-                    <Users size={22} className="text-primary" />
-                    Proposals ({proposals.length})
-                  </CardTitle>
-                  <CardDescription>
-                    Review and manage freelancer proposals
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  {proposals.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
-                      <div className="p-4 rounded-full bg-muted mb-4">
-                        <Users size={32} className="text-muted-foreground" />
-                      </div>
-                      <h3 className="text-lg font-semibold mb-2">No Proposals Yet</h3>
-                      <p className="text-muted-foreground max-w-sm">
-                        This job hasn&apos;t received any proposals from freelancers yet. Check back later.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-border/50">
-                      {proposals.map((proposal, index) => (
-                        <motion.div
-                          key={proposal.proposalID.toString()}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.1 * (index + 1) }}
-                          className="p-6 hover:bg-muted/20 transition-colors"
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-2">
-                                <div className="size-8 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-sm font-bold">
-                                  {proposal.metadata?.freelancerName?.charAt(0) || proposal.freelancer.slice(2, 4).toUpperCase()}
-                                </div>
-                                <div>
-                                  <p className="font-semibold text-sm">
-                                    {proposal.metadata?.freelancerName || "Anonymous Freelancer"}
-                                  </p>
-                                  <p className="text-xs text-muted-foreground font-mono">
-                                    {proposal.freelancer.slice(0, 6)}...{proposal.freelancer.slice(-4)}
-                                  </p>
-                                </div>
-                                {proposal.approved && (
-                                  <Badge variant="secondary" className="ml-2 bg-green-500/10 text-green-500 border-green-500/20">
-                                    <CheckCircle size={12} className="mr-1" />
-                                    Approved
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-muted-foreground line-clamp-2">
-                                {proposal.metadata?.description || "No description available"}
-                              </p>
-                              <p className="text-xs text-muted-foreground mt-2">
-                                Submitted {proposal.metadata?.timestamp ? new Date(proposal.metadata.timestamp).toLocaleDateString() : "recently"}
-                              </p>
-                            </div>
-                            <div className="flex items-center gap-2 shrink-0">
-                              {!proposal.approved && (
-                                <>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    className="text-red-500 hover:bg-red-500/10 border-red-500/20"
-                                    onClick={() => handleApprove(proposal.proposalID)}
-                                    disabled={actionLoading !== null}
-                                  >
-                                    {actionLoading === proposal.proposalID ? (
-                                      <Loader2 size={16} className="animate-spin" />
-                                    ) : (
-                                      <XCircle size={16} className="mr-1" />
-                                    )}
-                                    Reject
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    onClick={() => handleApprove(proposal.proposalID)}
-                                    disabled={actionLoading !== null}
-                                  >
-                                    {actionLoading === proposal.proposalID ? (
-                                      <Loader2 size={16} className="animate-spin mr-1" />
-                                    ) : (
-                                      <CheckCircle size={16} className="mr-1" />
-                                    )}
-                                    Accept
-                                  </Button>
-                                </>
-                              )}
-                            </div>
+              <Tabs defaultValue="proposals" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-3">
+                  <TabsTrigger value="proposals">Proposals</TabsTrigger>
+                  <TabsTrigger value="deliverables">Deliverables</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="proposals">
+                  <Card className="shadow-xl bg-card/50 backdrop-blur-xl rounded-2xl overflow-hidden">
+                    <CardHeader className="px-8 border-b border-border/50">
+                      <CardTitle className="flex items-center gap-2">
+                        <Users size={22} className="text-primary" />
+                        Proposals ({proposals.length})
+                      </CardTitle>
+                      <CardDescription>
+                        Review and manage freelancer proposals
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      {proposals.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center py-16 px-8 text-center">
+                          <div className="p-4 rounded-full bg-muted mb-4">
+                            <Users
+                              size={32}
+                              className="text-muted-foreground"
+                            />
                           </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+                          <h3 className="text-lg font-semibold mb-2">
+                            No Proposals Yet
+                          </h3>
+                          <p className="text-muted-foreground max-w-sm">
+                            This job hasn&apos;t received any proposals from
+                            freelancers yet. Check back later.
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="divide-y divide-border/50">
+                          {proposals.map((proposal, index) => (
+                            <motion.div
+                              key={proposal.proposalID.toString()}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.1 * (index + 1) }}
+                              className="p-6 hover:bg-muted/20 transition-colors"
+                            >
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <div className="size-8 rounded-full bg-gradient-to-br from-primary to-blue-600 flex items-center justify-center text-white text-sm font-bold">
+                                      {proposal.metadata?.freelancerName?.charAt(
+                                        0,
+                                      ) ||
+                                        proposal.freelancer
+                                          .slice(2, 4)
+                                          .toUpperCase()}
+                                    </div>
+                                    <div>
+                                      <p className="font-semibold text-sm">
+                                        {proposal.metadata?.freelancerName ||
+                                          "Anonymous Freelancer"}
+                                      </p>
+                                      <p className="text-xs text-muted-foreground font-mono">
+                                        {proposal.freelancer.slice(0, 6)}...
+                                        {proposal.freelancer.slice(-4)}
+                                      </p>
+                                    </div>
+                                    {proposal.approved && (
+                                      <Badge
+                                        variant="secondary"
+                                        className="ml-2 bg-green-500/10 text-green-500 border-green-500/20"
+                                      >
+                                        <CheckCircle
+                                          size={12}
+                                          className="mr-1"
+                                        />
+                                        Approved
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-muted-foreground line-clamp-2">
+                                    {proposal.metadata?.description ||
+                                      "No description available"}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground mt-2">
+                                    Submitted{" "}
+                                    {proposal.metadata?.timestamp
+                                      ? new Date(
+                                          proposal.metadata.timestamp,
+                                        ).toLocaleDateString()
+                                      : "recently"}
+                                  </p>
+                                </div>
+                                <div className="flex items-center gap-2 shrink-0">
+                                  {!proposal.approved && !proposal.rejected && (
+                                    <>
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="text-red-500 hover:bg-red-500/10 border-red-500/20"
+                                        onClick={() =>
+                                          handleReject(proposal.proposalID)
+                                        }
+                                        disabled={actionLoading !== null}
+                                      >
+                                        <XCircle size={16} className="mr-1" />
+                                        Reject
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        onClick={() =>
+                                          handleApprove(proposal.proposalID)
+                                        }
+                                        disabled={actionLoading !== null}
+                                      >
+                                        {actionLoading ===
+                                        proposal.proposalID ? (
+                                          <Loader2
+                                            size={16}
+                                            className="animate-spin mr-1"
+                                          />
+                                        ) : (
+                                          <CheckCircle
+                                            size={16}
+                                            className="mr-1"
+                                          />
+                                        )}
+                                        Accept
+                                      </Button>
+                                    </>
+                                  )}
+                                  {proposal.rejected && (
+                                    <Badge
+                                      variant="outline"
+                                      className="text-red-500 border-red-500/20"
+                                    >
+                                      Rejected
+                                    </Badge>
+                                  )}
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="deliverables">
+                  <Card className="shadow-xl bg-card/50 backdrop-blur-xl rounded-2xl overflow-hidden min-h-[400px]">
+                    <CardHeader className="px-8 border-b border-border/50">
+                      <CardTitle className="flex items-center gap-2">
+                        <Package size={22} className="text-primary" />
+                        Deliverables
+                      </CardTitle>
+                      <CardDescription>
+                        Track and review work submissions
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-0">
+                      {!deliverables ||
+                      Object.keys(deliverables).length === 0 ? (
+                        <div className="flex flex-col items-center justify-center p-8 text-center min-h-[300px]">
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="p-6 rounded-full bg-primary/5 mb-6"
+                          >
+                            <Package size={48} className="text-primary/40" />
+                          </motion.div>
+                          <h3 className="text-xl font-bold mb-2">
+                            No Deliverables Yet
+                          </h3>
+                          <p className="text-muted-foreground max-w-md text-base">
+                            Once the hired freelancer submits their work for
+                            review, it will appear here. You&apos;ll be able to
+                            review, approve, or request changes.
+                          </p>
+                        </div>
+                      ) : (
+                        <>
+                          <div className="divide-y divide-border/50">
+                            {Object.entries(deliverables).map(
+                              ([label, value], index) => (
+                                <motion.div
+                                  key={label}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.1 * (index + 1) }}
+                                  className="p-6 hover:bg-muted/20 transition-colors"
+                                >
+                                  <div className="flex items-center justify-between gap-4">
+                                    <div className="flex-1 min-w-0">
+                                      <h4 className="font-semibold text-lg mb-1">
+                                        {label}
+                                      </h4>
+                                      <a
+                                        href={
+                                          value.startsWith("http")
+                                            ? value
+                                            : `https://${value}`
+                                        }
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-primary hover:underline flex items-center gap-1 text-sm truncate"
+                                      >
+                                        {value}
+                                        <ExternalLink size={14} />
+                                      </a>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ),
+                            )}
+                          </div>
+                          
+                          <div className="p-6 bg-muted/30 border-t border-border/50 flex justify-end">
+                            {job?.clientApproved ? (
+                              <Badge className="h-10 px-4 text-base bg-green-500/10 text-green-600 hover:bg-green-500/20 border-green-500/20 gap-2">
+                                <CheckCircle size={18} />
+                                Job Marked Complete
+                              </Badge>
+                            ) : (
+                              <Button 
+                                onClick={handleMarkCompleted}
+                                disabled={actionLoading !== null}
+                                className="gap-2"
+                              >
+                                {actionLoading === BigInt(id as string) ? (
+                                  <Loader2 size={18} className="animate-spin" />
+                                ) : (
+                                  <CheckCircle size={18} />
+                                )}
+                                Mark as Complete
+                              </Button>
+                            )}
+                          </div>
+                        </>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
             </motion.div>
           </div>
 
@@ -428,18 +675,24 @@ const TrackJobPage = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-sm">Budget</span>
+                    <span className="text-muted-foreground text-sm">
+                      Budget
+                    </span>
                     <span className="font-bold flex items-center gap-1">
                       <IconEthereum size={14} />
                       {job?.budget || "0"} ETH
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-sm">Proposals</span>
+                    <span className="text-muted-foreground text-sm">
+                      Proposals
+                    </span>
                     <Badge variant="secondary">{proposals.length}</Badge>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-muted-foreground text-sm">Status</span>
+                    <span className="text-muted-foreground text-sm">
+                      Status
+                    </span>
                     <Badge className="bg-primary/10 text-primary border-primary/20">
                       Active
                     </Badge>
@@ -447,6 +700,7 @@ const TrackJobPage = () => {
                 </CardContent>
               </Card>
             </motion.div>
+            <ContractStatusSidebar job={jobData as IJob} />
           </div>
         </div>
       </div>

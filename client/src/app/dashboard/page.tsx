@@ -25,6 +25,9 @@ import {
   CheckCircle2,
   User,
   Clock,
+  Eye,
+  EyeOff,
+  RefreshCw,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Input } from "@/components/ui/input";
@@ -50,6 +53,9 @@ const DashboardPage = () => {
   const [allJobs, setAllJobs] = React.useState<any>([]);
   const [allProposals, setAllProposals] = React.useState<any>([]);
   const [hasProfile, setHasProfile] = React.useState(false);
+  const [showEarnings, setShowEarnings] = React.useState(false);
+  const [totalEarnings, setTotalEarnings] = React.useState("0.00 ETH");
+  const [earningsLoading, setEarningsLoading] = React.useState(false);
 
   // Query profile
   const {
@@ -115,14 +121,16 @@ const DashboardPage = () => {
 
   // Fetch jobs from Pinata
   React.useEffect(() => {
-    async function fetchJobData(
-      jobInfos: { jobID: string; jobCID: string }[],
-    ) {
+    async function fetchJobData(jobInfos: any[]) {
       try {
         const data = await Promise.all(
           jobInfos.map(async (info) => {
             const pinataData = await fetchFromPinata(info.jobCID);
-            return { ...pinataData, jobID: info.jobID, cid: info.jobCID };
+            return { 
+              ...pinataData, 
+              ...info, // Spread all on-chain info (completed, amount, etc.)
+              cid: info.jobCID 
+            };
           }),
         );
         setAllJobs(data);
@@ -137,6 +145,10 @@ const DashboardPage = () => {
         .map((job: any) => ({
           jobID: job.jobID.toString(),
           jobCID: job.jobCID,
+          completed: job.completed,
+          amount: job.amount,
+          clientApproved: job.clientApproved,
+          freelancerApproved: job.freelancerApproved,
         }));
 
       if (jobInfos.length > 0) {
@@ -210,6 +222,28 @@ const DashboardPage = () => {
       p.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.jobID?.toString().includes(searchQuery),
   );
+
+  const calculateEarnings = React.useCallback(async () => {
+    if (isClient) return;
+    
+    setEarningsLoading(true);
+    try {
+      const approvedProposals = allProposals.filter((p: any) => p.approved);
+      const earnings = approvedProposals.reduce((acc: number, p: any) => {
+        return acc + (Number(p.budget) || Number(p.amount) || 0);
+      }, 0);
+      setTotalEarnings(`${earnings.toFixed(4)} ETH`);
+    } catch (error) {
+      console.error("Error calculating earnings:", error);
+    } finally {
+      setEarningsLoading(false);
+    }
+  }, [isClient, allProposals]);
+
+  const handleRefreshEarnings = () => {
+    setShowEarnings(false);
+    calculateEarnings();
+  };
 
   if (!isConnected) {
     return (
@@ -302,25 +336,25 @@ const DashboardPage = () => {
         {[
           {
             label: isClient ? "Active Jobs" : "Proposals Sent",
-            value: isClient ? allJobs.length : allProposals.length,
+            value: isClient 
+              ? allJobs.filter((j: any) => !j.completed).length 
+              : allProposals.length,
             icon: Briefcase,
             color: "text-blue-500",
           },
           {
             label: isClient ? "Completed" : "Jobs Won",
-            value: "0",
+            value: isClient 
+              ? allJobs.filter((j: any) => j.completed).length 
+              : allProposals.filter((p: any) => p.approved).length,
             icon: CheckCircle2,
             color: "text-green-500",
           },
           {
-            label: isClient ? "Total Spent" : "Total Earned",
-            value: "0.00 ETH",
-            icon: IconEthereum,
-            color: "text-purple-500",
-          },
-          {
-            label: isClient ? "Proposals Recieved" : "Pending Actions",
-            value: "0",
+            label: isClient ? "Pending Actions" : "Pending Replies",
+            value: isClient
+               ? allJobs.filter((j: any) => !j.completed && j.freelancerApproved && !j.clientApproved).length
+               : allProposals.filter((p: any) => !p.approved).length,
             icon: Search,
             color: "text-orange-500",
           },
@@ -350,6 +384,66 @@ const DashboardPage = () => {
             </Card>
           </motion.div>
         ))}
+
+        {/* Total Earned/Spent Card with Eye Toggle */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+        >
+          <Card className="hover:shadow-md transition-shadow border-border/50 bg-card/50 backdrop-blur-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {isClient ? "Total Spent" : "Total Earned"}
+                  </p>
+                  <h3 className="text-2xl font-bold mt-1">
+                    {isClient ? (
+                      `${allJobs
+                        .filter((j: any) => j.completed)
+                        .reduce((acc: number, j: any) => acc + (Number(j.budget) || 0), 0)
+                        .toFixed(4)} ETH`
+                    ) : showEarnings ? (
+                      totalEarnings
+                    ) : (
+                      <span className="tracking-widest">••••••</span>
+                    )}
+                  </h3>
+                </div>
+                <div className="flex items-center gap-2">
+                  {!isClient && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleRefreshEarnings}
+                      disabled={earningsLoading}
+                      className="h-10 w-10"
+                    >
+                      <RefreshCw
+                        size={20}
+                        className={earningsLoading ? "animate-spin" : ""}
+                      />
+                    </Button>
+                  )}
+                  {!isClient && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setShowEarnings(!showEarnings)}
+                      className="h-10 w-10"
+                    >
+                      {showEarnings ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </Button>
+                  )}
+                  <div className="p-3 rounded-xl bg-card border text-purple-500">
+                    <IconEthereum size={24} />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
       {/* Content Section */}
@@ -410,78 +504,112 @@ const DashboardPage = () => {
                 </Button>
               </CreateJobDialog>
             )}
-             {!searchQuery && !isClient && (
-               <Link href="/explore">
+            {!searchQuery && !isClient && (
+              <Link href="/explore/jobs">
                 <Button variant="outline" className="rounded-full">
                   Explore Jobs
                 </Button>
-               </Link>
-             )}
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <AnimatePresence>
-              {isClient ? (
-                filteredJobs.map((job: any, index: number) => (
-                  <motion.div
-                    key={job.cid || index}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <JobCard job={job} showProposals={true} />
-                  </motion.div>
-                ))
-              ) : (
-                filteredProposals.map((proposal: any) => (
-                   <motion.div
-                    key={proposal.cid || proposal.proposalID}
-                    layout
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <Card className="hover:shadow-lg transition-all h-full flex flex-col border-border/50 bg-card/50 backdrop-blur-sm group">
-                      <CardHeader className="pb-3">
-                         <div className="flex justify-between items-start mb-2">
-                             <Badge variant="outline" className="font-mono text-xs">Job #{proposal.jobID}</Badge>
-                             <Badge variant={proposal.approved ? "default" : "secondary"} className={proposal.approved ? "bg-green-500 hover:bg-green-600" : "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20"}>
-                                 {proposal.approved ? "Approved" : "Pending"}
-                             </Badge>
-                         </div>
-                        <CardTitle className="text-lg font-bold line-clamp-1">
-                           Application
-                        </CardTitle>
-                         <CardDescription className="flex items-center gap-2 text-xs">
-                          <Clock size={12} />
-                          {proposal.timestamp
-                            ? formatDistanceToNow(new Date(proposal.timestamp), {
-                                addSuffix: true,
-                              })
-                            : "Recently"}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="flex-1">
-                          <div className="prose prose-sm dark:prose-invert">
-                             <p className="line-clamp-3 text-muted-foreground text-sm">
-                                 {proposal.description}
-                             </p>
+              {isClient
+                ? filteredJobs.map((job: any, index: number) => (
+                    <motion.div
+                      key={job.cid || index}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <JobCard job={job} showProposals={true} />
+                    </motion.div>
+                  ))
+                : filteredProposals.map((proposal: any) => (
+                    <motion.div
+                      key={proposal.cid || proposal.proposalID}
+                      layout
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.9 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Card className="hover:shadow-lg transition-all h-full flex flex-col border-border/50 bg-card/50 backdrop-blur-sm group">
+                        <CardHeader className="pb-3">
+                          <div className="flex justify-between items-start mb-2">
+                            <Badge
+                              variant="outline"
+                              className="font-mono text-xs"
+                            >
+                              Job #{proposal.jobID}
+                            </Badge>
+                            <Badge
+                              variant={
+                                proposal.approved ? "default" : "secondary"
+                              }
+                              className={
+                                proposal.approved
+                                  ? "bg-green-500 hover:bg-green-600"
+                                  : "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20"
+                              }
+                            >
+                              {proposal.approved ? "Approved" : "Pending"}
+                            </Badge>
                           </div>
-                      </CardContent>
-                      <div className="p-6 pt-0 mt-auto">
-                        <Link href={`/job/${proposal.jobID}`} className="w-full">
-                             <Button variant="secondary" className="w-full gap-2 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                                 View Job Details
-                             </Button>
-                        </Link>
-                      </div>
-                    </Card>
-                  </motion.div>
-                ))
-              )}
+                          <CardTitle className="text-lg font-bold line-clamp-1">
+                            Application
+                          </CardTitle>
+                          <CardDescription className="flex items-center gap-2 text-xs">
+                            <Clock size={12} />
+                            {proposal.timestamp
+                              ? formatDistanceToNow(
+                                  new Date(proposal.timestamp),
+                                  {
+                                    addSuffix: true,
+                                  },
+                                )
+                              : "Recently"}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex-1">
+                          <div className="prose prose-sm dark:prose-invert">
+                            <p className="line-clamp-3 text-muted-foreground text-sm">
+                              {proposal.description}
+                            </p>
+                          </div>
+                        </CardContent>
+                        <div className="p-6 pt-0 mt-auto space-y-2">
+                          <Link
+                            href={`/job/${proposal.jobID}`}
+                            className="w-full"
+                          >
+                            <Button
+                              variant="secondary"
+                              className="w-full gap-2 group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                            >
+                              View Job Details
+                            </Button>
+                          </Link>
+                          {proposal.approved && (
+                            <Link
+                              href={`/deliver/job/${proposal.jobID}`}
+                              className="w-full"
+                            >
+                              <Button
+                                variant="outline"
+                                className="w-full gap-2 group-hover:bg-primary group-hover:text-primary-foreground transition-colors"
+                              >
+                                Deliver Work
+                              </Button>
+                            </Link>
+                          )}
+                        </div>
+                      </Card>
+                    </motion.div>
+                  ))}
             </AnimatePresence>
           </div>
         )}

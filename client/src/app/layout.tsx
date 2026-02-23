@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import "./globals.css";
 import ClientRoot from "@/lib/config";
+import { ThemeProvider } from "next-themes";
 
 export default function RootLayout({
   children,
@@ -9,11 +10,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <ClientRoot>
-          <Navbar />
-          {children}
-        </ClientRoot>
+      <body suppressHydrationWarning={true}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+          <ClientRoot>
+            <Navbar />
+            {children}
+          </ClientRoot>
+        </ThemeProvider>
       </body>
     </html>
   );

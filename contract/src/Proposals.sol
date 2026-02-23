@@ -2,8 +2,14 @@
 
 pragma solidity ^0.8.24;
 
+interface IJobsContract {
+    function getJobOwner(uint256 jobID) external view returns (address);
+    function HireFreelancer(address freelancerAddress, uint256 jobID) external;
+}
+
 contract ProposalsContract {
     uint256 private proposalID_counter;
+    address public jobsContractAddress;
 
     struct Proposal{
         uint256 proposalID; //contract managed proposal id
@@ -13,13 +19,16 @@ contract ProposalsContract {
         address freelancer; // freelancer address
     }
 
-
-    mapping (address freelancerAddress => Proposal[]) private _freelancerProposals;//all proposals by freelancer(address)
-    mapping (uint256 jobID => Proposal[]) private _jobProposals; //all proposals by jobID
+    mapping (address freelancerAddress => uint256[]) private _freelancerProposalIDs;
+    mapping (uint256 jobID => uint256[]) private _jobProposalIDs;
     mapping(uint256 proposalID => Proposal) private _proposals;
     
     event ProposalCreated(address indexed freelancerAddress, uint256 proposalID, string proposalCID, uint256 jobID);
     event ProposalApproved(address indexed freelancerAddress, uint256 proposalID);
+
+    function setJobsContractAddress(address _address) external {
+        jobsContractAddress = _address;
+    }
 
     function CreateProposal(string calldata proposalCID, uint256 jobID) external {
         proposalID_counter++;
@@ -33,8 +42,8 @@ contract ProposalsContract {
             freelancer: msg.sender
         });
 
-        _freelancerProposals[msg.sender].push(proposal);
-        _jobProposals[jobID].push(proposal);
+        _freelancerProposalIDs[msg.sender].push(proposalID);
+        _jobProposalIDs[jobID].push(proposalID);
         _proposals[proposalID] = proposal;
 
 
@@ -44,18 +53,36 @@ contract ProposalsContract {
     function ApproveProposal(uint256 proposalID) external {
         Proposal storage p = _proposals[proposalID];
         require(!p.approved, "Proposal already approved");
+        
+        // Verify job ownership
+        address jobOwner = IJobsContract(jobsContractAddress).getJobOwner(p.jobID);
+        require(msg.sender == jobOwner, "Only job owner can approve proposal");
 
         p.approved = true;
+        
+        // Auto-hire freelancer
+        IJobsContract(jobsContractAddress).HireFreelancer(p.freelancer, p.jobID);
+        
         emit ProposalApproved(msg.sender, proposalID);
     }
 
     //VIEWS------
-    function getFreelancersProposals(address freelancerAddress) view external returns(Proposal[] memory proposals){
-        return _freelancerProposals[freelancerAddress];
+    function getFreelancersProposals(address freelancerAddress) view external returns(Proposal[] memory){
+        uint256[] memory ids = _freelancerProposalIDs[freelancerAddress];
+        Proposal[] memory proposals = new Proposal[](ids.length);
+        for(uint256 i = 0; i < ids.length; i++){
+            proposals[i] = _proposals[ids[i]];
+        }
+        return proposals;
     }
 
-    function getProposalsByJobID(uint256 jobID) view external returns(Proposal[] memory proposals){
-        return _jobProposals[jobID];
+    function getProposalsByJobID(uint256 jobID) view external returns(Proposal[] memory){
+        uint256[] memory ids = _jobProposalIDs[jobID];
+        Proposal[] memory proposals = new Proposal[](ids.length);
+        for(uint256 i = 0; i < ids.length; i++){
+            proposals[i] = _proposals[ids[i]];
+        }
+        return proposals;
     }
 
     function getProposalByProposalID(uint256 proposalID) view external returns (Proposal memory proposal){

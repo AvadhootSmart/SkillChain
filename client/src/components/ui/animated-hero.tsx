@@ -7,6 +7,7 @@ import { useConnection } from "wagmi";
 import { useRouter } from "next/navigation";
 import { MoveRight, ToolCase } from "lucide-react";
 import Link from "next/link";
+import { useUserStore } from "@/store/user.store";
 
 function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
@@ -15,6 +16,7 @@ function Hero() {
   const router = useRouter();
   const { openConnectModal } = useConnectModal();
   const { isConnected, address } = useConnection();
+  const {user} = useUserStore()
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -28,13 +30,13 @@ function Hero() {
   }, [titleNumber, titles]);
 
   const handleGetStarted = () => {
-    if (!isConnected && openConnectModal) {
+    if (!user && openConnectModal) {
       openConnectModal();
     } else {
       router.push("/sign-up");
     }
-    if (isConnected && address) {
-      router.push("/sign-up");
+    if (user && isConnected && address) {
+      router.push("/dashboard");
     }
   };
 

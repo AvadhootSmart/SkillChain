@@ -10,8 +10,12 @@ contract DeployScript is Script {
     function run() external {
         vm.startBroadcast();
         new UserProfile();
-        new JobsContract();
-        new ProposalsContract();
+        JobsContract jobs = new JobsContract();
+        ProposalsContract proposals = new ProposalsContract();
+
+        // Link the contracts
+        jobs.setProposalsContractAddress(address(proposals));
+        proposals.setJobsContractAddress(address(jobs));
         vm.stopBroadcast();
     }
 }
