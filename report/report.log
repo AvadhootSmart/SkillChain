@@ -1,0 +1,1152 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.18)  18 MAR 2026 23:12
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**report.tex
+(./report.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2025/01/22 v1.4n Standard LaTeX document class
+(/usr/local/texlive/2026/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count275
+\c@chapter=\count276
+\c@section=\count277
+\c@subsection=\count278
+\c@subsubsection=\count279
+\c@paragraph=\count280
+\c@subparagraph=\count281
+\c@figure=\count282
+\c@table=\count283
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen148
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+))
+\Gm@cnth=\count284
+\Gm@cntv=\count285
+\c@Gm@tempcnt=\count286
+\Gm@bindingoffset=\dimen149
+\Gm@wd@mp=\dimen150
+\Gm@odd@mp=\dimen151
+\Gm@even@mp=\dimen152
+\Gm@layoutwidth=\dimen153
+\Gm@layoutheight=\dimen154
+\Gm@layouthoffset=\dimen155
+\Gm@layoutvoffset=\dimen156
+\Gm@dimlist=\toks18
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2025/01/04 v2.17 Sectioning titles
+\ttl@box=\box53
+\beforetitleunit=\skip51
+\aftertitleunit=\skip52
+\ttl@plus=\dimen157
+\ttl@minus=\dimen158
+\ttl@toksa=\toks19
+\titlewidth=\dimen159
+\titlewidthlast=\dimen160
+\titlewidthfirst=\dimen161
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
+
+\f@nch@headwidth=\skip53
+\f@nch@offset@elh=\skip54
+\f@nch@offset@erh=\skip55
+\f@nch@offset@olh=\skip56
+\f@nch@offset@orh=\skip57
+\f@nch@offset@elf=\skip58
+\f@nch@offset@erf=\skip59
+\f@nch@offset@olf=\skip60
+\f@nch@offset@orf=\skip61
+\f@nch@height=\skip62
+\f@nch@footalignment=\skip63
+\f@nch@widthL=\skip64
+\f@nch@widthC=\skip65
+\f@nch@widthR=\skip66
+\@temptokenb=\toks20
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 106.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen162
+\Gin@req@width=\dimen163
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tocloft/tocloft.sty
+Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
+Package tocloft Info: The document has chapter divisions on input line 51.
+\cftparskip=\skip67
+\cftbeforetoctitleskip=\skip68
+\cftaftertoctitleskip=\skip69
+\cftbeforepartskip=\skip70
+\cftpartnumwidth=\skip71
+\cftpartindent=\skip72
+\cftbeforechapskip=\skip73
+\cftchapindent=\skip74
+\cftchapnumwidth=\skip75
+\cftbeforesecskip=\skip76
+\cftsecindent=\skip77
+\cftsecnumwidth=\skip78
+\cftbeforesubsecskip=\skip79
+\cftsubsecindent=\skip80
+\cftsubsecnumwidth=\skip81
+\cftbeforesubsubsecskip=\skip82
+\cftsubsubsecindent=\skip83
+\cftsubsubsecnumwidth=\skip84
+\cftbeforeparaskip=\skip85
+\cftparaindent=\skip86
+\cftparanumwidth=\skip87
+\cftbeforesubparaskip=\skip88
+\cftsubparaindent=\skip89
+\cftsubparanumwidth=\skip90
+\cftbeforeloftitleskip=\skip91
+\cftafterloftitleskip=\skip92
+\cftbeforefigskip=\skip93
+\cftfigindent=\skip94
+\cftfignumwidth=\skip95
+\c@lofdepth=\count287
+\c@lotdepth=\count288
+\cftbeforelottitleskip=\skip96
+\cftafterlottitleskip=\skip97
+\cftbeforetabskip=\skip98
+\cfttabindent=\skip99
+\cfttabnumwidth=\skip100
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.sty
+\lst@mode=\count289
+\lst@gtempboxa=\box54
+\lst@token=\toks21
+\lst@length=\count290
+\lst@currlwidth=\dimen164
+\lst@column=\count291
+\lst@pos=\count292
+\lst@lostspace=\dimen165
+\lst@width=\dimen166
+\lst@newlines=\count293
+\lst@lineno=\count294
+\lst@maxwidth=\dimen167
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstpatch.sty
+File: lstpatch.sty 2025/11/14 1.11b (Carsten Heinz)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2025/11/14 1.11b (Carsten Heinz)
+\c@lstnumber=\count295
+\lst@skipnumbers=\count296
+\lst@framebox=\box55
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2025/11/14 1.11b listings configuration
+))
+Package: listings 2025/11/14 1.11b (Carsten Heinz)
+
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 274.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
+\LTleft=\skip101
+\LTright=\skip102
+\LTpre=\skip103
+\LTpost=\skip104
+\LTchunksize=\count297
+\LTcapwidth=\dimen168
+\LT@head=\box56
+\LT@firsthead=\box57
+\LT@foot=\box58
+\LT@lastfoot=\box59
+\LT@gbox=\box60
+\LT@cols=\count298
+\LT@rows=\count299
+\c@LT@tables=\count300
+\c@LT@chunks=\count301
+\LT@p@ftn=\toks22
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen169
+\lightrulewidth=\dimen170
+\cmidrulewidth=\dimen171
+\belowrulesep=\dimen172
+\belowbottomsep=\dimen173
+\aboverulesep=\dimen174
+\abovetopsep=\dimen175
+\cmidrulesep=\dimen176
+\cmidrulekern=\dimen177
+\defaultaddspace=\dimen178
+\@cmidla=\count302
+\@cmidlb=\count303
+\@aboverulesep=\dimen179
+\@belowrulesep=\dimen180
+\@thisruleclass=\count304
+\@lastruleclass=\count305
+\@thisrulewidth=\dimen181
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/tools/array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen182
+\ar@mcellbox=\box61
+\extrarowheight=\dimen183
+\NC@list=\toks23
+\extratabsurround=\skip105
+\backup@length=\skip106
+\ar@cellbox=\box62
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
+\multirow@colwidth=\skip107
+\multirow@cntb=\count306
+\multirow@dima=\skip108
+\bigstrutjot=\dimen184
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/enumitem/enumitem.sty
+Package: enumitem 2025/02/06 v3.11 Customized lists
+\labelindent=\skip109
+\enit@outerparindent=\dimen185
+\enit@toks=\toks24
+\enit@inbox=\box63
+\enit@count@id=\count307
+\enitdp@description=\count308
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count309
+\float@exts=\toks25
+\float@box=\box64
+\@float@everytoks=\toks26
+\@floatcapt=\box65
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen186
+\captionmargin=\dimen187
+\caption@leftmargin=\dimen188
+\caption@rightmargin=\dimen189
+\caption@width=\dimen190
+\caption@indent=\dimen191
+\caption@parindent=\dimen192
+\caption@hangindent=\dimen193
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count310
+\c@continuedfloat=\count311
+Package caption Info: float package is loaded.
+Package caption Info: listings package is loaded.
+Package caption Info: longtable package is loaded.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count312
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count313
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2025/07/09 v2.17z AMS math features
+\@mathmargin=\skip110
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2024/11/17 v2.01 AMS text
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks27
+\ex@=\dimen194
+))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen195
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count314
+LaTeX Info: Redefining \frac on input line 233.
+\uproot@=\count315
+\leftroot@=\count316
+LaTeX Info: Redefining \overline on input line 398.
+LaTeX Info: Redefining \colon on input line 409.
+\classnum@=\count317
+\DOTSCASE@=\count318
+LaTeX Info: Redefining \ldots on input line 495.
+LaTeX Info: Redefining \dots on input line 498.
+LaTeX Info: Redefining \cdots on input line 619.
+\Mathstrutbox@=\box66
+\strutbox@=\box67
+LaTeX Info: Redefining \big on input line 721.
+LaTeX Info: Redefining \Big on input line 722.
+LaTeX Info: Redefining \bigg on input line 723.
+LaTeX Info: Redefining \Bigg on input line 724.
+\big@size=\dimen196
+LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
+\macc@depth=\count319
+LaTeX Info: Redefining \bmod on input line 904.
+LaTeX Info: Redefining \pmod on input line 909.
+LaTeX Info: Redefining \smash on input line 939.
+LaTeX Info: Redefining \relbar on input line 969.
+LaTeX Info: Redefining \Relbar on input line 970.
+\c@MaxMatrixCols=\count320
+\dotsspace@=\muskip17
+\c@parentequation=\count321
+\dspbrk@lvl=\count322
+\tag@help=\toks28
+\row@=\count323
+\column@=\count324
+\maxfields@=\count325
+\andhelp@=\toks29
+\eqnshift@=\dimen197
+\alignsep@=\dimen198
+\tagshift@=\dimen199
+\tagwidth@=\dimen256
+\totwidth@=\dimen257
+\lineht@=\dimen258
+\@envbody=\toks30
+\multlinegap=\skip111
+\multlinetaggap=\skip112
+\mathdisplay@stack=\toks31
+LaTeX Info: Redefining \[ on input line 2950.
+LaTeX Info: Redefining \] on input line 2951.
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2026-01-29 v7.01p Hypertext links for LaTeX
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+))
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2026-01-29 v2.58 Cross-referencing by name of section
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count326
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count327
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\@linkdim=\dimen259
+\Hy@linkcounter=\count328
+\Hy@pagecounter=\count329
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2026-01-29 v7.01p Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(/usr/local/texlive/2026/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count330
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2026-01-29 v7.01p Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4201.
+Package hyperref Info: Link nesting OFF on input line 4206.
+Package hyperref Info: Hyper index ON on input line 4209.
+Package hyperref Info: Plain pages OFF on input line 4216.
+Package hyperref Info: Backreferencing OFF on input line 4221.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4468.
+\c@Hy@tempcnt=\count331
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip18
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4807.
+\XeTeXLinkMargin=\dimen260
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count332
+\Field@Width=\dimen261
+\Fld@charsize=\dimen262
+Package hyperref Info: Hyper figures OFF on input line 6084.
+Package hyperref Info: Link nesting OFF on input line 6089.
+Package hyperref Info: Hyper index ON on input line 6092.
+Package hyperref Info: backreferencing OFF on input line 6099.
+Package hyperref Info: Link coloring OFF on input line 6104.
+Package hyperref Info: Link coloring with OCG OFF on input line 6109.
+Package hyperref Info: PDF/A mode OFF on input line 6114.
+\Hy@abspage=\count333
+\c@Item=\count334
+\c@Hfootnote=\count335
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2026-01-29 v7.01p Hyperref driver for pdfTeX
+\Fld@listcount=\count336
+\c@bookmark@seq@number=\count337
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
+
+(/usr/local/texlive/2026/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+84.
+)
+\Hy@SectionHShift=\skip113
+)
+! Illegal parameter number in definition of \lstlang@toml$.
+<to be read again> 
+                   }
+l.103 }
+       
+? 
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
+27.
+(/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count338
+)
+(./report.aux)
+\openout1 = `report.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 127.
+LaTeX Font Info:    ... okay on input line 127.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(72.26997pt, 462.00163pt, 63.23627pt)
+* v-part:(T,H,B)=(54.2025pt, 727.60808pt, 63.23627pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=462.00163pt
+* \textheight=727.60808pt
+* \oddsidemargin=-0.00002pt
+* \evensidemargin=-0.00002pt
+* \topmargin=-55.06749pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=35.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+(/usr/local/texlive/2026/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count339
+\scratchdimen=\dimen263
+\scratchbox=\box68
+\nofMPsegments=\count340
+\nofMParguments=\count341
+\everyMPshowfont=\toks32
+\MPscratchCnt=\count342
+\MPscratchDim=\dimen264
+\MPnumerator=\count343
+\makeMPintoPDFobject=\count344
+\everyMPtoPDFconversion=\toks33
+) (/usr/local/texlive/2026/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+\c@lstlisting=\count345
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring OFF on input line 127.
+
+(./report.out) (./report.out)
+\@outlinefile=\write3
+\openout3 = `report.out'.
+
+ (./sections/acknowledgement.tex) [1
+
+
+{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
+al/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}] (./sections/abstract.t
+ex
+Overfull \hbox (13.20302pt too wide) in paragraph at lines 9--10
+[]\OT1/ptm/m/n/12 Security con-sid-er-a-tions in-clude re-entrancy pro-tec-tion
+ through the Checks-Effects-Interactions
+ []
+
+)
+Overfull \hbox (2.90707pt too wide) in paragraph at lines 146--147
+[]\OT1/ptm/b/n/12 Keywords: \OT1/ptm/m/n/12 Blockchain, Smart Con-tracts, De-ce
+n-tral-ized Ap-pli-ca-tion, Ethereum, IPFS, Free-
+ []
+
+(./report.toc
+LaTeX Font Info:    Trying to load font information for U+msa on input line 1.
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [2
+
+] [3]
+[4] [5] [6])
+\tf@toc=\write4
+\openout4 = `report.toc'.
+
+ [7] (./sections/abbreviations.tex) [8
+
+] (./report.lof)
+\tf@lof=\write5
+\openout5 = `report.lof'.
+
+ [9
+
+]
+(./report.lot)
+\tf@lot=\write6
+\openout6 = `report.lot'.
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.171 \chapter
+              {Introduction} [1
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.171 \chapter
+              {Introduction} [2]
+Chapter 1.
+(./sections/introduction.tex
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 7
+.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.21 \subsection{Key Features}
+                               [3
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 43--43
+[]|\OT1/ptm/m/n/12 High Com-mis-sion
+ []
+
+
+Underfull \hbox (badness 8189) in paragraph at lines 43--44
+[]|\OT1/ptm/m/n/12 Direct blockchain trans-ac-
+ []
+
+
+Underfull \hbox (badness 6927) in paragraph at lines 45--45
+[]|\OT1/ptm/m/n/12 5-14 day with-drawal
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 47--47
+[]|\OT1/ptm/m/n/12 Lack of Trans-
+ []
+
+
+Underfull \hbox (badness 2653) in paragraph at lines 49--49
+[]|\OT1/ptm/m/n/12 Centralized data stor-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
+[]|\OT1/ptm/m/n/12 Mutual con-sen-sus mech-a-
+ []
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.62     \item \textbf
+                      {Cost Efficiency:} Optimized gas usage through efficie...
+[4])
+pdfTeX warning (ext4): destination with the same identifier (name{page.5}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.174 \chapter
+              {Literature Survey} [5]
+Chapter 2.
+(./sections/literature_survey.tex
+Overfull \hbox (8.45335pt too wide) in paragraph at lines 3--4
+\OT1/ptm/m/n/12 Blockchain tech-nol-ogy en-ables trust-less in-ter-ac-tions thr
+ough im-mutable ledgers and pro-grammable
+ []
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.6}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.25 \end{itemize}
+                   [6
+
+]
+Overfull \hbox (0.31776pt too wide) in paragraph at lines 41--42
+\OT1/ptm/m/n/12 Several plat-forms have at-tempted to ad-dress free-lance mar-k
+et-place chal-lenges through blockchain
+ []
+
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.7}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.57     \item L
+                imited dispute resolution mechanisms. [7])
+pdfTeX warning (ext4): destination with the same identifier (name{page.8}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.177 \chapter
+              {Software Requirements Specification} [8]
+Chapter 3.
+(./sections/srs.tex
+pdfTeX warning (ext4): destination with the same identifier (name{page.9}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.30     \item T
+                ime tracking integration. [9
+
+] [10] [11] [12] [13] [14]
+! Missing $ inserted.
+<inserted text> 
+                $
+l.237 Smart Contracts & Solidity & ^
+                                    0.8.24 \\
+? 
+! Missing $ inserted.
+<inserted text> 
+                $
+l.238 \hline
+            
+? 
+[15]) [16]
+Chapter 4.
+(./sections/system_design.tex
+Underfull \hbox (badness 10000) in paragraph at lines 14--14
+[]|\OT1/ptm/m/n/12 Presentation
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--16
+[]|\OT1/ptm/m/n/12 Application
+ []
+
+
+Underfull \hbox (badness 6236) in paragraph at lines 18--18
+[]|\OT1/ptm/m/n/12 Ethereum Net-work, Smart
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--19
+[]|\OT1/ptm/m/n/12 Decentralized com-pu-ta-tion
+ []
+
+[17
+
+] [18]
+Underfull \hbox (badness 3657) in paragraph at lines 117--118
+\OT1/ptm/m/n/12 Client), One-to-Many with
+ []
+
+
+Underfull \hbox (badness 2213) in paragraph at lines 119--119
+[]|\OT1/ptm/m/n/12 jobID, job-CID, de-liv-
+ []
+
+
+Underfull \hbox (badness 1939) in paragraph at lines 119--119
+\OT1/ptm/m/n/12 er-able-CID, com-pleted,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--119
+\OT1/ptm/m/n/12 client, free-lancer,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--119
+\OT1/ptm/m/n/12 amount, clien-tAp-
+ []
+
+
+Underfull \hbox (badness 4872) in paragraph at lines 119--119
+\OT1/ptm/m/n/12 proved, free-lancer-Ap-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+[]|\OT1/ptm/m/n/12 Many-to-One with Client,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+\OT1/ptm/m/n/12 Many-to-One with Free-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 119--120
+\OT1/ptm/m/n/12 lancer, One-to-Many with
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--121
+[]|\OT1/ptm/m/n/12 proposalID, pro-pos-al-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+[]|\OT1/ptm/m/n/12 Many-to-One with Job,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
+\OT1/ptm/m/n/12 Many-to-One with Free-
+ []
+
+[19] [20]
+Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
+nput line 172.
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
+72.
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+[21] [22] [23]
+Overfull \hbox (10.85547pt too wide) in paragraph at lines 302--302
+[]|\OT1/ptm/m/n/12 MarkClientJobCompleted| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 302--303
+[]|\OT1/ptm/m/n/12 Awaiting Free-lancer Ap-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 304--304
+[]|\OT1/ptm/m/n/12 Awaiting Client Ap-
+ []
+
+
+Overfull \hbox (10.85547pt too wide) in paragraph at lines 304--304
+[]|\OT1/ptm/m/n/12 MarkClientJobCompleted| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 306--306
+[]|\OT1/ptm/m/n/12 Awaiting Free-lancer
+ []
+
+) [24]
+Chapter 5.
+(./sections/implementation.tex
+Underfull \hbox (badness 10000) in paragraph at lines 39--39
+[]|\OT1/ptm/m/n/12 Retrieves pro-file by
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 41--41
+[]|\OT1/ptm/m/n/12 Reverse lookup by
+ []
+
+[25
+
+] [26]
+Overfull \hbox (10.85547pt too wide) in paragraph at lines 96--96
+[]|\OT1/ptm/m/n/12 MarkClientJobCompleted| 
+ []
+
+[27] [28] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+)
+(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2025/11/14 1.11b listings language file
+) [29]
+LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 2
+44.
+
+(/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1pcr.fd
+File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
+) [30]
+Underfull \hbox (badness 3547) in paragraph at lines 297--297
+[]|\OT1/ptm/b/n/12 Time Com-plex-
+ []
+
+
+Underfull \hbox (badness 3138) in paragraph at lines 299--300
+[]|\OT1/ptm/m/n/12 User lookup by
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 301--302
+[]|\OT1/ptm/m/n/12 Reverse user-
+ []
+
+
+Overfull \hbox (12.0261pt too wide) in paragraph at lines 311--311
+[]|[]\OT1/ptm/m/n/12 freelancerProposalIDs| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 311--312
+[]|\OT1/ptm/m/n/12 Freelancer pro-
+ []
+
+
+Overfull \hbox (27.18964pt too wide) in paragraph at lines 295--314
+ [][] 
+ []
+
+[31]
+LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 3
+27.
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 327.
+ [32]
+Underfull \hbox (badness 10000) in paragraph at lines 396--396
+[]|\OT1/ptm/m/n/12 Client or Pro-pos-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 402--402
+[]|\OT1/ptm/m/n/12 Assigned free-lancer
+ []
+
+) [33] [34]
+Chapter 6.
+(./sections/testing.tex
+Overfull \hbox (13.00319pt too wide) in paragraph at lines 68--68
+[]|\OT1/ptm/m/n/12 test[]OnlyJobOwnerCanApprove| 
+ []
+
+
+Overfull \hbox (10.41096pt too wide) in paragraph at lines 72--72
+[]|\OT1/ptm/m/n/12 test[]DoubleApprovalPrevention| 
+ []
+
+[35
+
+] [36]
+Underfull \hbox (badness 10000) in paragraph at lines 134--134
+[]|\OT1/ptm/m/n/12 Re-entrancy pro-tec-tion im-ple-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
+[]|\OT1/ptm/m/n/12 Checks-Effects-Interactions
+ []
+
+
+Underfull \hbox (badness 4660) in paragraph at lines 154--155
+[]|\OT1/ptm/m/n/12 Recommended for pro-duc-
+ []
+
+[37] [38]
+Underfull \hbox (badness 10000) in paragraph at lines 254--254
+[]|\OT1/ptm/m/n/12 Wallet Con-nec-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 256--256
+[]|\OT1/ptm/m/n/12 Role-Based Ac-
+ []
+
+) [39]
+Chapter 7.
+(./sections/other_specifications.tex [40
+
+] [41] [42]
+Underfull \hbox (badness 10000) in paragraph at lines 143--143
+[]|\OT1/ptm/m/n/12 Crypto-native Free-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 147--147
+[]|\OT1/ptm/m/n/12 Remote-first Com-pa-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 147--148
+[]|\OT1/ptm/m/n/12 Global tal-ent, trans-par-ent
+ []
+
+) [43] [44]
+Chapter 8.
+(./sections/conclusion.tex [45
+
+]
+Overfull \hbox (14.27246pt too wide) in paragraph at lines 38--39
+[]\OT1/ptm/b/n/12 Web3 In-te-gra-tion: \OT1/ptm/m/n/12 Mas-tered wagmi, Rain-bo
+wKit, and viem li-braries for seam-less blockchain
+ []
+
+[46] [47]
+Overfull \hbox (3.60364pt too wide) in paragraph at lines 100--101
+[]\OT1/ptm/m/n/12 As blockchain tech-nol-ogy con-tin-ues to ma-ture and adop-ti
+on grows, plat-forms like SkillChain
+ []
+
+) [48]
+Appendix A.
+(./sections/appendix_contracts.tex
+
+Package hyperref Warning: Difference (2) between bookmark levels is greater 
+(hyperref)                than one, level fixed on input line 1.
+
+[49
+
+] [50] [51] [52] [53] [54]) [55]
+Appendix B.
+(./sections/appendix_deployment.tex [56
+
+]
+! Illegal parameter number in definition of \reserved@a.
+<to be read again> 
+                   \@nil 
+l.79 ...age=toml, caption={Foundry Configuration}]
+                                                  
+? 
+! Illegal parameter number in definition of \reserved@b.
+<to be read again> 
+                   \@nil 
+l.79 ...age=toml, caption={Foundry Configuration}]
+                                                  
+? 
+[57] [58]) [59]
+Appendix C.
+(./sections/appendix_statistics.tex [60
+
+] [61] [62]) (./sections/references.tex
+[63]
+Underfull \hbox (badness 10000) in paragraph at lines 14--17
+[]\OT1/ptm/m/n/12 Benet, J. (2014). \OT1/ptm/m/it/12 IPFS - Con-tent Ad-dressed
+, Ver-sioned,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--17
+\OT1/ptm/m/it/12 P2P File Sys-tem\OT1/ptm/m/n/12 . Avail-able at: []$\OT1/pcr/m
+/n/12 https : / / ipfs . io / ipfs /
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 14--17
+\OT1/pcr/m/n/12 QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX / ipfs . draft3 
+.
+ []
+
+
+Underfull \hbox (badness 1789) in paragraph at lines 39--42
+[]\OT1/ptm/m/n/12 Pinata Doc-u-men-ta-tion. (2024). \OT1/ptm/m/it/12 IPFS Pin-n
+ing Ser-vice Doc-u-men-ta-tion\OT1/ptm/m/n/12 . Avail-able at:
+ []
+
+[64
+
+]) [65] (./report.aux)
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2026-01-19>
+ ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package rerunfilecheck Info: File `report.out' has not changed.
+(rerunfilecheck)             Checksum: 873FDEC38FCB8AA0DF623A6615D1398A;25479.
+ ) 
+Here is how much of TeX's memory you used:
+ 17398 strings out of 467525
+ 267442 string characters out of 5418982
+ 1195574 words of memory out of 5000000
+ 44996 multiletter control sequences out of 15000+600000
+ 644790 words of font info for 82 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 75i,15n,79p,1147b,2093s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
+></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></us
+r/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
+/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><
+/usr/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/loc
+al/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texli
+ve/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/te
+xmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/f
+onts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (74 pages, 284163 bytes).
+PDF statistics:
+ 2239 PDF objects out of 2487 (max. 8388607)
+ 2121 compressed objects within 22 object streams
+ 1049 named destinations out of 1200 (max. 500000)
+ 1233 words of extra memory for PDF output out of 10000 (max. 10000000)
+

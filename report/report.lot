@@ -1,0 +1,35 @@
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1.1}{\ignorespaces Comparison of Traditional vs. SkillChain Solutions}}{4}{table.caption.6}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Software Requirements}}{15}{table.caption.7}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces System Architecture Layers}}{17}{table.caption.8}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Entity Relationships}}{20}{table.caption.9}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Job State Transitions}}{24}{table.caption.10}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces UserProfile Functions}}{26}{table.caption.14}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces JobsContract Functions}}{27}{table.caption.19}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Data Structure Complexity Analysis}}{32}{table.caption.29}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Function Access Control}}{34}{table.caption.30}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces UserProfile Test Cases}}{35}{table.caption.31}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces JobsContract Test Cases}}{35}{table.caption.32}%
+\contentsline {table}{\numberline {6.3}{\ignorespaces ProposalsContract Test Cases}}{36}{table.caption.33}%
+\contentsline {table}{\numberline {6.4}{\ignorespaces Test Coverage Summary}}{37}{table.caption.34}%
+\contentsline {table}{\numberline {6.5}{\ignorespaces Security Audit Results}}{37}{table.caption.35}%
+\contentsline {table}{\numberline {6.6}{\ignorespaces Gas Cost Analysis}}{38}{table.caption.36}%
+\contentsline {table}{\numberline {6.7}{\ignorespaces Requirements Validation}}{39}{table.caption.37}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {7.1}{\ignorespaces Target Market Segments}}{44}{table.caption.38}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {C.1}{\ignorespaces Project Statistics Summary}}{60}{table.caption.39}%
+\contentsline {table}{\numberline {C.2}{\ignorespaces Smart Contract Details}}{60}{table.caption.40}%
+\contentsline {table}{\numberline {C.3}{\ignorespaces Frontend Dependencies}}{61}{table.caption.41}%
+\contentsline {table}{\numberline {C.4}{\ignorespaces Smart Contract Dependencies}}{61}{table.caption.42}%
+\contentsline {table}{\numberline {C.5}{\ignorespaces Project Development Phases}}{61}{table.caption.43}%
+\contentsline {table}{\numberline {C.6}{\ignorespaces Estimated Gas Costs (at 20 Gwei)}}{62}{table.caption.44}%
+\contentsline {table}{\numberline {C.7}{\ignorespaces Code Quality Analysis}}{62}{table.caption.45}%

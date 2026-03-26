@@ -211,6 +211,8 @@ const DashboardPage = () => {
     }
   }, [proposals, proposalsLoading, proposalsError]);
 
+  const isClient = profile.role === UserRole.Client;
+
   const filteredJobs = allJobs.filter(
     (job: any) =>
       job.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -293,7 +295,6 @@ const DashboardPage = () => {
     );
   }
 
-  const isClient = profile.role === UserRole.Client;
   const isLoading = isClient ? jobsLoading : proposalsLoading;
   const displayItems = isClient ? filteredJobs : filteredProposals;
 

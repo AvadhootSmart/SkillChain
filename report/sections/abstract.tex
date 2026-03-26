@@ -1,0 +1,11 @@
+SkillChain is a decentralized freelance marketplace built on Ethereum blockchain technology that eliminates intermediaries and establishes trust through smart contracts. The platform connects clients and freelancers directly, utilizing IPFS for decentralized data storage and implementing an escrow-based payment system.
+
+The traditional freelance industry faces significant challenges including high commission fees (typically 10-20\%), payment delays of 5-14 days, lack of transparency in dispute resolution, and data privacy concerns due to centralized storage. These issues affect millions of freelancers and clients worldwide, reducing earnings and creating friction in the gig economy.
+
+This project presents the complete architecture, design decisions, algorithms, and implementation details of the SkillChain platform. The system addresses key challenges in traditional freelance platforms through blockchain-based solutions including direct peer-to-peer transactions, smart contract escrow for secure payment holding and conditional release, decentralized IPFS storage for data permanence and censorship resistance, transparent operations with all transactions verifiable on the blockchain, and minimal blockchain gas costs compared to traditional platform fees.
+
+The platform implements three interconnected smart contracts: UserProfile Contract for managing user identities and roles, JobsContract for handling job creation, escrow management, and payment release, and ProposalsContract for managing proposal submission and approval workflow. The frontend is built using modern web technologies including Next.js, React, TypeScript, and Tailwind CSS, with Web3 integration through wagmi and RainbowKit.
+
+Security considerations include re-entrancy protection through the Checks-Effects-Interactions pattern, comprehensive input validation, and multi-party approval for fund release. The system has been thoroughly tested using Foundry framework with 100\% coverage of contract functions.
+
+The project demonstrates the feasibility of decentralized freelance marketplaces and provides a foundation for future enhancements including Layer 2 integration, reputation systems, and decentralized dispute resolution.

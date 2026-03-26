@@ -1,0 +1,286 @@
+\section{Project Scope}
+
+\subsection{In Scope}
+
+The SkillChain platform encompasses the following features and capabilities:
+
+\begin{itemize}
+    \item User registration and profile management for both clients and freelancers.
+    \item Job posting with detailed descriptions, budgets, and requirements.
+    \item Proposal submission and management system.
+    \item Smart contract-based escrow for secure payment holding.
+    \item Mutual approval mechanism for job completion and payment release.
+    \item IPFS integration for decentralized data storage.
+    \item Web3 wallet integration for blockchain interactions.
+    \item Real-time job and proposal tracking dashboard.
+    \item Role-based access control (Client vs. Freelancer).
+\end{itemize}
+
+\subsection{Out of Scope}
+
+The following features are not included in the current implementation but are planned for future releases:
+
+\begin{itemize}
+    \item Decentralized dispute resolution with third-party arbitration.
+    \item On-chain reputation and rating system.
+    \item Multi-token support (ERC-20 tokens).
+    \item Layer 2 scaling solutions (Arbitrum, Optimism).
+    \item Push notifications and real-time messaging.
+    \item Milestone-based payment schedules.
+    \item Time tracking integration.
+\end{itemize}
+
+\section{User Classes and Characteristics}
+
+\subsection{Clients}
+
+\begin{itemize}
+    \item \textbf{Description:} Users who post jobs and hire freelancers.
+    \item \textbf{Technical Expertise:} Basic understanding of cryptocurrency wallets.
+    \item \textbf{Frequency of Use:} Occasional to frequent job posting.
+    \item \textbf{Security Level:} High - handles ETH for escrow deposits.
+\end{itemize}
+
+\subsection{Freelancers}
+
+\begin{itemize}
+    \item \textbf{Description:} Users who submit proposals and complete work.
+    \item \textbf{Technical Expertise:} Basic understanding of cryptocurrency wallets.
+    \item \textbf{Frequency of Use:} Regular proposal submissions and work delivery.
+    \item \textbf{Security Level:} Medium - receives payments but does not deposit.
+\end{itemize}
+
+\section{Assumptions and Dependencies}
+
+\subsection{Assumptions}
+
+\begin{enumerate}
+    \item Users have access to modern web browsers with Web3 capabilities.
+    \item Users possess or can create cryptocurrency wallets (MetaMask, Rainbow, etc.).
+    \item Users have basic understanding of blockchain transactions and gas fees.
+    \item Ethereum network is available and operational.
+    \item IPFS network is accessible for content retrieval.
+    \item Users have stable internet connectivity.
+\end{enumerate}
+
+\subsection{Dependencies}
+
+\begin{enumerate}
+    \item Ethereum blockchain network (local, testnet, or mainnet).
+    \item IPFS/Pinata service for decentralized storage.
+    \item Wallet providers (MetaMask, Rainbow, etc.).
+    \item Web3 libraries (wagmi, viem, RainbowKit).
+    \item Node.js runtime environment.
+    \item Modern web browsers supporting ES6+ JavaScript.
+\end{enumerate}
+
+\section{Functional Requirements}
+
+\subsection{User Profile Management}
+
+\begin{itemize}
+    \item \textbf{FR-1.1:} System shall allow users to create profiles with username, role, and metadata.
+    \item \textbf{FR-1.2:} System shall enforce unique usernames across all users.
+    \item \textbf{FR-1.3:} System shall support two roles: Client and Freelancer.
+    \item \textbf{FR-1.4:} System shall store profile data on IPFS and reference via CID.
+    \item \textbf{FR-1.5:} System shall allow profile updates while maintaining username uniqueness.
+\end{itemize}
+
+\subsection{Job Management}
+
+\begin{itemize}
+    \item \textbf{FR-2.1:} System shall allow clients to create jobs with title, description, budget, and metadata.
+    \item \textbf{FR-2.2:} System shall require ETH deposit equal to job budget during creation.
+    \item \textbf{FR-2.3:} System shall lock deposited funds in smart contract escrow.
+    \item \textbf{FR-2.4:} System shall allow clients to view their posted jobs.
+    \item \textbf{FR-2.5:} System shall allow freelancers to browse available jobs.
+    \item \textbf{FR-2.6:} System shall track job status (Open, In Progress, Completed).
+\end{itemize}
+
+\subsection{Proposal Management}
+
+\begin{itemize}
+    \item \textbf{FR-3.1:} System shall allow freelancers to submit proposals for open jobs.
+    \item \textbf{FR-3.2:} System shall store proposal details on IPFS.
+    \item \textbf{FR-3.3:} System shall allow clients to view proposals for their jobs.
+    \item \textbf{FR-3.4:} System shall allow clients to approve proposals.
+    \item \textbf{FR-3.5:} System shall automatically hire freelancer upon proposal approval.
+    \item \textbf{FR-3.6:} System shall prevent multiple proposals from same freelancer for same job.
+\end{itemize}
+
+\subsection{Payment and Escrow}
+
+\begin{itemize}
+    \item \textbf{FR-4.1:} System shall hold client funds in escrow upon job creation.
+    \item \textbf{FR-4.2:} System shall allow freelancer to mark job as completed with deliverables.
+    \item \textbf{FR-4.3:} System shall allow client to mark job as completed.
+    \item \textbf{FR-4.4:} System shall release funds only upon mutual approval from both parties.
+    \item \textbf{FR-4.5:} System shall transfer funds directly to freelancer's wallet upon release.
+    \item \textbf{FR-4.6:} System shall prevent fund release before both parties approve.
+\end{itemize}
+
+\section{External Interface Requirements}
+
+\subsection{User Interfaces}
+
+\begin{itemize}
+    \item \textbf{UI-1:} Web-based interface accessible via modern browsers.
+    \item \textbf{UI-2:} Responsive design supporting desktop and mobile devices.
+    \item \textbf{UI-3:} Intuitive navigation with clear role-based menus.
+    \item \textbf{UI-4:} Real-time feedback for blockchain transactions.
+    \item \textbf{UI-5:} Wallet connection interface with multiple provider support.
+\end{itemize}
+
+\subsection{Hardware Interfaces}
+
+\begin{itemize}
+    \item \textbf{HI-1:} Standard computing devices (PC, laptop, tablet, smartphone).
+    \item \textbf{HI-2:} Internet connectivity (minimum 1 Mbps).
+    \item \textbf{HI-3:} No specialized hardware required.
+\end{itemize}
+
+\subsection{Software Interfaces}
+
+\begin{itemize}
+    \item \textbf{SI-1:} Web3 wallet browser extensions (MetaMask, Rainbow, etc.).
+    \item \textbf{SI-2:} Ethereum JSON-RPC endpoints (Infura, Alchemy, local node).
+    \item \textbf{SI-3:} IPFS gateway for content retrieval.
+    \item \textbf{SI-4:} Pinata API for IPFS content pinning.
+\end{itemize}
+
+\subsection{Communication Interfaces}
+
+\begin{itemize}
+    \item \textbf{CI-1:} HTTPS for web application communication.
+    \item \textbf{CI-2:} WebSocket for real-time updates (future enhancement).
+    \item \textbf{CI-3:} Ethereum JSON-RPC for blockchain interactions.
+    \item \textbf{CI-4:} IPFS HTTP API for storage operations.
+\end{itemize}
+
+\section{Non-Functional Requirements}
+
+\subsection{Performance Requirements}
+
+\begin{itemize}
+    \item \textbf{NFR-1.1:} Page load time shall not exceed 3 seconds on standard broadband.
+    \item \textbf{NFR-1.2:} Smart contract interactions shall complete within 30 seconds (dependent on network).
+    \item \textbf{NFR-1.3:} IPFS content retrieval shall complete within 5 seconds.
+    \item \textbf{NFR-1.4:} System shall support up to 1000 concurrent users.
+\end{itemize}
+
+\subsection{Safety Requirements}
+
+\begin{itemize}
+    \item \textbf{NFR-2.1:} Smart contracts shall implement re-entrancy guards.
+    \item \textbf{NFR-2.2:} User funds shall be protected against unauthorized access.
+    \item \textbf{NFR-2.3:} System shall validate all inputs to prevent attacks.
+    \item \textbf{NFR-2.4:} Failed transactions shall not result in fund loss.
+\end{itemize}
+
+\subsection{Security Requirements}
+
+\begin{itemize}
+    \item \textbf{NFR-3.1:} All transactions require cryptographic signatures.
+    \item \textbf{NFR-3.2:} Smart contracts shall follow established security patterns.
+    \item \textbf{NFR-3.3:} User data shall be encrypted during IPFS storage.
+    \item \textbf{NFR-3.4:} Wallet connections shall use secure protocols.
+    \item \textbf{NFR-3.5:} Private keys shall never be stored or transmitted.
+\end{itemize}
+
+\subsection{Software Quality Attributes}
+
+\begin{itemize}
+    \item \textbf{Maintainability:} Modular architecture with clear separation of concerns.
+    \item \textbf{Scalability:} Horizontal scaling capability for frontend components.
+    \item \textbf{Usability:} Intuitive UI requiring minimal blockchain knowledge.
+    \item \textbf{Reliability:} 99.9\% uptime for web application.
+    \item \textbf{Portability:} Cross-platform compatibility (Windows, macOS, Linux, mobile).
+\end{itemize}
+
+\section{System Requirements}
+
+\subsection{Database Requirements}
+
+The system uses IPFS for decentralized storage with the following data structures:
+
+\begin{itemize}
+    \item Profile metadata stored as JSON objects.
+    \item Job details stored as JSON objects with IPFS CIDs.
+    \item Proposal details stored as JSON objects.
+    \item Deliverables stored as files or JSON objects.
+    \item Blockchain stores only references (CIDs) and critical state.
+\end{itemize}
+
+\subsection{Software Requirements}
+
+\begin{table}[H]
+\centering
+\caption{Software Requirements}
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Component} & \textbf{Technology} & \textbf{Version} \\
+\hline
+Frontend Framework & Next.js & 16.1.1 \\
+\hline
+UI Library & React & 19.2.3 \\
+\hline
+Styling & Tailwind CSS & 4.1.18 \\
+\hline
+State Management & Zustand & 5.0.9 \\
+\hline
+Data Fetching & TanStack Query & 5.90.16 \\
+\hline
+Blockchain & wagmi & 3.4.1 \\
+\hline
+Wallet & RainbowKit & 2.2.10 \\
+\hline
+Smart Contracts & Solidity & ^0.8.24 \\
+\hline
+Development & Foundry & Latest \\
+\hline
+Storage & IPFS/Pinata & - \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Hardware Requirements}
+
+\begin{itemize}
+    \item \textbf{Development:} 
+    \begin{itemize}
+        \item CPU: Intel Core i5 or equivalent
+        \item RAM: 8 GB minimum, 16 GB recommended
+        \item Storage: 50 GB free space
+        \item Internet: Broadband connection
+    \end{itemize}
+    \item \textbf{End Users:}
+    \begin{itemize}
+        \item Device: Computer, tablet, or smartphone
+        \item Browser: Chrome, Firefox, Safari, Edge (latest versions)
+        \item Internet: Stable connection (1 Mbps minimum)
+    \end{itemize}
+\end{itemize}
+
+\section{Analysis Models}
+
+\subsection{Data Flow}
+
+The system follows a multi-layer data flow:
+
+\begin{enumerate}
+    \item User interacts with frontend interface.
+    \item Frontend communicates with smart contracts via Web3.
+    \item Smart contracts interact with blockchain state.
+    \item Frontend reads/writes metadata to IPFS.
+    \item Blockchain events trigger UI updates.
+\end{enumerate}
+
+\subsection{System Implementation Plan}
+
+\begin{enumerate}
+    \item \textbf{Phase 1:} Smart contract development and testing.
+    \item \textbf{Phase 2:} Frontend development and Web3 integration.
+    \item \textbf{Phase 3:} IPFS integration and content management.
+    \item \textbf{Phase 4:} Testing and security audit.
+    \item \textbf{Phase 5:} Deployment and documentation.
+\end{enumerate}

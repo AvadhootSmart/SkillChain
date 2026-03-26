@@ -1,0 +1,171 @@
+\section{Deployment Script}
+
+\begin{lstlisting}[language=Solidity, caption={Deploy.s.sol - Contract Deployment Script}]
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "forge-std/Script.sol";
+import "../src/Profile.sol";
+import "../src/Jobs.sol";
+import "../src/Proposals.sol";
+
+contract DeployScript is Script {
+    function run() external {
+        vm.startBroadcast();
+        
+        // Deploy UserProfile contract
+        UserProfile profile = new UserProfile();
+        
+        // Deploy JobsContract
+        JobsContract jobs = new JobsContract();
+        
+        // Deploy ProposalsContract
+        ProposalsContract proposals = new ProposalsContract();
+        
+        // Link contracts
+        jobs.setProposalsContractAddress(address(proposals));
+        proposals.setJobsContractAddress(address(jobs));
+        
+        vm.stopBroadcast();
+        
+        // Log deployed addresses
+        console.log("UserProfile deployed at:", address(profile));
+        console.log("JobsContract deployed at:", address(jobs));
+        console.log("ProposalsContract deployed at:", address(proposals));
+    }
+}
+\end{lstlisting}
+
+\section{Environment Configuration}
+
+\subsection{Frontend Environment Variables (.env.local)}
+
+\begin{lstlisting}[language=bash, caption={Frontend Environment Configuration}]
+# Contract Addresses (update after deployment)
+NEXT_PUBLIC_PROFILE_CONTRACT_ADDRESS=0x...
+NEXT_PUBLIC_JOB_CONTRACT_ADDRESS=0x...
+NEXT_PUBLIC_PROPOSAL_CONTRACT_ADDRESS=0x...
+
+# Pinata IPFS Configuration
+NEXT_PUBLIC_PINATA_JWT=your_pinata_jwt_token_here
+NEXT_PUBLIC_PINATA_GATEWAY=your_pinata_gateway_url
+
+# WalletConnect Project ID
+NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
+
+# Optional: Analytics
+NEXT_PUBLIC_ANALYTICS_ID=your_analytics_id
+\end{lstlisting}
+
+\subsection{Contract Deployment Configuration (.env)}
+
+\begin{lstlisting}[language=bash, caption={Contract Deployment Configuration}]
+# Ethereum Network Configuration
+PRIVATE_KEY=your_wallet_private_key_here
+RPC_URL=http://127.0.0.1:8545  # For local development
+# RPC_URL=https://mainnet.infura.io/v3/YOUR_INFURA_KEY  # For mainnet
+# RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY  # For testnet
+
+# Etherscan API Key (for verification)
+ETHERSCAN_API_KEY=your_etherscan_api_key
+
+# Gas Configuration (optional)
+GAS_PRICE=20000000000  # 20 gwei
+GAS_LIMIT=3000000
+\end{lstlisting}
+
+\subsection{Foundry Configuration (foundry.toml)}
+
+\begin{lstlisting}[language=toml, caption={Foundry Configuration}]
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+remappings = [
+    "@openzeppelin/=lib/openzeppelin-contracts/",
+]
+
+# Compiler settings
+solc_version = "0.8.24"
+optimizer = true
+optimizer_runs = 200
+
+# Testing settings
+fuzz_runs = 256
+verbosity = 3
+
+# Gas reporting
+gas_reports = ["*"]
+gas_reports_ignore = []
+
+[rpc_endpoints]
+mainnet = "https://mainnet.infura.io/v3/${INFURA_KEY}"
+sepolia = "https://sepolia.infura.io/v3/${INFURA_KEY}"
+anvil = "http://127.0.0.1:8545"
+
+[etherscan]
+mainnet = { key = "${ETHERSCAN_API_KEY}" }
+sepolia = { key = "${ETHERSCAN_API_KEY}" }
+\end{lstlisting}
+
+\section{Deployment Commands}
+
+\subsection{Local Development Deployment}
+
+\begin{lstlisting}[language=bash, caption={Local Deployment Steps}]
+# 1. Start local Anvil node
+anvil
+
+# 2. Deploy contracts (in new terminal)
+cd contract
+forge script script/Deploy.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast
+
+# 3. Copy deployed addresses to frontend .env
+\end{lstlisting}
+
+\subsection{Testnet Deployment}
+
+\begin{lstlisting}[language=bash, caption={Testnet Deployment Steps}]
+# Deploy to Sepolia testnet
+forge script script/Deploy.s.sol:DeployScript \
+  --rpc-url https://sepolia.infura.io/v3/YOUR_INFURA_KEY \
+  --broadcast \
+  --verify \
+  -vvvv
+\end{lstlisting}
+
+\subsection{Mainnet Deployment}
+
+\begin{lstlisting}[language=bash, caption={Mainnet Deployment Steps}]
+# Deploy to Ethereum mainnet
+forge script script/Deploy.s.sol:DeployScript \
+  --rpc-url https://mainnet.infura.io/v3/YOUR_INFURA_KEY \
+  --broadcast \
+  --verify \
+  -vvvv
+\end{lstlisting}
+
+\section{Pinata IPFS Setup}
+
+\subsection{Getting Pinata JWT}
+
+\begin{enumerate}
+    \item Create account at \url{https://www.pinata.cloud/}
+    \item Navigate to API Keys section
+    \item Create new API key with permissions:
+    \begin{itemize}
+        \item pinFileToIPFS
+        \item pinJSONToIPFS
+        \item unpin
+    \end{itemize}
+    \item Copy the JWT token for frontend configuration
+\end{enumerate}
+
+\subsection{Pinata Gateway Configuration}
+
+\begin{enumerate}
+    \item In Pinata dashboard, go to Gateway section
+    \item Create a dedicated gateway (paid plan) or use public gateway
+    \item Configure gateway URL in frontend environment variables
+    \item Format: \texttt{gateway.pinata.cloud} or your custom domain
+\end{enumerate}

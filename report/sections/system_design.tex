@@ -1,0 +1,309 @@
+\section{System Architecture}
+
+The SkillChain platform follows a multi-layer architecture that separates concerns and enables scalability, maintainability, and security.
+
+\subsection{High-Level Architecture}
+
+\begin{table}[H]
+\centering
+\caption{System Architecture Layers}
+\begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+\hline
+\textbf{Layer} & \textbf{Components} & \textbf{Responsibilities} \\
+\hline
+Presentation Layer & Next.js Frontend, Client UI, Freelancer UI, Dashboard & User interface rendering and interaction \\
+\hline
+Application Layer & Wagmi hooks, Zustand state, React Query, IPFS integration & Business logic and data management \\
+\hline
+Blockchain Layer & Ethereum Network, Smart Contracts & Decentralized computation and storage \\
+\hline
+Storage Layer & IPFS/Pinata & Decentralized content storage \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Layer 1: Presentation Layer}
+
+The presentation layer is built using Next.js 16 with the App Router architecture. It provides:
+
+\begin{itemize}
+    \item Responsive user interfaces for clients and freelancers.
+    \item Role-based dashboard views.
+    \item Wallet connection management via RainbowKit.
+    \item Real-time transaction status updates.
+    \item Form validation and error handling.
+\end{itemize}
+
+\subsection{Layer 2: Application Layer}
+
+The application layer handles business logic and state management:
+
+\begin{itemize}
+    \item \textbf{Wagmi Hooks:} Ethereum blockchain interactions (read/write operations).
+    \item \textbf{Zustand:} Global state management for user sessions and application state.
+    \item \textbf{React Query:} Server state management with caching and synchronization.
+    \item \textbf{IPFS Integration:} Content upload and retrieval via Pinata API.
+\end{itemize}
+
+\subsection{Layer 3: Blockchain Layer}
+
+The blockchain layer consists of three interconnected smart contracts:
+
+\begin{enumerate}
+    \item \textbf{UserProfile Contract:} Manages user registration and profiles.
+    \item \textbf{JobsContract:} Handles job creation, escrow, and payment release.
+    \item \textbf{ProposalsContract:} Manages proposal submission and approval.
+\end{enumerate}
+
+\subsection{Layer 4: Storage Layer}
+
+IPFS provides decentralized storage for:
+
+\begin{itemize}
+    \item User profile metadata.
+    \item Job descriptions and requirements.
+    \item Proposal details and pricing.
+    \item Work deliverables and attachments.
+\end{itemize}
+
+\section{Data Flow Diagrams}
+
+\subsection{Job Creation Flow}
+
+\begin{enumerate}
+    \item Client fills job creation form with title, description, budget.
+    \item Frontend uploads metadata to IPFS and receives CID.
+    \item Client confirms transaction with ETH deposit.
+    \item Smart contract creates job with IPFS CID and locks funds.
+    \item Job is indexed and displayed in job listings.
+\end{enumerate}
+
+\subsection{Proposal and Hiring Flow}
+
+\begin{enumerate}
+    \item Freelancer views available jobs.
+    \item Freelancer submits proposal with cover letter and bid.
+    \item Proposal metadata uploaded to IPFS.
+    \item Smart contract stores proposal reference.
+    \item Client reviews proposals and approves selected freelancer.
+    \item Approval automatically triggers freelancer hiring.
+    \item Job status changes to ``In Progress''.
+\end{enumerate}
+
+\subsection{Completion and Payment Flow}
+
+\begin{enumerate}
+    \item Freelancer completes work and uploads deliverables to IPFS.
+    \item Freelancer marks job complete via smart contract.
+    \item Client reviews deliverables.
+    \item Client marks job complete via smart contract.
+    \item Upon mutual approval, funds are released to freelancer.
+    \item Job marked as completed.
+\end{enumerate}
+
+\section{Entity Relationship Diagrams}
+
+\subsection{Core Entities}
+
+The system consists of three primary entities:
+
+\begin{table}[H]
+\centering
+\caption{Entity Relationships}
+\begin{tabular}{|p{3cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Entity} & \textbf{Attributes} & \textbf{Relationships} \\
+\hline
+UserProfile & userID, username, cid, role, userAddress & One-to-Many with Jobs (as Client), One-to-Many with Proposals (as Freelancer) \\
+\hline
+Job & jobID, jobCID, deliverableCID, completed, client, freelancer, amount, clientApproved, freelancerApproved & Many-to-One with Client, Many-to-One with Freelancer, One-to-Many with Proposals \\
+\hline
+Proposal & proposalID, proposalCID, jobID, approved, freelancer & Many-to-One with Job, Many-to-One with Freelancer \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Data Relationships}
+
+\begin{itemize}
+    \item A \textbf{User} can be either a Client or Freelancer (Role-based).
+    \item A \textbf{Client} can create multiple \textbf{Jobs} (One-to-Many).
+    \item A \textbf{Job} can have multiple \textbf{Proposals} (One-to-Many).
+    \item A \textbf{Freelancer} can submit multiple \textbf{Proposals} (One-to-Many).
+    \item A \textbf{Job} is assigned to exactly one \textbf{Freelancer} (Many-to-One).
+    \item Each \textbf{Job} has exactly one \textbf{Client} (Many-to-One).
+\end{itemize}
+
+\section{UML Diagrams}
+
+\subsection{Use Case Diagram}
+
+\textbf{Actors:}
+\begin{itemize}
+    \item Client
+    \item Freelancer
+    \item System (Smart Contracts)
+\end{itemize}
+
+\textbf{Client Use Cases:}
+\begin{itemize}
+    \item Register/Create Profile
+    \item Create Job
+    \item View Posted Jobs
+    \item Review Proposals
+    \item Approve Proposal/Hire Freelancer
+    \item Mark Job as Completed
+\end{itemize}
+
+\textbf{Freelancer Use Cases:}
+\begin{itemize}
+    \item Register/Create Profile
+    \item Browse Jobs
+    \item Submit Proposal
+    \item View Submitted Proposals
+    \item Submit Deliverables
+    \item Mark Job as Completed
+\end{itemize}
+
+\subsection{Class Diagram}
+
+\textbf{Smart Contract Classes:}
+
+\begin{lstlisting}[language=Solidity, caption={UserProfile Contract Structure}]
+contract UserProfile {
+    struct Profile {
+        uint256 userID;
+        string username;
+        string cid;
+        Role role;
+        address userAddress;
+    }
+    
+    function setProfile(...) external
+    function getProfileByAddress(...) external view
+    function getUserByUsername(...) external view
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Solidity, caption={JobsContract Structure}]
+contract JobsContract {
+    struct Job {
+        uint256 jobID;
+        string jobCID;
+        string deliverableCID;
+        bool completed;
+        address client;
+        address freelancer;
+        uint256 amount;
+        bool clientApproved;
+        bool freelancerApproved;
+    }
+    
+    function CreateJob(...) external payable
+    function HireFreelancer(...) external
+    function MarkFLJobCompleted(...) external
+    function MarkClientJobCompleted(...) external
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=Solidity, caption={ProposalsContract Structure}]
+contract ProposalsContract {
+    struct Proposal {
+        uint256 proposalID;
+        string proposalCID;
+        uint256 jobID;
+        bool approved;
+        address freelancer;
+    }
+    
+    function CreateProposal(...) external
+    function ApproveProposal(...) external
+    function getProposalsByJobID(...) external view
+}
+\end{lstlisting}
+
+\subsection{Sequence Diagram: Job Creation}
+
+\begin{enumerate}
+    \item Client opens job creation form.
+    \item Client fills form with job details.
+    \item System validates form inputs.
+    \item System uploads metadata to IPFS.
+    \item IPFS returns Content Identifier (CID).
+    \item Client confirms job creation with ETH deposit.
+    \item MetaMask prompts for transaction confirmation.
+    \item Smart contract receives transaction.
+    \item Contract validates ETH amount.
+    \item Contract creates job with CID and locks funds.
+    \item Contract emits JobCreated event.
+    \item Frontend updates UI with success message.
+\end{enumerate}
+
+\subsection{Activity Diagram: Complete Job Lifecycle}
+
+The complete job lifecycle involves seven phases:
+
+\textbf{Phase 1: Setup}
+\begin{itemize}
+    \item User A registers as Client.
+    \item User B registers as Freelancer.
+\end{itemize}
+
+\textbf{Phase 2: Job Creation}
+\begin{itemize}
+    \item Client creates job with ETH escrow.
+    \item Contract stores job and emits event.
+\end{itemize}
+
+\textbf{Phase 3: Proposal Submission}
+\begin{itemize}
+    \item Freelancer submits proposal.
+    \item Contract stores proposal reference.
+\end{itemize}
+
+\textbf{Phase 4: Proposal Approval}
+\begin{itemize}
+    \item Client reviews and approves proposal.
+    \item Contract automatically hires freelancer.
+\end{itemize}
+
+\textbf{Phase 5: Work Execution}
+\begin{itemize}
+    \item Freelancer completes work off-chain.
+\end{itemize}
+
+\textbf{Phase 6: Completion Marking}
+\begin{itemize}
+    \item Freelancer marks job complete.
+    \item Client marks job complete.
+\end{itemize}
+
+\textbf{Phase 7: Payment Release}
+\begin{itemize}
+    \item Upon mutual approval, funds released.
+    \item Job marked as completed.
+\end{itemize}
+
+\subsection{State Diagram: Job States}
+
+\begin{table}[H]
+\centering
+\caption{Job State Transitions}
+\begin{tabular}{|p{4cm}|p{4cm}|p{5cm}|}
+\hline
+\textbf{Current State} & \textbf{Event} & \textbf{Next State} \\
+\hline
+Initial & CreateJob transaction & Open \\
+\hline
+Open & ApproveProposal & In Progress \\
+\hline
+In Progress & MarkFLJobCompleted & Awaiting Client Approval \\
+\hline
+In Progress & MarkClientJobCompleted & Awaiting Freelancer Approval \\
+\hline
+Awaiting Client Approval & MarkClientJobCompleted & Completed \\
+\hline
+Awaiting Freelancer Approval & MarkFLJobCompleted & Completed \\
+\hline
+\end{tabular}
+\end{table}

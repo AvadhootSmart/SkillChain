@@ -23,6 +23,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
   ChevronLeft,
+  ChevronDown,
+  ChevronUp,
   FileText,
   CheckCircle,
   XCircle,
@@ -77,6 +79,7 @@ const TrackJobPage = () => {
     deliverables: false,
   });
   const [actionLoading, setActionLoading] = useState<bigint | null>(null);
+  const [expandedProposals, setExpandedProposals] = useState<Set<string>>(new Set());
 
   const queryClient = useQueryClient();
 
@@ -264,6 +267,18 @@ const TrackJobPage = () => {
       ),
     );
     toast.success("Proposal rejected locally");
+  };
+
+  const toggleProposalExpand = (proposalId: string) => {
+    setExpandedProposals((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(proposalId)) {
+        newSet.delete(proposalId);
+      } else {
+        newSet.add(proposalId);
+      }
+      return newSet;
+    });
   };
 
   const handleMarkCompleted = async () => {
@@ -495,10 +510,39 @@ const TrackJobPage = () => {
                                       </Badge>
                                     )}
                                   </div>
-                                  <p className="text-sm text-muted-foreground line-clamp-2">
-                                    {proposal.metadata?.description ||
-                                      "No description available"}
-                                  </p>
+                                  {proposal.metadata?.description ? (
+                                    <div className="mt-2">
+                                      {expandedProposals.has(proposal.proposalID.toString()) ? (
+                                        <div className="max-h-40 overflow-y-auto text-sm text-muted-foreground pr-2">
+                                          {proposal.metadata.description}
+                                        </div>
+                                      ) : (
+                                        <p className="text-sm text-muted-foreground line-clamp-2">
+                                          {proposal.metadata.description}
+                                        </p>
+                                      )}
+                                      <button
+                                        onClick={() => toggleProposalExpand(proposal.proposalID.toString())}
+                                        className="text-xs text-primary hover:underline mt-1 flex items-center gap-1"
+                                      >
+                                        {expandedProposals.has(proposal.proposalID.toString()) ? (
+                                          <>
+                                            <ChevronUp size={14} />
+                                            Show less
+                                          </>
+                                        ) : (
+                                          <>
+                                            <ChevronDown size={14} />
+                                            Read more
+                                          </>
+                                        )}
+                                      </button>
+                                    </div>
+                                  ) : (
+                                    <p className="text-sm text-muted-foreground line-clamp-2">
+                                      No description available
+                                    </p>
+                                  )}
                                   <p className="text-xs text-muted-foreground mt-2">
                                     Submitted{" "}
                                     {proposal.metadata?.timestamp

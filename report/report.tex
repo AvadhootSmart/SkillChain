@@ -1,0 +1,207 @@
+\documentclass[12pt,a4paper]{report}
+
+% ---------------- PACKAGES ----------------
+% Page dimensions from Project_Report_Format 25-26.docx adapted for A4
+% Margins: Top=19.05mm, Left=25.4mm, Bottom=22.225mm, Right=22.225mm
+\usepackage[a4paper,top=19.05mm,left=25.4mm,bottom=22.225mm,right=22.225mm]{geometry}
+\usepackage{times}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{tocloft}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Figure caption formatting: 12pt at bottom with legends at 10pt
+\captionsetup[figure]{font=small,labelfont=bf,position=bottom}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{url}
+
+% ---------------- CODE STYLING ----------------
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.95}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+% Define Solidity language for listings
+\lstdefinelanguage{Solidity}{
+    keywords={break, continue, delete, else, for, if, return, while, do, throw, catch, try, finally, emit, event, function, modifier, constructor, fallback, receive, abstract, contract, interface, library, using, struct, enum, mapping, address, bool, bytes, string, uint, int, uint8, uint16, uint32, uint64, uint128, uint256, int8, int16, int32, int64, int128, int256, bytes1, bytes2, bytes3, bytes4, bytes8, bytes16, bytes32, fixed, ufixed, fixed0x8, fixed0x16, fixed0x24, fixed0x32, fixed0x40, fixed0x48, fixed0x56, fixed0x64, fixed0x72, fixed0x80, ufixed0x8, ufixed0x16, ufixed0x24, ufixed0x32, ufixed0x40, ufixed0x48, ufixed0x56, ufixed0x64, ufixed0x72, ufixed0x80, var, let, const, public, private, internal, external, pure, view, payable, constant, anonymous, indexed, storage, memory, calldata, this, super, selfdestruct, block, msg, tx, now, gasprice, origin, gas, sender, data, sig, value, length, push, pop, addmod, mulmod, keccak256, sha256, ripemd160, ecrecover, blockhash, require, assert, revert, transfer, send, call, delegatecall, staticcall, new, is, as, assembly, let, switch, case, default, leave, break, continue},
+    keywordstyle=\color{magenta}\bfseries,
+    ndkeywords={pragma, solidity, import, from, as, is},
+    ndkeywordstyle=\color{codepurple}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=true,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{codegreen},
+    stringstyle=\color{codepurple},
+    morestring=[b]',
+    morestring=[b]"
+}
+
+% Define JavaScript language for listings
+\lstdefinelanguage{JavaScript}{
+    keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with, class, const, export, extends, import, super, yield, let, static, await, async},
+    keywordstyle=\color{magenta}\bfseries,
+    ndkeywords={true, false, null, undefined, NaN, Infinity},
+    ndkeywordstyle=\color{codepurple}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=true,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{codegreen},
+    stringstyle=\color{codepurple},
+    morestring=[b]',
+    morestring=[b]"
+}
+
+% Define TypeScript language for listings (extends JavaScript)
+\lstdefinelanguage{TypeScript}[]{JavaScript}{
+    morekeywords={readonly, type, interface, namespace, declare, abstract, implements, extends, constructor, private, protected, public, static, get, set, any, number, boolean, string, symbol, void, never, undefined, null, unknown, bigint, unique, infer, is, keyof, typeof, require},
+    sensitive=true
+}
+
+
+
+% ---------------- SPACING ----------------
+\onehalfspacing
+\setlength{\parindent}{5ex}
+\setlength{\parskip}{2em}
+
+% Section spacing per rules: 2 spaces between section headings, 1 space between subheadings
+\titlespacing{\section}{0pt}{2em}{1em}
+\titlespacing{\subsection}{0pt}{1em}{0.5em}
+
+% ---------------- HEADER/FOOTER ----------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\small BSIOTR, Department of Information Technology 2024-25}
+\fancyfoot[R]{\thepage}
+
+% ---------------- TITLE FORMATTING ----------------
+\titleformat{\chapter}
+{\centering\bfseries\fontsize{14}{16}\selectfont\uppercase}{\thechapter}{1em}{}
+
+\titleformat{\section}
+{\bfseries\uppercase}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\bfseries}{\thesubsection}{1em}{}
+
+% ---------------- DOCUMENT ----------------
+\begin{document}
+
+% ---------------- FRONT MATTER (Optional) ----------------
+% Uncomment the following lines to include cover page and certificate:
+% \input{frontmatter/coverpage}
+% \input{frontmatter/certificate}
+
+% ---------------- ACKNOWLEDGEMENT ----------------
+\chapter*{ACKNOWLEDGEMENT}
+\addcontentsline{toc}{chapter}{Acknowledgement}
+
+\input{sections/acknowledgement}
+
+% ---------------- ABSTRACT ----------------
+\chapter*{ABSTRACT}
+\addcontentsline{toc}{chapter}{Abstract}
+
+\input{sections/abstract}
+
+\textbf{Keywords:} Blockchain, Smart Contracts, Decentralized Application, Ethereum, IPFS, Freelance Marketplace, Escrow, Web3
+
+% ---------------- TABLE OF CONTENTS ----------------
+\tableofcontents
+\newpage
+
+% ---------------- LISTS ----------------
+\chapter*{LIST OF ABBREVIATIONS}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+
+\input{sections/abbreviations}
+
+\chapter*{LIST OF FIGURES}
+\addcontentsline{toc}{chapter}{List of Figures}
+
+\listoffigures
+
+\chapter*{LIST OF TABLES}
+\addcontentsline{toc}{chapter}{List of Tables}
+
+\listoftables
+
+% ---------------- MAIN CONTENT ----------------
+\pagenumbering{arabic}
+
+\chapter{Introduction}
+\input{sections/introduction}
+
+\chapter{Literature Survey}
+\input{sections/literature_survey}
+
+\chapter{Software Requirements Specification}
+\input{sections/srs}
+
+\chapter{System Design}
+\input{sections/system_design}
+
+\chapter{Implementation Details}
+\input{sections/implementation}
+
+\chapter{Testing and Validation}
+\input{sections/testing}
+
+\chapter{Other Specifications}
+\input{sections/other_specifications}
+
+\chapter{Conclusion and Future Work}
+\input{sections/conclusion}
+
+% ---------------- APPENDIX ----------------
+\appendix
+
+\chapter{Smart Contract Source Code}
+\input{sections/appendix_contracts}
+
+\chapter{Deployment and Configuration}
+\input{sections/appendix_deployment}
+
+\chapter{Project Statistics}
+\input{sections/appendix_statistics}
+
+% ---------------- REFERENCES ----------------
+\input{sections/references}
+
+\end{document}
