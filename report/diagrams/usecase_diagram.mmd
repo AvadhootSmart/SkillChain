@@ -1,0 +1,45 @@
+graph TB
+    subgraph Actors
+        Client((Client))
+        Freelancer((Freelancer))
+        System[(Smart Contracts)]
+    end
+
+    subgraph UseCases["Use Cases"]
+        UC1[Register Profile]
+        UC2[Create Job]
+        UC3[View Posted Jobs]
+        UC4[Browse Jobs]
+        UC5[Submit Proposal]
+        UC6[Review Proposals]
+        UC7[Approve Proposal]
+        UC8[Mark Job Complete<br/>Client]
+        UC9[Mark Job Complete<br/>Freelancer]
+        UC10[Receive Payment]
+        UC11[Upload Deliverables]
+        UC12[Manage Escrow]
+    end
+
+    Client --> UC1
+    Client --> UC2
+    Client --> UC3
+    Client --> UC6
+    Client --> UC7
+    Client --> UC8
+
+    Freelancer --> UC1
+    Freelancer --> UC4
+    Freelancer --> UC5
+    Freelancer --> UC9
+    Freelancer --> UC10
+    Freelancer --> UC11
+
+    UC2 -->|Lock Funds| UC12
+    UC7 -->|Auto Hire| UC12
+    UC8 -->|Approve| UC12
+    UC9 -->|Approve| UC12
+    UC12 -->|Release| UC10
+
+    System -->|Enforce| UC12
+    System -->|Validate| UC2
+    System -->|Validate| UC5

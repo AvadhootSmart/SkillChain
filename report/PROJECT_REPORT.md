@@ -13,7 +13,7 @@
 5. [System Architecture](#5-system-architecture)
 6. [Smart Contract Design](#6-smart-contract-design)
 7. [Frontend Implementation](#7-frontend-implementation)
-8. [Algorithms and Data Structures](#8-algorithms-and-data-structures)
+8. [Algorithms](#8-algorithms)
 9. [Security Considerations](#9-security-considerations)
 10. [Testing and Validation](#10-testing-and-validation)
 11. [Future Enhancements](#11-future-enhancements)
@@ -468,88 +468,15 @@ const config = getDefaultConfig({
 ---
 
 
-## 8. Algorithms and Data Structures
+## 8. Algorithms
 
-### 8.1 Data Structure Analysis
-
-| Structure | Type | Time Complexity | Space Complexity | Purpose |
-|-----------|------|----------------|------------------|---------|
-| `_profiles` | Mapping | O(1) access | O(n) | User lookup by address |
-| `_usernameOwner` | Mapping | O(1) access | O(n) | Reverse username lookup |
-| `_jobs` | Mapping | O(1) access | O(n) | Job lookup by ID |
-| `_clientJobIDs` | Mapping + Array | O(1) + O(n) | O(n) | Client job history |
-| `_jobProposalIDs` | Mapping + Array | O(1) + O(n) | O(n) | Job proposals list |
-| `_proposals` | Mapping | O(1) access | O(n) | Proposal lookup |
-| `_freelancerProposalIDs` | Mapping + Array | O(1) + O(n) | O(n) | Freelancer proposals |
-
-### 8.2 Complete Job Lifecycle Algorithm
-
-```
-ALGORITHM: CompleteJobLifecycle
-DESCRIPTION: End-to-end workflow from job creation to payment
-
-PHASE 1: Setup
-1. User A registers as Client via UserProfile.setProfile()
-2. User B registers as Freelancer via UserProfile.setProfile()
-
-PHASE 2: Job Creation
-3. Client calls JobsContract.CreateJob{value: X}(jobCID)
-4. Contract stores job with escrow funds
-5. Emit JobCreated event
-
-PHASE 3: Proposal Submission
-6. Freelancer calls ProposalsContract.CreateProposal(propCID, jobID)
-7. Contract stores proposal reference
-8. Emit ProposalCreated event
-
-PHASE 4: Proposal Approval
-9. Client calls ProposalsContract.ApproveProposal(proposalID)
-10. Contract verifies job ownership
-11. Contract calls JobsContract.HireFreelancer(freelancer, jobID)
-12. Emit ProposalApproved event
-
-PHASE 5: Work Execution
-13. Freelancer completes work off-chain
-
-PHASE 6: Completion Marking
-14. Freelancer calls JobsContract.MarkFLJobCompleted(jobID, deliverableCID)
-15. Contract sets freelancerApproved = true
-16. IF clientApproved already true:
-17.     CALL _releaseFunds(jobID)
-18. END IF
-
-19. Client calls JobsContract.MarkClientJobCompleted(jobID)
-20. Contract sets clientApproved = true
-21. IF freelancerApproved already true:
-22.     CALL _releaseFunds(jobID)
-23. END IF
-
-PHASE 7: Payment Release
-24. _releaseFunds() verifies both approvals
-25. Transfers escrow to freelancer
-26. Marks job completed
-27. Emit JobCompleted event
-```
-
-### 8.3 Gas Optimization Techniques
+### 8.1 Gas Optimization Techniques
 
 1. **Calldata vs Memory**: Using `calldata` for function parameters reduces gas costs
 2. **Storage Packing**: Struct fields ordered to minimize storage slots
 3. **View Functions**: Read-only operations marked as `view` cost no gas when called externally
 4. **Event Logging**: Expensive storage operations replaced with events where appropriate
 5. **Early Returns**: Validation checks at function start prevent wasted computation
-
-### 8.4 Access Control Matrix
-
-| Function | Access Control | Validation |
-|----------|----------------|------------|
-| `setProfile` | Any address | Username uniqueness |
-| `CreateJob` | Any address | msg.value > 0 |
-| `HireFreelancer` | Client or ProposalsContract | Job exists, not completed |
-| `CreateProposal` | Any address | Job exists |
-| `ApproveProposal` | Job owner only | Proposal exists, not approved |
-| `MarkFLJobCompleted` | Assigned freelancer only | Job not completed |
-| `MarkClientJobCompleted` | Job client only | Job not completed |
 
 ---
 

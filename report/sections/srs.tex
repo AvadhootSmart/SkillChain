@@ -34,21 +34,11 @@ The following features are not included in the current implementation but are pl
 
 \subsection{Clients}
 
-\begin{itemize}
-    \item \textbf{Description:} Users who post jobs and hire freelancers.
-    \item \textbf{Technical Expertise:} Basic understanding of cryptocurrency wallets.
-    \item \textbf{Frequency of Use:} Occasional to frequent job posting.
-    \item \textbf{Security Level:} High - handles ETH for escrow deposits.
-\end{itemize}
+Users who post jobs and hire freelancers. They require a basic understanding of cryptocurrency wallets, use the platform occasionally to frequently for job posting, and operate at a high security level because they handle ETH for escrow deposits.
 
 \subsection{Freelancers}
 
-\begin{itemize}
-    \item \textbf{Description:} Users who submit proposals and complete work.
-    \item \textbf{Technical Expertise:} Basic understanding of cryptocurrency wallets.
-    \item \textbf{Frequency of Use:} Regular proposal submissions and work delivery.
-    \item \textbf{Security Level:} Medium - receives payments but does not deposit.
-\end{itemize}
+Users who submit proposals and complete work. They require a basic understanding of cryptocurrency wallets, use the platform regularly for proposal submissions and work delivery, and operate at a medium security level (they receive payments but do not deposit).
 
 \section{Assumptions and Dependencies}
 
@@ -78,46 +68,19 @@ The following features are not included in the current implementation but are pl
 
 \subsection{User Profile Management}
 
-\begin{itemize}
-    \item \textbf{FR-1.1:} System shall allow users to create profiles with username, role, and metadata.
-    \item \textbf{FR-1.2:} System shall enforce unique usernames across all users.
-    \item \textbf{FR-1.3:} System shall support two roles: Client and Freelancer.
-    \item \textbf{FR-1.4:} System shall store profile data on IPFS and reference via CID.
-    \item \textbf{FR-1.5:} System shall allow profile updates while maintaining username uniqueness.
-\end{itemize}
+The system shall allow users to create profiles with unique usernames and role selection (Client or Freelancer). Profile data is stored on IPFS and referenced via CID, with uniqueness enforcement and update capabilities (FR-1.1 to FR-1.5).
 
 \subsection{Job Management}
 
-\begin{itemize}
-    \item \textbf{FR-2.1:} System shall allow clients to create jobs with title, description, budget, and metadata.
-    \item \textbf{FR-2.2:} System shall require ETH deposit equal to job budget during creation.
-    \item \textbf{FR-2.3:} System shall lock deposited funds in smart contract escrow.
-    \item \textbf{FR-2.4:} System shall allow clients to view their posted jobs.
-    \item \textbf{FR-2.5:} System shall allow freelancers to browse available jobs.
-    \item \textbf{FR-2.6:} System shall track job status (Open, In Progress, Completed).
-\end{itemize}
+Clients can create jobs with title, description, and budget, requiring ETH deposit equal to the budget amount. Funds are locked in escrow, with job status tracking through Open, In Progress, and Completed states (FR-2.1 to FR-2.6).
 
 \subsection{Proposal Management}
 
-\begin{itemize}
-    \item \textbf{FR-3.1:} System shall allow freelancers to submit proposals for open jobs.
-    \item \textbf{FR-3.2:} System shall store proposal details on IPFS.
-    \item \textbf{FR-3.3:} System shall allow clients to view proposals for their jobs.
-    \item \textbf{FR-3.4:} System shall allow clients to approve proposals.
-    \item \textbf{FR-3.5:} System shall automatically hire freelancer upon proposal approval.
-    \item \textbf{FR-3.6:} System shall prevent multiple proposals from same freelancer for same job.
-\end{itemize}
+Freelancers submit proposals for open jobs with details stored on IPFS. Clients can view and approve proposals, which automatically hires the freelancer. The system prevents duplicate proposals from the same freelancer for one job (FR-3.1 to FR-3.6).
 
 \subsection{Payment and Escrow}
 
-\begin{itemize}
-    \item \textbf{FR-4.1:} System shall hold client funds in escrow upon job creation.
-    \item \textbf{FR-4.2:} System shall allow freelancer to mark job as completed with deliverables.
-    \item \textbf{FR-4.3:} System shall allow client to mark job as completed.
-    \item \textbf{FR-4.4:} System shall release funds only upon mutual approval from both parties.
-    \item \textbf{FR-4.5:} System shall transfer funds directly to freelancer's wallet upon release.
-    \item \textbf{FR-4.6:} System shall prevent fund release before both parties approve.
-\end{itemize}
+The escrow system holds client funds upon job creation. Both freelancer and client must mark the job complete for fund release, which transfers ETH directly to the freelancer's wallet. The system prevents premature fund release (FR-4.1 to FR-4.6).
 
 \section{External Interface Requirements}
 
@@ -234,7 +197,7 @@ Blockchain & wagmi & 3.4.1 \\
 \hline
 Wallet & RainbowKit & 2.2.10 \\
 \hline
-Smart Contracts & Solidity & ^0.8.24 \\
+Smart Contracts & Solidity & 0.8.24+ \\
 \hline
 Development & Foundry & Latest \\
 \hline

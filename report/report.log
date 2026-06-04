@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.18)  18 MAR 2026 23:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026) (preloaded format=pdflatex 2026.3.18)  4 JUN 2026 22:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -508,15 +508,9 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip113
 )
-! Illegal parameter number in definition of \lstlang@toml$.
-<to be read again> 
-                   }
-l.103 }
-       
-? 
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
-27.
-(/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+24.
+ (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 (/usr/local/texlive/2026/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
@@ -526,24 +520,24 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 (./report.aux)
 \openout1 = `report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 124.
+LaTeX Font Info:    ... okay on input line 124.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -553,15 +547,15 @@ LaTeX Font Info:    ... okay on input line 127.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(72.26997pt, 462.00163pt, 63.23627pt)
-* v-part:(T,H,B)=(54.2025pt, 727.60808pt, 63.23627pt)
+* h-part:(L,W,R)=(108.40501pt, 416.83289pt, 72.26997pt)
+* v-part:(T,H,B)=(72.26997pt, 700.5069pt, 72.26997pt)
 * \paperwidth=597.50787pt
 * \paperheight=845.04684pt
-* \textwidth=462.00163pt
-* \textheight=727.60808pt
-* \oddsidemargin=-0.00002pt
-* \evensidemargin=-0.00002pt
-* \topmargin=-55.06749pt
+* \textwidth=416.83289pt
+* \textheight=700.5069pt
+* \oddsidemargin=36.13503pt
+* \evensidemargin=36.13503pt
+* \topmargin=-37.00002pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=12.0pt
@@ -605,73 +599,63 @@ e
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring OFF on input line 127.
+Package hyperref Info: Link coloring OFF on input line 124.
 
 (./report.out) (./report.out)
 \@outlinefile=\write3
 \openout3 = `report.out'.
 
- (./sections/acknowledgement.tex) [1
+ (./frontmatter/coverpage.tex
+LaTeX Font Info:    Trying to load font information for U+msa on input line 35.
 
 
-{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
-al/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}] (./sections/abstract.t
-ex
-Overfull \hbox (13.20302pt too wide) in paragraph at lines 9--10
-[]\OT1/ptm/m/n/12 Security con-sid-er-a-tions in-clude re-entrancy pro-tec-tion
- through the Checks-Effects-Interactions
- []
-
-)
-Overfull \hbox (2.90707pt too wide) in paragraph at lines 146--147
-[]\OT1/ptm/b/n/12 Keywords: \OT1/ptm/m/n/12 Blockchain, Smart Con-tracts, De-ce
-n-tral-ized Ap-pli-ca-tion, Ethereum, IPFS, Free-
- []
-
-(./report.toc
-LaTeX Font Info:    Trying to load font information for U+msa on input line 1.
- (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
+(/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 1.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 35.
+
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [2
+) [1
 
-] [3]
-[4] [5] [6])
+{/usr/local/texlive/2026/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/usr/loc
+al/texlive/2026/texmf-dist/fonts/enc/dvips/base/8r.enc}]) (./frontmatter/certif
+icate.tex
+[1
+
+]) (./sections/acknowledgement.tex) [2
+
+
+] (./sections/abstract.tex
+Overfull \hbox (1.72057pt too wide) in paragraph at lines 9--10
+[]\OT1/ptm/m/n/12 Security con-sid-er-a-tions in-clude re-entrancy pro-tec-tion
+ through the Checks-Effects-
+ []
+
+) [3
+
+] (./report.toc [4] [5] [6])
 \tf@toc=\write4
 \openout4 = `report.toc'.
 
  [7] (./sections/abbreviations.tex) [8
 
-] (./report.lof)
+
+]
+(./report.lof)
 \tf@lof=\write5
 \openout5 = `report.lof'.
 
  [9
 
-]
-(./report.lot)
+] (./report.lot)
 \tf@lot=\write6
 \openout6 = `report.lot'.
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.171 \chapter
-              {Introduction} [1
+ [1
 
 ]
-pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.171 \chapter
-              {Introduction} [2]
 Chapter 1.
 (./sections/introduction.tex
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 7
@@ -679,13 +663,7 @@ LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 7
 
 (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-)
-pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.21 \subsection{Key Features}
-                               [3
+) [2
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 43--43
@@ -717,77 +695,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 51--52
 []|\OT1/ptm/m/n/12 Mutual con-sen-sus mech-a-
  []
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.4}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.62     \item \textbf
-                      {Cost Efficiency:} Optimized gas usage through efficie...
-[4])
-pdfTeX warning (ext4): destination with the same identifier (name{page.5}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.174 \chapter
-              {Literature Survey} [5]
+[3]) [4]
 Chapter 2.
-(./sections/literature_survey.tex
-Overfull \hbox (8.45335pt too wide) in paragraph at lines 3--4
-\OT1/ptm/m/n/12 Blockchain tech-nol-ogy en-ables trust-less in-ter-ac-tions thr
-ough im-mutable ledgers and pro-grammable
- []
-
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.6}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.25 \end{itemize}
-                   [6
+(./sections/literature_survey.tex [5
 
 ]
-Overfull \hbox (0.31776pt too wide) in paragraph at lines 41--42
-\OT1/ptm/m/n/12 Several plat-forms have at-tempted to ad-dress free-lance mar-k
-et-place chal-lenges through blockchain
+Overfull \hbox (0.40285pt too wide) in paragraph at lines 37--38
+\OT1/ptm/m/n/12 elim-i-nat-ing man-ual in-ter-ven-tion while main-tain-ing se-c
+u-rity. The mu-tual ap-proval mech-
  []
 
-
-pdfTeX warning (ext4): destination with the same identifier (name{page.7}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.57     \item L
-                imited dispute resolution mechanisms. [7])
-pdfTeX warning (ext4): destination with the same identifier (name{page.8}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.177 \chapter
-              {Software Requirements Specification} [8]
+) [6] [7]
 Chapter 3.
-(./sections/srs.tex
-pdfTeX warning (ext4): destination with the same identifier (name{page.9}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.30     \item T
-                ime tracking integration. [9
+(./sections/srs.tex [8
 
-] [10] [11] [12] [13] [14]
-! Missing $ inserted.
-<inserted text> 
-                $
-l.237 Smart Contracts & Solidity & ^
-                                    0.8.24 \\
-? 
-! Missing $ inserted.
-<inserted text> 
-                $
-l.238 \hline
-            
-? 
-[15]) [16]
+] [9] [10] [11] [12] [13]) [14]
 Chapter 4.
 (./sections/system_design.tex
 Underfull \hbox (badness 10000) in paragraph at lines 14--14
@@ -809,344 +731,287 @@ Underfull \hbox (badness 10000) in paragraph at lines 18--19
 []|\OT1/ptm/m/n/12 Decentralized com-pu-ta-tion
  []
 
-[17
+[15
 
-] [18]
-Underfull \hbox (badness 3657) in paragraph at lines 117--118
-\OT1/ptm/m/n/12 Client), One-to-Many with
- []
-
-
-Underfull \hbox (badness 2213) in paragraph at lines 119--119
-[]|\OT1/ptm/m/n/12 jobID, job-CID, de-liv-
- []
-
-
-Underfull \hbox (badness 1939) in paragraph at lines 119--119
-\OT1/ptm/m/n/12 er-able-CID, com-pleted,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 119--119
-\OT1/ptm/m/n/12 client, free-lancer,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 119--119
-\OT1/ptm/m/n/12 amount, clien-tAp-
- []
-
-
-Underfull \hbox (badness 4872) in paragraph at lines 119--119
-\OT1/ptm/m/n/12 proved, free-lancer-Ap-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 119--120
-[]|\OT1/ptm/m/n/12 Many-to-One with Client,
- []
+]
+<diagrams/dfd_level0.png, id=776, 1985.4175pt x 1059.96pt>
+File: diagrams/dfd_level0.png Graphic file (type png)
+<use diagrams/dfd_level0.png>
+Package pdftex.def Info: diagrams/dfd_level0.png  used on input line 75.
+(pdftex.def)             Requested size: 416.83289pt x 222.53348pt.
+ [16]
+<diagrams/dfd_level1.png, id=784, 2376.88pt x 1636.1125pt>
+File: diagrams/dfd_level1.png Graphic file (type png)
+<use diagrams/dfd_level1.png>
+Package pdftex.def Info: diagrams/dfd_level1.png  used on input line 86.
+(pdftex.def)             Requested size: 416.83289pt x 286.92314pt.
+ [17 <./diagrams/dfd_level0.png>]
+<diagrams/dfd_level2_job_creation.png, id=789, 421.575pt x 590.205pt>
+File: diagrams/dfd_level2_job_creation.png Graphic file (type png)
+<use diagrams/dfd_level2_job_creation.png>
+Package pdftex.def Info: diagrams/dfd_level2_job_creation.png  used on input li
+ne 99.
+(pdftex.def)             Requested size: 416.83289pt x 583.57529pt.
+ [18 <./diagrams/dfd_level1.png>]
+[19 <./diagrams/dfd_level2_job_creation.png>]
+<diagrams/dfd_level2_proposal.png, id=799, 2200.22pt x 3774.1pt>
+File: diagrams/dfd_level2_proposal.png Graphic file (type png)
+<use diagrams/dfd_level2_proposal.png>
+Package pdftex.def Info: diagrams/dfd_level2_proposal.png  used on input line 1
+10.
+(pdftex.def)             Requested size: 416.83289pt x 715.0133pt.
+ [20] [21]
+Overfull \vbox (74.85085pt too high) has occurred while \output is active []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 119--120
-\OT1/ptm/m/n/12 Many-to-One with Free-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 119--120
-\OT1/ptm/m/n/12 lancer, One-to-Many with
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 121--121
-[]|\OT1/ptm/m/n/12 proposalID, pro-pos-al-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 121--122
-[]|\OT1/ptm/m/n/12 Many-to-One with Job,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 121--122
-\OT1/ptm/m/n/12 Many-to-One with Free-
- []
-
-[19] [20]
-Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 172.
+[22 <./diagrams/dfd_level2_proposal.png>]
+<diagrams/usecase_diagram.png, id=814, 2376.88pt x 602.25pt>
+File: diagrams/usecase_diagram.png Graphic file (type png)
+<use diagrams/usecase_diagram.png>
+Package pdftex.def Info: diagrams/usecase_diagram.png  used on input line 156.
+(pdftex.def)             Requested size: 375.14705pt x 95.04785pt.
+ [23] [24 <./diagrams/usecase_diagram.png>]
 LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
-72.
+99.
  (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-[21] [22] [23]
-Overfull \hbox (10.85547pt too wide) in paragraph at lines 302--302
-[]|\OT1/ptm/m/n/12 MarkClientJobCompleted| 
+Overfull \hbox (22.98892pt too wide) in paragraph at lines 203--203
+[]|\OT1/pcr/m/n/12 getProfileByAddress| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--303
-[]|\OT1/ptm/m/n/12 Awaiting Free-lancer Ap-
+Overfull \hbox (8.58893pt too wide) in paragraph at lines 205--205
+[]|\OT1/pcr/m/n/12 getUserByUsername| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 304--304
-[]|\OT1/ptm/m/n/12 Awaiting Client Ap-
+Overfull \hbox (15.78893pt too wide) in paragraph at lines 223--223
+[]|\OT1/pcr/m/n/12 MarkFLJobCompleted| 
  []
 
 
-Overfull \hbox (10.85547pt too wide) in paragraph at lines 304--304
-[]|\OT1/ptm/m/n/12 MarkClientJobCompleted| 
+Overfull \hbox (44.58891pt too wide) in paragraph at lines 225--225
+[]|\OT1/pcr/m/n/12 MarkClientJobCompleted| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 306--306
-[]|\OT1/ptm/m/n/12 Awaiting Free-lancer
+Underfull \hbox (badness 2111) in paragraph at lines 237--238
+[]|\OT1/ptm/m/n/12 proposalID, pro-pos-al-CID, jo-bID, ap-proved, free-
  []
 
-) [24]
+
+Overfull \hbox (22.98892pt too wide) in paragraph at lines 243--243
+[]|\OT1/pcr/m/n/12 getProposalsByJobID| 
+ []
+
+[25]
+<diagrams/sequence_diagram.png, id=847, 2376.88pt x 2234.3475pt>
+File: diagrams/sequence_diagram.png Graphic file (type png)
+<use diagrams/sequence_diagram.png>
+Package pdftex.def Info: diagrams/sequence_diagram.png  used on input line 254.
+
+(pdftex.def)             Requested size: 416.83289pt x 391.83492pt.
+) [26 <./diagrams/sequence_diagram.png>]
 Chapter 5.
 (./sections/implementation.tex
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+LaTeX Info: Symbol \textrightarrow not provided by
+            font family ptm in TS1 encoding.
+            Default family used instead on input line 7.
+LaTeX Info: Symbol \textrightarrow not provided by
+            font family ptm in TS1 encoding.
+            Default family used instead on input line 7.
+
+Underfull \hbox (badness 10000) in paragraph at lines 18--18
 []|\OT1/ptm/m/n/12 Retrieves pro-file by
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--41
+Underfull \hbox (badness 10000) in paragraph at lines 20--20
 []|\OT1/ptm/m/n/12 Reverse lookup by
  []
 
-[25
+[27
 
-] [26]
-Overfull \hbox (10.85547pt too wide) in paragraph at lines 96--96
+{/usr/local/texlive/2026/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+
+Overfull \hbox (10.85547pt too wide) in paragraph at lines 46--46
 []|\OT1/ptm/m/n/12 MarkClientJobCompleted| 
  []
 
-[27] [28] (/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2025/11/14 1.11b listings language file
-)
-(/usr/local/texlive/2026/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2025/11/14 1.11b listings language file
-) [29]
-LaTeX Font Info:    Trying to load font information for TS1+pcr on input line 2
-44.
 
-(/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/ts1pcr.fd
-File: ts1pcr.fd 2001/06/04 font definitions for TS1/pcr.
-) [30]
-Underfull \hbox (badness 3547) in paragraph at lines 297--297
-[]|\OT1/ptm/b/n/12 Time Com-plex-
+Overfull \hbox (22.85617pt too wide) in paragraph at lines 59--60
+\OT1/ptm/m/n/12 ity. It de-clares a min-i-mal \OT1/pcr/m/n/12 IJobsContract \OT
+1/ptm/m/n/12 in-ter-face with two meth-ods --- \OT1/pcr/m/n/12 getJobOwner
  []
 
-
-Underfull \hbox (badness 3138) in paragraph at lines 299--300
-[]|\OT1/ptm/m/n/12 User lookup by
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 301--302
-[]|\OT1/ptm/m/n/12 Reverse user-
- []
-
-
-Overfull \hbox (12.0261pt too wide) in paragraph at lines 311--311
-[]|[]\OT1/ptm/m/n/12 freelancerProposalIDs| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 311--312
-[]|\OT1/ptm/m/n/12 Freelancer pro-
- []
-
-
-Overfull \hbox (27.18964pt too wide) in paragraph at lines 295--314
- [][] 
- []
-
-[31]
-LaTeX Font Info:    Trying to load font information for OMS+ptm on input line 3
-27.
- (/usr/local/texlive/2026/texmf-dist/tex/latex/psnfss/omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 327.
- [32]
-Underfull \hbox (badness 10000) in paragraph at lines 396--396
-[]|\OT1/ptm/m/n/12 Client or Pro-pos-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 402--402
-[]|\OT1/ptm/m/n/12 Assigned free-lancer
- []
-
-) [33] [34]
+[28] [29]) [30]
 Chapter 6.
 (./sections/testing.tex
-Overfull \hbox (13.00319pt too wide) in paragraph at lines 68--68
-[]|\OT1/ptm/m/n/12 test[]OnlyJobOwnerCanApprove| 
+Overfull \hbox (0.6894pt too wide) in paragraph at lines 3--4
+[]\OT1/ptm/m/n/12 The project in-cludes com-pre-hen-sive test cov-er-age us-ing
+ Foundry frame-work. Tests
  []
 
 
-Overfull \hbox (10.41096pt too wide) in paragraph at lines 72--72
-[]|\OT1/ptm/m/n/12 test[]DoubleApprovalPrevention| 
+Overfull \hbox (1.27794pt too wide) in paragraph at lines 25--26
+[]\OT1/ptm/m/n/12 Tests are ex-e-cuted us-ing Foundry com-mands: \OT1/pcr/m/n/1
+2 forge test \OT1/ptm/m/n/12 runs all tests, \OT1/pcr/m/n/12 forge
  []
 
-[35
 
-] [36]
-Underfull \hbox (badness 10000) in paragraph at lines 134--134
+Overfull \hbox (5.00156pt too wide) in paragraph at lines 25--26
+\OT1/pcr/m/n/12 test --gas-report \OT1/ptm/m/n/12 pro-vides gas anal-y-sis, and
+ \OT1/pcr/m/n/12 forge coverage \OT1/ptm/m/n/12 gen-er-ates cov-
+ []
+
+[31
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 58--58
 []|\OT1/ptm/m/n/12 Re-entrancy pro-tec-tion im-ple-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 134--135
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
 []|\OT1/ptm/m/n/12 Checks-Effects-Interactions
  []
 
 
-Underfull \hbox (badness 4660) in paragraph at lines 154--155
+Underfull \hbox (badness 4660) in paragraph at lines 78--79
 []|\OT1/ptm/m/n/12 Recommended for pro-duc-
  []
 
-[37] [38]
-Underfull \hbox (badness 10000) in paragraph at lines 254--254
+[32]
+Underfull \hbox (badness 10000) in paragraph at lines 140--140
 []|\OT1/ptm/m/n/12 Wallet Con-nec-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 256--256
+Underfull \hbox (badness 10000) in paragraph at lines 142--142
 []|\OT1/ptm/m/n/12 Role-Based Ac-
  []
 
-) [39]
+) [33]
 Chapter 7.
-(./sections/other_specifications.tex [40
-
-] [41] [42]
-Underfull \hbox (badness 10000) in paragraph at lines 143--143
-[]|\OT1/ptm/m/n/12 Crypto-native Free-
+(./sections/other_specifications.tex
+Overfull \hbox (22.9957pt too wide) in paragraph at lines 5--6
+[]\OT1/ptm/b/n/12 Security Ben-e-fits: \OT1/ptm/m/n/12 Trust-less op-er-a-tions
+ through smart con-tracts, im-mutable blockchain
  []
 
+[34
 
-Underfull \hbox (badness 10000) in paragraph at lines 147--147
-[]|\OT1/ptm/m/n/12 Remote-first Com-pa-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 147--148
-[]|\OT1/ptm/m/n/12 Global tal-ent, trans-par-ent
- []
-
-) [43] [44]
+]) [35]
 Chapter 8.
-(./sections/conclusion.tex [45
+(./sections/conclusion.tex
+Overfull \hbox (3.57938pt too wide) in paragraph at lines 3--4
+[]\OT1/ptm/m/n/12 SkillChain suc-cess-fully demon-strates the fea-si-bil-ity of
+ de-cen-tral-ized free-lance mar-
+ []
+
+
+Overfull \hbox (10.71092pt too wide) in paragraph at lines 3--4
+\OT1/ptm/m/n/12 logic through wallet-based iden-tity to IPFS-backed con-tent st
+or-age. The plat-form achieves
+ []
+
+[36
 
 ]
-Overfull \hbox (14.27246pt too wide) in paragraph at lines 38--39
-[]\OT1/ptm/b/n/12 Web3 In-te-gra-tion: \OT1/ptm/m/n/12 Mas-tered wagmi, Rain-bo
-wKit, and viem li-braries for seam-less blockchain
+Overfull \hbox (1.27863pt too wide) in paragraph at lines 25--26
+\OT1/ptm/m/n/12 chal-lenge en-trenched mar-ket-place mod-els: em-pow-er-ing fre
+e-lancers through di-rect client
  []
 
-[46] [47]
-Overfull \hbox (3.60364pt too wide) in paragraph at lines 100--101
-[]\OT1/ptm/m/n/12 As blockchain tech-nol-ogy con-tin-ues to ma-ture and adop-ti
-on grows, plat-forms like SkillChain
+) [37]
+Chapter 9.
+(./sections/future_work.tex [38
+
+]
+Overfull \hbox (3.05435pt too wide) in paragraph at lines 34--35
+[]\OT1/ptm/b/n/12 Time Track-ing: \OT1/ptm/m/n/12 In-te-grated time log-ging co
+m-bined with hourly-rate es-crow would
  []
 
-) [48]
+) [39] [40]
 Appendix A.
-(./sections/appendix_contracts.tex
+(./sections/appendix_deployment.tex
+Overfull \hbox (1.35164pt too wide) in paragraph at lines 5--6
+\OT1/ptm/m/n/12 per-forms the three de-ploy-ments in a sin-gle trans-ac-tion ba
+tch. It de-ploys \OT1/pcr/m/n/12 UserProfile
+ []
 
-Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 1.
 
-[49
+Overfull \hbox (26.08382pt too wide) in paragraph at lines 5--6
+\OT1/ptm/m/n/12 all three are de-ployed, the script in-vokes the cross-contract
+ set-ter on \OT1/pcr/m/n/12 ProposalsContract
+ []
 
-] [50] [51] [52] [53] [54]) [55]
-Appendix B.
-(./sections/appendix_deployment.tex [56
+[41
 
 ]
-! Illegal parameter number in definition of \reserved@a.
-<to be read again> 
-                   \@nil 
-l.79 ...age=toml, caption={Foundry Configuration}]
-                                                  
-? 
-! Illegal parameter number in definition of \reserved@b.
-<to be read again> 
-                   \@nil 
-l.79 ...age=toml, caption={Foundry Configuration}]
-                                                  
-? 
-[57] [58]) [59]
-Appendix C.
-(./sections/appendix_statistics.tex [60
+Overfull \hbox (43.16885pt too wide) in paragraph at lines 21--22
+[]\OT1/ptm/m/n/12 The op-er-a-tor cre-ates a Pinata ac-count and gen-er-ates an
+ API key with the \OT1/pcr/m/n/12 pinFileToIPFS
+ []
 
-] [61] [62]) (./sections/references.tex
-[63]
-Underfull \hbox (badness 10000) in paragraph at lines 14--17
-[]\OT1/ptm/m/n/12 Benet, J. (2014). \OT1/ptm/m/it/12 IPFS - Con-tent Ad-dressed
-, Ver-sioned,
+)
+Overfull \hbox (0.80908pt too wide) in paragraph at lines 25--206
+[]\OT1/ptm/b/n/12 Key cus-tody: \OT1/ptm/m/n/12 the de-ployer pri-vate key con-
+trols up-grades and cross-contract wiring
+ []
+
+(./sections/references.tex [42]
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
+[]\OT1/ptm/m/n/10 OpenZeppelin. (2024). \OT1/ptm/m/it/10 Smart Con-tract Se-cu-
+rity Best Prac-tices\OT1/ptm/m/n/10 . []$\OT1/pcr/m/n/10 https : / / docs .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 14--17
-\OT1/ptm/m/it/12 P2P File Sys-tem\OT1/ptm/m/n/12 . Avail-able at: []$\OT1/pcr/m
-/n/12 https : / / ipfs . io / ipfs /
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
+[]\OT1/ptm/m/n/10 Solidity Doc-u-men-ta-tion. (2024). \OT1/ptm/m/it/10 So-lid-i
+ty Pro-gram-ming Lan-guage\OT1/ptm/m/n/10 . []$\OT1/pcr/m/n/10 https : / / docs
+ .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 14--17
-\OT1/pcr/m/n/12 QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX / ipfs . draft3 
-.
+Underfull \hbox (badness 2653) in paragraph at lines 48--49
+[]\OT1/ptm/m/n/10 Pinata Doc-u-men-ta-tion. (2024). \OT1/ptm/m/it/10 IPFS Pin-n
+ing Ser-vice Doc-u-men-ta-tion\OT1/ptm/m/n/10 . []$\OT1/pcr/m/n/10 https : / / 
+docs .
  []
 
+[43
 
-Underfull \hbox (badness 1789) in paragraph at lines 39--42
-[]\OT1/ptm/m/n/12 Pinata Doc-u-men-ta-tion. (2024). \OT1/ptm/m/it/12 IPFS Pin-n
-ing Ser-vice Doc-u-men-ta-tion\OT1/ptm/m/n/12 . Avail-able at:
- []
-
-[64
-
-]) [65] (./report.aux)
+]) [44] (./report.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 873FDEC38FCB8AA0DF623A6615D1398A;25479.
+(rerunfilecheck)             Checksum: A2A6ACF77CF2A9ED8B45CC2499605F48;18777.
  ) 
 Here is how much of TeX's memory you used:
- 17398 strings out of 467525
- 267442 string characters out of 5418982
- 1195574 words of memory out of 5000000
- 44996 multiletter control sequences out of 15000+600000
- 644790 words of font info for 82 fonts, out of 8000000 for 9000
+ 15871 strings out of 467525
+ 248252 string characters out of 5418982
+ 679127 words of memory out of 5000000
+ 44214 multiletter control sequences out of 15000+600000
+ 659886 words of font info for 105 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 75i,15n,79p,1147b,2093s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb
-></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
-/usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></us
-r/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr
-/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><
-/usr/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr/loc
-al/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texli
-ve/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2026/te
-xmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-dist/f
-onts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (74 pages, 284163 bytes).
+ 75i,15n,79p,1147b,607s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+></usr/local/texlive/2026/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10
+.pfb></usr/local/texlive/2026/texmf-dist/fonts/type1/public/cm-super/sfrm1200.p
+fb></usr/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrb8a.pfb></usr
+/local/texlive/2026/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/t
+exlive/2026/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/202
+6/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2026/texmf-di
+st/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (54 pages, 1025562 bytes).
 PDF statistics:
- 2239 PDF objects out of 2487 (max. 8388607)
- 2121 compressed objects within 22 object streams
- 1049 named destinations out of 1200 (max. 500000)
- 1233 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1113 PDF objects out of 1200 (max. 8388607)
+ 1024 compressed objects within 11 object streams
+ 302 named destinations out of 1000 (max. 500000)
+ 967 words of extra memory for PDF output out of 10000 (max. 10000000)
 

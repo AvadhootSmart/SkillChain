@@ -1,0 +1,28 @@
+graph TB
+    subgraph External Entities
+        Client[Client User]
+        Freelancer[Freelancer User]
+    end
+
+    subgraph System["SkillChain System"]
+        Process[Freelance Marketplace DApp]
+    end
+
+    subgraph DataStores
+        Blockchain[(Ethereum Blockchain)]
+        IPFS[(IPFS Storage)]
+    end
+
+    Client -->|Job Creation Request| Process
+    Client -->|ETH Deposit| Process
+    Client -->|Approve Proposal| Process
+    Client -->|Mark Complete| Process
+    
+    Freelancer -->|Submit Proposal| Process
+    Freelancer -->|Upload Deliverables| Process
+    Freelancer -->|Mark Complete| Process
+    
+    Process -->|Store Contract State| Blockchain
+    Process -->|Store Metadata| IPFS
+    Process -->|Retrieve Metadata| IPFS
+    Blockchain -->|Read State| Process

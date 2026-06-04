@@ -1,171 +1,25 @@
-\section{Deployment Script}
+\section{Deployment Configuration}
 
-\begin{lstlisting}[language=Solidity, caption={Deploy.s.sol - Contract Deployment Script}]
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+\subsection{Deploy Script Summary}
 
-import "forge-std/Script.sol";
-import "../src/Profile.sol";
-import "../src/Jobs.sol";
-import "../src/Proposals.sol";
+The deployment is automated through a Foundry script (\texttt{Deploy.s.sol}) that performs the three deployments in a single transaction batch. It deploys \texttt{UserProfile} first (no dependencies), then \texttt{JobsContract}, then \texttt{ProposalsContract}. Once all three are deployed, the script invokes the cross-contract setter on \texttt{ProposalsContract} so it can later call into \texttt{JobsContract} for ownership verification and freelancer hiring. The freshly deployed addresses are written to the Foundry broadcast log and copied into the frontend environment.
 
-contract DeployScript is Script {
-    function run() external {
-        vm.startBroadcast();
-        
-        // Deploy UserProfile contract
-        UserProfile profile = new UserProfile();
-        
-        // Deploy JobsContract
-        JobsContract jobs = new JobsContract();
-        
-        // Deploy ProposalsContract
-        ProposalsContract proposals = new ProposalsContract();
-        
-        // Link contracts
-        jobs.setProposalsContractAddress(address(proposals));
-        proposals.setJobsContractAddress(address(jobs));
-        
-        vm.stopBroadcast();
-        
-        // Log deployed addresses
-        console.log("UserProfile deployed at:", address(profile));
-        console.log("JobsContract deployed at:", address(jobs));
-        console.log("ProposalsContract deployed at:", address(proposals));
-    }
-}
-\end{lstlisting}
+The same script runs against an Anvil node locally, and against a Sepolia RPC for testnet, in each case with the \texttt{--broadcast} flag so transactions are actually sent and \texttt{--verify} on testnet so source code is published to Etherscan.
 
-\section{Environment Configuration}
+\subsection{Environment Configuration}
 
-\subsection{Frontend Environment Variables (.env.local)}
+\textbf{Frontend (\texttt{.env.local}):} the three deployed contract addresses (refreshed after every deployment), the Pinata JWT and dedicated gateway hostname, and the WalletConnect project ID. None of these values are committed to source control; the repository ships an \texttt{.env.example} documenting the required keys.
 
-\begin{lstlisting}[language=bash, caption={Frontend Environment Configuration}]
-# Contract Addresses (update after deployment)
-NEXT_PUBLIC_PROFILE_CONTRACT_ADDRESS=0x...
-NEXT_PUBLIC_JOB_CONTRACT_ADDRESS=0x...
-NEXT_PUBLIC_PROPOSAL_CONTRACT_ADDRESS=0x...
+\textbf{Contract Deployment (\texttt{.env}):} the deployer's private key (loaded only at deployment time), the target RPC URL (Anvil locally, Infura/Alchemy for testnet and mainnet), and an optional Etherscan API key for source verification.
 
-# Pinata IPFS Configuration
-NEXT_PUBLIC_PINATA_JWT=your_pinata_jwt_token_here
-NEXT_PUBLIC_PINATA_GATEWAY=your_pinata_gateway_url
+\subsection{Deployment Workflow}
 
-# WalletConnect Project ID
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
-
-# Optional: Analytics
-NEXT_PUBLIC_ANALYTICS_ID=your_analytics_id
-\end{lstlisting}
-
-\subsection{Contract Deployment Configuration (.env)}
-
-\begin{lstlisting}[language=bash, caption={Contract Deployment Configuration}]
-# Ethereum Network Configuration
-PRIVATE_KEY=your_wallet_private_key_here
-RPC_URL=http://127.0.0.1:8545  # For local development
-# RPC_URL=https://mainnet.infura.io/v3/YOUR_INFURA_KEY  # For mainnet
-# RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY  # For testnet
-
-# Etherscan API Key (for verification)
-ETHERSCAN_API_KEY=your_etherscan_api_key
-
-# Gas Configuration (optional)
-GAS_PRICE=20000000000  # 20 gwei
-GAS_LIMIT=3000000
-\end{lstlisting}
-
-\subsection{Foundry Configuration (foundry.toml)}
-
-\begin{lstlisting}[language=toml, caption={Foundry Configuration}]
-[profile.default]
-src = "src"
-out = "out"
-libs = ["lib"]
-remappings = [
-    "@openzeppelin/=lib/openzeppelin-contracts/",
-]
-
-# Compiler settings
-solc_version = "0.8.24"
-optimizer = true
-optimizer_runs = 200
-
-# Testing settings
-fuzz_runs = 256
-verbosity = 3
-
-# Gas reporting
-gas_reports = ["*"]
-gas_reports_ignore = []
-
-[rpc_endpoints]
-mainnet = "https://mainnet.infura.io/v3/${INFURA_KEY}"
-sepolia = "https://sepolia.infura.io/v3/${INFURA_KEY}"
-anvil = "http://127.0.0.1:8545"
-
-[etherscan]
-mainnet = { key = "${ETHERSCAN_API_KEY}" }
-sepolia = { key = "${ETHERSCAN_API_KEY}" }
-\end{lstlisting}
-
-\section{Deployment Commands}
-
-\subsection{Local Development Deployment}
-
-\begin{lstlisting}[language=bash, caption={Local Deployment Steps}]
-# 1. Start local Anvil node
-anvil
-
-# 2. Deploy contracts (in new terminal)
-cd contract
-forge script script/Deploy.s.sol:DeployScript --fork-url http://localhost:8545 --broadcast
-
-# 3. Copy deployed addresses to frontend .env
-\end{lstlisting}
-
-\subsection{Testnet Deployment}
-
-\begin{lstlisting}[language=bash, caption={Testnet Deployment Steps}]
-# Deploy to Sepolia testnet
-forge script script/Deploy.s.sol:DeployScript \
-  --rpc-url https://sepolia.infura.io/v3/YOUR_INFURA_KEY \
-  --broadcast \
-  --verify \
-  -vvvv
-\end{lstlisting}
-
-\subsection{Mainnet Deployment}
-
-\begin{lstlisting}[language=bash, caption={Mainnet Deployment Steps}]
-# Deploy to Ethereum mainnet
-forge script script/Deploy.s.sol:DeployScript \
-  --rpc-url https://mainnet.infura.io/v3/YOUR_INFURA_KEY \
-  --broadcast \
-  --verify \
-  -vvvv
-\end{lstlisting}
+The recommended local workflow is to start Anvil --- which spins up a deterministic in-memory Ethereum node pre-funded with ten test accounts --- and then execute the deployment script with \texttt{--fork-url} pointing at the local endpoint and \texttt{--broadcast} to actually send the transactions. For testnet the script is re-run against a Sepolia RPC with \texttt{--broadcast} and \texttt{--verify}. Post-deployment, the operator copies the new addresses into \texttt{.env.local}, restarts the frontend dev server, and runs a short smoke test (register a profile, post a low-value job, submit a proposal) before announcing the deployment.
 
 \section{Pinata IPFS Setup}
 
-\subsection{Getting Pinata JWT}
+The operator creates a Pinata account and generates an API key with the \texttt{pinFileToIPFS} and \texttt{unpin} permissions enabled. Pinata issues a JWT that authenticates subsequent uploads; this JWT is stored in the frontend environment file along with the dedicated gateway hostname Pinata provisions for the account. The gateway is used for read operations: when the frontend resolves a CID for display, it requests the content from the configured gateway, which serves it with low latency from Pinata's edge cache. Public IPFS gateways are avoided for production because their availability is best-effort and their response times can spike under load.
 
-\begin{enumerate}
-    \item Create account at \url{https://www.pinata.cloud/}
-    \item Navigate to API Keys section
-    \item Create new API key with permissions:
-    \begin{itemize}
-        \item pinFileToIPFS
-        \item pinJSONToIPFS
-        \item unpin
-    \end{itemize}
-    \item Copy the JWT token for frontend configuration
-\end{enumerate}
+\section{Operational Considerations}
 
-\subsection{Pinata Gateway Configuration}
-
-\begin{enumerate}
-    \item In Pinata dashboard, go to Gateway section
-    \item Create a dedicated gateway (paid plan) or use public gateway
-    \item Configure gateway URL in frontend environment variables
-    \item Format: \texttt{gateway.pinata.cloud} or your custom domain
-\end{enumerate}
+\textbf{Key custody:} the deployer private key controls upgrades and cross-contract wiring during deployment, so it is held in a hardware wallet or, at minimum, in an isolated environment file that is never checked into version control. \textbf{Gas-price monitoring:} on public networks, gas spikes can briefly make low-budget jobs uneconomic to post, so the frontend displays a live gas estimate before transaction submission. \textbf{Pinata quotas:} the free tier caps storage and bandwidth, so a production deployment monitors usage and upgrades the plan or supplements with a self-hosted pinning node before the cap is reached. \textbf{Address rotation:} any change to the contracts requires a coordinated update --- deploy, copy the new addresses, smoke test, and only then deprecate the previous deployment.

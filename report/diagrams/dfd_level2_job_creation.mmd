@@ -1,0 +1,9 @@
+graph TB
+    Client[Client] -->|Job Details| Validate[Validate Input]
+    Client -->|ETH| Escrow[Lock Escrow Funds]
+    Validate -->|Valid| CreateJob[Create Job Struct]
+    Escrow -->|Funds Locked| CreateJob
+    CreateJob -->|Store| Jobs[(Jobs)]
+    CreateJob -->|Emit| Event[JobCreated Event]
+    Jobs -->|Display| Marketplace[Job Listed]
+    Event -->|Notify| User[User Notification]

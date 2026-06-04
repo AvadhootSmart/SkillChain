@@ -1,31 +1,10 @@
 \section{Smart Contract Implementation}
 
-The smart contract layer forms the core of the SkillChain platform, handling business logic, fund management, and access control. Three interconnected contracts work together to provide complete functionality.
+The smart contract layer forms the core of the SkillChain platform, handling business logic, fund management, and access control. Three interconnected contracts in Solidity 0.8.24 provide complete functionality: \textit{UserProfile} for identity, \textit{JobsContract} for escrow and payment, and \textit{ProposalsContract} for the bidding workflow.
 
 \subsection{UserProfile Contract}
 
-\subsubsection{Purpose and Functionality}
-
-The UserProfile contract manages user registration, profiles, and role assignment. It ensures each user has a unique identity on the platform and maintains the mapping between Ethereum addresses and user profiles.
-
-\subsubsection{Data Structures}
-
-\begin{lstlisting}[language=Solidity, caption={UserProfile Data Structures}]
-enum Role { 
-    Client,      // 0 - Can post jobs
-    Freelancer   // 1 - Can submit proposals
-}
-
-struct Profile {
-    uint256 userID;        // Auto-incremented unique ID
-    string username;       // Unique identifier
-    string cid;           // IPFS Content Identifier
-    Role role;            // Client or Freelancer
-    address userAddress;  // Ethereum wallet address
-}
-\end{lstlisting}
-
-\subsubsection{Key Functions}
+The UserProfile contract manages user registration, profile data, and role assignment, serving as the platform's identity backbone since every other action is keyed on an Ethereum address. Each user is represented by a \texttt{Profile} record containing a numeric ID, a unique username, an IPFS CID pointing to off-chain metadata, a role enumeration (Client or Freelancer), and the wallet address. Two internal mappings support lookup: \texttt{\_profiles} (address → Profile) and \texttt{\_usernameOwner} (username → address) for uniqueness enforcement.
 
 \begin{table}[H]
 \centering
@@ -43,42 +22,13 @@ getUserByUsername & external view & Reverse lookup by username & $\sim$2,000 \\
 \end{tabular}
 \end{table}
 
-\subsubsection{Profile Creation Algorithm}
-
-The profile creation process follows these steps:
-
-\begin{enumerate}
-    \item Validate username and CID are non-empty.
-    \item Increment user ID counter.
-    \item Check username uniqueness (either new profile or changed username).
-    \item Store profile data in mapping.
-    \item Update username ownership mapping.
-    \item Emit ProfileSet event for indexing.
-\end{enumerate}
+Profile creation validates the username and CID, assigns the next sequential ID, enforces uniqueness against the \texttt{\_usernameOwner} mapping (clearing the prior entry on an update), persists the record, and emits a \texttt{ProfileSet} event for off-chain indexing. Storing only minimal identity data on-chain keeps gas costs predictable; rich profile fields live on IPFS and are referenced through the single CID.
 
 \subsection{JobsContract}
 
-\subsubsection{Purpose and Functionality}
+The JobsContract handles the full job lifecycle: creation with escrow, freelancer assignment, completion signalling, and payment release. It holds value at runtime and is therefore the most security-critical contract. The escrow guarantee --- funds released only when both parties signal completion --- is enforced entirely by contract logic, with no administrative override.
 
-The JobsContract handles job creation, escrow management, and payment release. It ensures funds are securely held and only released upon mutual agreement.
-
-\subsubsection{Data Structures}
-
-\begin{lstlisting}[language=Solidity, caption={JobsContract Data Structures}]
-struct Job {
-    uint256 jobID;              // Unique job identifier
-    string jobCID;              // IPFS reference to job details
-    string deliverableCID;      // IPFS reference to completed work
-    bool completed;             // Job completion status
-    address client;             // Job poster
-    address freelancer;         // Hired freelancer
-    uint256 amount;             // Escrowed payment (wei)
-    bool clientApproved;        // Client approval flag
-    bool freelancerApproved;    // Freelancer approval flag
-}
-\end{lstlisting}
-
-\subsubsection{Key Functions}
+A \texttt{Job} record bundles a job ID, IPFS CIDs for the job description and deliverable, a completion flag, client and freelancer addresses, the escrowed amount in wei, and two independent approval booleans (one per party, since mutual approval requires remembering each signal until the other arrives). An inverse index \texttt{\_clientJobIDs} avoids scanning all jobs to render a client's dashboard.
 
 \begin{table}[H]
 \centering
@@ -100,308 +50,38 @@ MarkClientJobCompleted & external & Client marks job complete \\
 \end{tabular}
 \end{table}
 
-\subsubsection{Job Creation Algorithm}
+\textbf{Job creation} validates that the message value is greater than zero, increments the job ID counter, constructs the \texttt{Job} struct with the provided CID and deposited funds, persists it, appends the ID to the client's job list, and emits a \texttt{JobCreated} event.
 
-\begin{enumerate}
-    \item Validate msg.value is greater than 0 (funds required).
-    \item Increment job ID counter.
-    \item Create Job struct with provided CID and deposited funds.
-    \item Store job in \_jobs mapping.
-    \item Append job ID to client's job list.
-    \item Emit JobCreated event.
-\end{enumerate}
-
-\subsubsection{Payment Release Algorithm}
-
-The payment release function implements critical security patterns:
-
-\begin{lstlisting}[language=Solidity, caption={Payment Release Function}]
-function _releaseFunds(uint256 jobID) private {
-    Job storage job = _jobs[jobID];
-    if (job.freelancerApproved && job.clientApproved && !job.completed) {
-        // Effects: Update state first (prevent re-entrancy)
-        job.completed = true;
-        uint256 payment = job.amount;
-        job.amount = 0;  // Critical: Set to zero before external call
-        
-        // Interactions: External call last
-        (bool sent, ) = job.freelancer.call{value: payment}("");
-        require(sent, "Transfer failed");
-        
-        emit JobCompleted(msg.sender, jobID);
-    }
-}
-\end{lstlisting}
-
-\textbf{Security Pattern:} The contract uses Checks-Effects-Interactions pattern with re-entrancy protection by setting job.amount = 0 before external calls.
+\textbf{Payment release} is the most security-sensitive routine because it sends ETH externally. It is invoked internally whenever a party records their completion approval and both flags are now true. The function follows the \textbf{Checks-Effects-Interactions} pattern: it checks that both parties have approved and the job is not already completed; commits the effect by marking the job complete and zeroing the stored amount \emph{before} any external call; then performs the transfer using a low-level call, with the return value checked and the transaction reverted on failure. Zeroing the balance before the transfer neutralises any re-entrancy attempt.
 
 \subsection{ProposalsContract}
 
-\subsubsection{Purpose and Functionality}
+The ProposalsContract manages bidding: it accepts proposals from freelancers, exposes them for client review, and orchestrates the hiring step when a proposal is approved. It is the only contract that calls into another contract during ordinary user activity. It declares a minimal \texttt{IJobsContract} interface with two methods --- \texttt{getJobOwner} for verifying approval authority and \texttt{HireFreelancer} for assigning the freelancer --- which keeps the cross-contract dependency explicit and auditable.
 
-The ProposalsContract manages proposal submissions and approval workflow. It integrates with JobsContract to automatically hire freelancers upon proposal approval.
+A \texttt{Proposal} record contains the proposal ID, an IPFS CID with cover letter and bid details, the target job ID, an approval flag, and the submitting freelancer's address. Three mappings support lookup: \texttt{\_proposals} for direct access, \texttt{\_jobProposalIDs} for client review, and \texttt{\_freelancerProposalIDs} for freelancer dashboards.
 
-\subsubsection{Interface Definition}
-
-\begin{lstlisting}[language=Solidity, caption={Jobs Contract Interface}]
-interface IJobsContract {
-    function getJobOwner(uint256 jobID) external view returns (address);
-    function HireFreelancer(address freelancerAddress, uint256 jobID) external;
-}
-\end{lstlisting}
-
-\subsubsection{Data Structures}
-
-\begin{lstlisting}[language=Solidity, caption={ProposalsContract Data Structures}]
-struct Proposal {
-    uint256 proposalID;     // Unique proposal ID
-    string proposalCID;     // IPFS reference to proposal details
-    uint256 jobID;          // Reference to target job
-    bool approved;          // Approval status
-    address freelancer;     // Proposal submitter
-}
-\end{lstlisting}
-
-\subsubsection{Proposal Approval Algorithm}
-
-\begin{enumerate}
-    \item Retrieve proposal from storage.
-    \item Verify proposal is not already approved.
-    \item Query JobsContract to verify job ownership.
-    \item Ensure caller is the job owner.
-    \item Mark proposal as approved.
-    \item Call JobsContract.HireFreelancer to assign freelancer.
-    \item Emit ProposalApproved event.
-\end{enumerate}
+\textbf{Proposal approval} retrieves the proposal, ensures it is not already approved, queries the JobsContract for the canonical job owner, asserts that the caller is that owner, marks the proposal approved \emph{before} the external call, invokes \texttt{HireFreelancer} on the JobsContract, and emits a \texttt{ProposalApproved} event.
 
 \section{Frontend Implementation}
 
 \subsection{Project Structure}
 
-The frontend follows a well-organized directory structure:
-
-\begin{lstlisting}[language=bash, caption={Frontend Directory Structure}]
-client/
-|-- src/
-|   |-- app/                    # Next.js App Router pages
-|   |   |-- layout.tsx         # Root layout with providers
-|   |   |-- page.tsx           # Landing page
-|   |   |-- dashboard/         # User dashboard
-|   |   |-- explore/jobs/      # Job listings
-|   |   |-- job/[id]/          # Job details
-|   |   |-- track/job/[id]/    # Client tracking
-|   |   |-- deliver/job/[id]/  # Freelancer deliverables
-|   |   |-- sign-up/           # Profile creation
-|   |-- components/
-|   |   |-- ui/               # UI primitives (Button, Input, etc.)
-|   |   |-- navbar.tsx        # Navigation component
-|   |   |-- job-card.tsx      # Job listing cards
-|   |   |-- popups/           # Dialog and modal components
-|   |-- providers/
-|   |   |-- provider.tsx      # Wagmi + RainbowKit configuration
-|   |-- store/
-|   |   |-- user.store.ts     # Zustand user state
-|   |   |-- transition.store.ts # UI transition state
-|   |-- lib/
-|   |   |-- pinata.ts         # IPFS operations
-|   |   |-- utils.ts          # Utility functions
-|   |-- types/
-|   |   |-- user.types.ts     # TypeScript interfaces
-|   |   |-- job.types.ts
-|   |-- abi/                  # Contract ABIs
-\end{lstlisting}
+The frontend is implemented in Next.js 16 using the App Router. The codebase is organised into \texttt{app/} (routed pages), \texttt{components/} (UI primitives), \texttt{providers/} (Web3 context), \texttt{store/} (Zustand state), \texttt{lib/} (IPFS helpers), and \texttt{abi/} (JSON ABIs from the Foundry build). Components consume typed hooks wrapping wagmi calls referenced against the ABIs, isolating blockchain concerns from UI concerns and making contract upgrades a localised change.
 
 \subsection{State Management}
 
-\subsubsection{Zustand User Store}
-
-\begin{lstlisting}[language=TypeScript, caption={User State Interface}]
-interface UserState {
-  user: IUser | null;
-  isConnected: boolean;
-  isRegistered: boolean;
-}
-
-interface UserActions {
-  setUser: (user: IUser) => void;
-  clearUser: () => void;
-  setConnected: (status: boolean) => void;
-}
-\end{lstlisting}
-
-State persists in localStorage for seamless reconnection across sessions.
+Application state is divided between two complementary stores. \textbf{Wagmi and React Query} together manage all on-chain (server) state: account connection, contract reads, transaction status, and cache invalidation. \textbf{Zustand} manages cross-component UI state that does not belong on-chain --- the resolved user profile (on-chain identity combined with IPFS metadata), the connection status, and a registration flag. The store persists to \texttt{localStorage} so a returning user sees their profile rehydrate immediately on page load.
 
 \subsection{IPFS Integration}
 
-\subsubsection{Upload Function}
-
-\begin{lstlisting}[language=TypeScript, caption={IPFS Upload Function}]
-async function uploadJSONToPinata(obj: any): Promise<string> {
-  const blob = new Blob([JSON.stringify(obj)], { 
-    type: "application/json" 
-  });
-  
-  const file = new File([blob], `${obj.username}.json`, { 
-    type: "application/json" 
-  });
-  
-  const formData = new FormData();
-  formData.append("file", file);
-  
-  const res = await fetch("https://api.pinata.cloud/pinning/pinFileToIPFS", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${PINATA_JWT}`,
-    },
-    body: formData,
-  });
-  
-  const data = await res.json();
-  return data.IpfsHash;
-}
-\end{lstlisting}
-
-\subsubsection{Fetch Function}
-
-\begin{lstlisting}[language=TypeScript, caption={IPFS Fetch Function}]
-async function fetchFromPinata(cid: string): Promise<any> {
-  const res = await fetch(
-    `https://${PINATA_GATEWAY}/ipfs/${cid}`
-  );
-  return await res.json();
-}
-\end{lstlisting}
+All variable-length content (profile metadata, job descriptions, proposal cover letters, deliverable references) is uploaded to IPFS via Pinata. The frontend exposes two thin helpers: an upload function that serialises a JavaScript object to JSON, wraps it in a \texttt{File}, posts it to Pinata's pinning endpoint with bearer authentication, and returns the resulting CID; and a fetch function that dereferences a CID through the configured Pinata gateway. Centralising IPFS access in two stateless functions makes swapping pinning providers a single-file change.
 
 \subsection{Blockchain Configuration}
 
-\begin{lstlisting}[language=TypeScript, caption={Wagmi Configuration}]
-const config = getDefaultConfig({
-  appName: "SkillChain",
-  projectId: "YOUR_PROJECT_ID",
-  chains: [foundry],
-  transports: {
-    [foundry.id]: http("http://127.0.0.1:8545"),
-  },
-});
-\end{lstlisting}
+Web3 connectivity is established through a single wagmi configuration created with RainbowKit's \texttt{getDefaultConfig} helper, declaring the application name, a WalletConnect project ID, the supported chains, and an HTTP transport per chain. During development the only configured chain is the Foundry local node on port 8545; production deployments add Sepolia and mainnet entries. The rest of the application remains chain-agnostic.
 
-\section{Algorithms and Data Structures}
+\subsection{Gas Optimization and Access Control}
 
-\subsection{Data Structure Analysis}
+Gas optimization combines several techniques: \texttt{calldata} for unmodified parameters avoids memory copy costs; struct fields are ordered so smaller types share 32-byte slots; read-only functions are marked \texttt{view} and cost no gas externally; values needed only for off-chain indexing are emitted as events rather than stored; and validation checks at the start of each function revert before consuming gas on later logic.
 
-\begin{table}[H]
-\centering
-\caption{Data Structure Complexity Analysis}
-\begin{tabular}{|p{3.5cm}|p{2.5cm}|p{3cm}|p{3cm}|p{3cm}|}
-\hline
-\textbf{Structure} & \textbf{Type} & \textbf{Time Complexity} & \textbf{Space Complexity} & \textbf{Purpose} \\
-\hline
-\_profiles & Mapping & O(1) access & O(n) & User lookup by address \\
-\hline
-\_usernameOwner & Mapping & O(1) access & O(n) & Reverse username lookup \\
-\hline
-\_jobs & Mapping & O(1) access & O(n) & Job lookup by ID \\
-\hline
-\_clientJobIDs & Mapping + Array & O(1) + O(n) & O(n) & Client job history \\
-\hline
-\_jobProposalIDs & Mapping + Array & O(1) + O(n) & O(n) & Job proposals list \\
-\hline
-\_proposals & Mapping & O(1) access & O(n) & Proposal lookup \\
-\hline
-\_freelancerProposalIDs & Mapping + Array & O(1) + O(n) & O(n) & Freelancer proposals \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Complete Job Lifecycle Algorithm}
-
-\begin{enumerate}
-    \item \textbf{Phase 1: Setup}
-    \begin{itemize}
-        \item User A registers as Client via UserProfile.setProfile()
-        \item User B registers as Freelancer via UserProfile.setProfile()
-    \end{itemize}
-    
-    \item \textbf{Phase 2: Job Creation}
-    \begin{itemize}
-        \item Client calls JobsContract.CreateJob\{value: X\}(jobCID)
-        \item Contract stores job with escrow funds
-        \item Emit JobCreated event
-    \end{itemize}
-    
-    \item \textbf{Phase 3: Proposal Submission}
-    \begin{itemize}
-        \item Freelancer calls ProposalsContract.CreateProposal(propCID, jobID)
-        \item Contract stores proposal reference
-        \item Emit ProposalCreated event
-    \end{itemize}
-    
-    \item \textbf{Phase 4: Proposal Approval}
-    \begin{itemize}
-        \item Client calls ProposalsContract.ApproveProposal(proposalID)
-        \item Contract verifies job ownership
-        \item Contract calls JobsContract.HireFreelancer(freelancer, jobID)
-        \item Emit ProposalApproved event
-    \end{itemize}
-    
-    \item \textbf{Phase 5: Work Execution}
-    \begin{itemize}
-        \item Freelancer completes work off-chain
-    \end{itemize}
-    
-    \item \textbf{Phase 6: Completion Marking}
-    \begin{itemize}
-        \item Freelancer calls JobsContract.MarkFLJobCompleted(jobID, deliverableCID)
-        \item Contract sets freelancerApproved = true
-        \item If clientApproved already true, call \_releaseFunds(jobID)
-        \item Client calls JobsContract.MarkClientJobCompleted(jobID)
-        \item Contract sets clientApproved = true
-        \item If freelancerApproved already true, call \_releaseFunds(jobID)
-    \end{itemize}
-    
-    \item \textbf{Phase 7: Payment Release}
-    \begin{itemize}
-        \item \_releaseFunds() verifies both approvals
-        \item Transfers escrow to freelancer
-        \item Marks job completed
-        \item Emit JobCompleted event
-    \end{itemize}
-\end{enumerate}
-
-\subsection{Gas Optimization Techniques}
-
-The smart contracts implement several gas optimization strategies:
-
-\begin{enumerate}
-    \item \textbf{Calldata vs Memory:} Using calldata for function parameters reduces gas costs by avoiding memory allocation.
-    \item \textbf{Storage Packing:} Struct fields are ordered to minimize storage slots (each slot is 32 bytes).
-    \item \textbf{View Functions:} Read-only operations marked as view cost no gas when called externally.
-    \item \textbf{Event Logging:} Expensive storage operations replaced with events where appropriate.
-    \item \textbf{Early Returns:} Validation checks at function start prevent wasted computation.
-\end{enumerate}
-
-\subsection{Access Control Matrix}
-
-\begin{table}[H]
-\centering
-\caption{Function Access Control}
-\begin{tabular}{|p{5cm}|p{4cm}|p{5cm}|}
-\hline
-\textbf{Function} & \textbf{Access Control} & \textbf{Validation} \\
-\hline
-setProfile & Any address & Username uniqueness \\
-\hline
-CreateJob & Any address & msg.value $>$ 0 \\
-\hline
-HireFreelancer & Client or ProposalsContract & Job exists, not completed \\
-\hline
-CreateProposal & Any address & Job exists \\
-\hline
-ApproveProposal & Job owner only & Proposal exists, not approved \\
-\hline
-MarkFLJobCompleted & Assigned freelancer only & Job not completed \\
-\hline
-MarkClientJobCompleted & Job client only & Job not completed \\
-\hline
-\end{tabular}
-\end{table}
+Access control is enforced through inline checks at the start of each state-changing function: \texttt{setProfile} and \texttt{CreateJob} are open; \texttt{HireFreelancer} may only be invoked by the job's client or, transitively, by the ProposalsContract on the client's behalf; \texttt{ApproveProposal} is restricted to the job owner as verified by a live query to JobsContract; and the completion functions are restricted to the assigned freelancer and the job's client respectively. Failed checks revert with descriptive error messages.

@@ -1,0 +1,34 @@
+sequenceDiagram
+    participant C as Client
+    participant F as Frontend
+    participant I as IPFS
+    participant W as Wallet
+    participant S as Smart Contract
+    participant B as Blockchain
+
+    Note over C,B: Job Creation Flow
+    
+    C->>F: Open Create Job Form
+    F->>C: Display Form
+    C->>F: Fill Form Details
+    F->>F: Validate Inputs
+    
+    F->>I: Upload Job Metadata
+    I-->>F: Return CID
+    
+    F->>W: Request Transaction
+    W->>C: Confirm + ETH Amount
+    C->>W: Approve Transaction
+    
+    W->>S: CreateJob(CID) + ETH
+    S->>S: Validate msg.value >0
+    S->>S: Generate jobID
+    S->>S: Create Job Struct
+    S->>S: Lock Escrow Funds
+    
+    S->>B: Store Job State
+    S->>B: Emit JobCreated Event
+    
+    B-->>F: Transaction Confirmed
+    F->>C: Show Success Message
+    F->>F: Update Job Listings

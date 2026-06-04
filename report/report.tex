@@ -3,7 +3,7 @@
 % ---------------- PACKAGES ----------------
 % Page dimensions from Project_Report_Format 25-26.docx adapted for A4
 % Margins: Top=19.05mm, Left=25.4mm, Bottom=22.225mm, Right=22.225mm
-\usepackage[a4paper,top=19.05mm,left=25.4mm,bottom=22.225mm,right=22.225mm]{geometry}
+\usepackage[a4paper,top=25.4mm,left=38.1mm,bottom=25.4mm,right=25.4mm]{geometry}
 \usepackage{times}
 \usepackage{setspace}
 \usepackage{titlesec}
@@ -98,11 +98,11 @@
 % ---------------- SPACING ----------------
 \onehalfspacing
 \setlength{\parindent}{5ex}
-\setlength{\parskip}{2em}
+\setlength{\parskip}{3pt}
 
 % Section spacing per rules: 2 spaces between section headings, 1 space between subheadings
-\titlespacing{\section}{0pt}{2em}{1em}
-\titlespacing{\subsection}{0pt}{1em}{0.5em}
+\titlespacing{\section}{0pt}{1.2em}{0.6em}
+\titlespacing{\subsection}{0pt}{0.7em}{0.35em}
 
 % ---------------- HEADER/FOOTER ----------------
 \pagestyle{fancy}
@@ -112,7 +112,7 @@
 
 % ---------------- TITLE FORMATTING ----------------
 \titleformat{\chapter}
-{\centering\bfseries\fontsize{14}{16}\selectfont\uppercase}{\thechapter}{1em}{}
+{\centering\bfseries\fontsize{16}{20}\selectfont\uppercase}{\thechapter}{1em}{}
 
 \titleformat{\section}
 {\bfseries\uppercase}{\thesection}{1em}{}
@@ -123,10 +123,15 @@
 % ---------------- DOCUMENT ----------------
 \begin{document}
 
-% ---------------- FRONT MATTER (Optional) ----------------
-% Uncomment the following lines to include cover page and certificate:
-% \input{frontmatter/coverpage}
-% \input{frontmatter/certificate}
+% ---------------- FRONT MATTER ----------------
+% Cover page: no page number, no header/footer
+\pagenumbering{gobble}
+\input{frontmatter/coverpage}
+
+% Everything from certificate onward uses roman page numbers
+\pagenumbering{roman}
+\setcounter{page}{1}
+\input{frontmatter/certificate}
 
 % ---------------- ACKNOWLEDGEMENT ----------------
 \chapter*{ACKNOWLEDGEMENT}
@@ -140,11 +145,11 @@
 
 \input{sections/abstract}
 
-\textbf{Keywords:} Blockchain, Smart Contracts, Decentralized Application, Ethereum, IPFS, Freelance Marketplace, Escrow, Web3
+\noindent\textbf{Keywords:} Blockchain, Smart Contracts, Decentralized Application, Ethereum, IPFS, Freelance Marketplace, Escrow, Web3
 
 % ---------------- TABLE OF CONTENTS ----------------
 \tableofcontents
-\newpage
+\clearpage
 
 % ---------------- LISTS ----------------
 \chapter*{LIST OF ABBREVIATIONS}
@@ -164,6 +169,7 @@
 
 % ---------------- MAIN CONTENT ----------------
 \pagenumbering{arabic}
+\setcounter{page}{1}
 
 \chapter{Introduction}
 \input{sections/introduction}
@@ -186,22 +192,20 @@
 \chapter{Other Specifications}
 \input{sections/other_specifications}
 
-\chapter{Conclusion and Future Work}
+\chapter{Conclusion}
 \input{sections/conclusion}
+
+\chapter{Future Work}
+\input{sections/future_work}
 
 % ---------------- APPENDIX ----------------
 \appendix
 
-\chapter{Smart Contract Source Code}
-\input{sections/appendix_contracts}
-
 \chapter{Deployment and Configuration}
 \input{sections/appendix_deployment}
 
-\chapter{Project Statistics}
-\input{sections/appendix_statistics}
-
-% ---------------- REFERENCES ----------------
+% ---------------- REFERENCES (FINAL SECTION) ----------------
+\addcontentsline{toc}{chapter}{Bibliography}
 \input{sections/references}
 
 \end{document}

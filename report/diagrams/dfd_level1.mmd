@@ -1,0 +1,44 @@
+graph TB
+    subgraph External
+        Client[Client]
+        Freelancer[Freelancer]
+    end
+
+    subgraph Processes
+        P1[1.0 Profile Management]
+        P2[2.0 Job Management]
+        P3[3.0 Proposal Management]
+        P4[4.0 Payment Processing]
+        P5[5.0 IPFS Operations]
+    end
+
+    subgraph DataStores
+        D1[(D1: User Profiles)]
+        D2[(D2: Jobs)]
+        D3[(D3: Proposals)]
+        D4[(D4: IPFS Content)]
+    end
+
+    Client -->|Profile Data| P1
+    Freelancer -->|Profile Data| P1
+    P1 -->|Store Profile| D1
+    D1 -->|Retrieve Profile| P1
+
+    Client -->|Create Job + ETH| P2
+    P2 -->|Store Job| D2
+    D2 -->|Job List| P2
+    P2 -->|Escrow Funds| P4
+
+    Freelancer -->|Submit Proposal| P3
+    P3 -->|Store Proposal| D3
+    D3 -->|Proposals List| P3
+    Client -->|Approve Proposal| P3
+    P3 -->|Hire Freelancer| P2
+
+    P2 -->|Completion Notice| P4
+    P4 -->|Release Payment| Freelancer
+
+    P2 -->|Job Metadata| P5
+    P3 -->|Proposal Metadata| P5
+    P5 -->|CID Reference| D4
+    D4 -->|Content Hash| P5

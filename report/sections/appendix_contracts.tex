@@ -1,287 +1,42 @@
 \subsection{UserProfile Contract}
 
-\begin{lstlisting}[language=Solidity, caption={UserProfile.sol - Complete Source Code}]
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+\textbf{File:} \texttt{src/UserProfile.sol} (50 lines)
 
-contract UserProfile {
-    uint256 private userID_counter;
-    
-    enum Role {
-        Client,
-        Freelancer
-    }
-    
-    struct Profile {
-        uint256 userID;
-        string username;
-        string cid;
-        Role role;
-        address userAddress;
-    }
+Manages user registration and profile storage with role assignment (Client/Freelancer). Key components:
+\begin{itemize}
+    \item \texttt{Profile} struct: userID, username, cid (IPFS), role, userAddress
+    \item Mappings: \texttt{\_profiles} (address → Profile), \texttt{\_usernameOwner} (username → address)
+    \item Functions: \texttt{setProfile}, \texttt{getProfileByAddress}, \texttt{getUserByUsername}
+\end{itemize}
 
-    event ProfileSet(address indexed user, string username, string cid);
-
-    mapping(address userAddress => Profile) private _profiles;
-    mapping(string username => address) private _usernameOwner;
-
-    function setProfile(string calldata username, string calldata cid, Role role) external {
-        require(bytes(username).length > 0, "Username required");
-        require(bytes(cid).length > 0, "CID required");
-
-        userID_counter++;
-        uint256 userID = userID_counter;
-
-        Profile storage existingProfile = _profiles[msg.sender];
-
-        if (bytes(existingProfile.username).length == 0) {
-            require(_usernameOwner[username] == address(0), "Username taken");
-        } else {
-            if (keccak256(bytes(existingProfile.username)) != keccak256(bytes(username))) {
-                require(_usernameOwner[username] == address(0), "Username taken");
-                delete _usernameOwner[existingProfile.username];
-            }
-        }
-
-        _profiles[msg.sender] = Profile({
-            userID: userID,
-            username: username,
-            cid: cid,
-            role: role,
-            userAddress: msg.sender
-        });
-
-        _usernameOwner[username] = msg.sender;
-        emit ProfileSet(msg.sender, username, cid);
-    }
-
-    function getProfileByAddress(address user) external view returns (Profile memory userProfile) {
-        require(_profiles[user].userAddress == user, "User not found");
-        return _profiles[user];
-    }
-
-    function getUserByUsername(string calldata username) external view returns (address) {
-        return _usernameOwner[username];
-    }
-}
-\end{lstlisting}
+\textbf{Security Features:} Username uniqueness enforcement, input validation, profile updatesupport with username change handling.
 
 \subsection{JobsContract}
 
-\begin{lstlisting}[language=Solidity, caption={Jobs.sol - Complete Source Code}]
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+\textbf{File:} \texttt{src/Jobs.sol} (120 lines)
 
-contract JobsContract {
-    uint256 private jobID_counter;
+Handles job creation, escrow management, and payment release. Key components:
+\begin{itemize}
+    \item \texttt{Job} struct: jobID, jobCID, deliverableCID, completed, client, freelancer, amount, clientApproved, freelancerApproved
+    \item Mappings: \texttt{\_jobs} (jobID → Job), \texttt{\_clientJobIDs} (address → jobID[])
+    \item Functions: \texttt{CreateJob} (payable), \texttt{HireFreelancer}, \texttt{MarkFLJobCompleted}, \texttt{MarkClientJobCompleted}, \texttt{\_releaseFunds} (private)
+\end{itemize}
 
-    struct Job {
-        uint256 jobID;
-        string jobCID;
-        string deliverableCID;
-        bool completed;
-        address client;
-        address freelancer;
-        uint256 amount;
-        bool clientApproved;
-        bool freelancerApproved;
-    }
-
-    mapping (uint256 jobID => Job) private _jobs;
-    mapping(address clientAddress => uint256[]) private _clientJobIDs;
-
-    event JobCreated(address indexed clientAddress, uint256 jobID, string jobCID, uint256 amount);
-    event FreelancerHired(address indexed freelancerAddress, uint256 jobID);
-    event JobCompleted(address indexed freelancerAddress, uint256 jobID);
-    event FLJobCompleted(address indexed freelancerAddress, uint256 jobID, string deliverableCID);
-    event ClientJobCompleted(address indexed clientAddress, uint256 jobID);
-
-    function CreateJob(string calldata jobCID) external payable {
-        require(msg.value > 0, "Funds required to create job");
-        jobID_counter++;
-        uint256 jobID = jobID_counter;
-
-        Job memory job = Job({
-            jobID: jobID,
-            jobCID: jobCID,
-            deliverableCID: "",
-            completed: false,
-            clientApproved: false,
-            freelancerApproved: false,
-            client: msg.sender,
-            freelancer: address(0),
-            amount: msg.value
-        });
-
-        _jobs[jobID] = job;
-        _clientJobIDs[msg.sender].push(jobID);
-        
-        emit JobCreated(msg.sender, jobID, jobCID, msg.value);
-    }
-
-    address public proposalsContractAddress;
-
-    function setProposalsContractAddress(address _address) external {
-        proposalsContractAddress = _address;
-    }
-
-    function HireFreelancer(address freelancerAddress, uint256 jobID) external {
-        Job storage job = _jobs[jobID];
-        require(job.client == msg.sender || msg.sender == proposalsContractAddress, "Only client or Proposals contract can hire");
-        require(!job.completed, "Job already completed");
-
-        job.freelancer = freelancerAddress;
-        emit FreelancerHired(freelancerAddress, jobID);
-    }
-
-    function _releaseFunds(uint256 jobID) private {
-        Job storage job = _jobs[jobID];
-        if(job.freelancerApproved && job.clientApproved && !job.completed){
-            job.completed = true;
-            uint256 payment = job.amount;
-            job.amount = 0;
-
-            (bool sent, ) = job.freelancer.call{value:payment}("");
-            require(sent, "Failed to transfer funds");
-
-            emit JobCompleted(msg.sender, jobID);
-        }
-    }
-
-    function MarkFLJobCompleted(uint256 jobID, string calldata deliverableCID) external {
-        Job storage job = _jobs[jobID];
-        require(job.freelancer == msg.sender, "Only freelancer can mark complete");
-        require(!job.completed, "Job already completed");
-        
-        job.freelancerApproved = true;
-        job.deliverableCID = deliverableCID;
-
-        emit FLJobCompleted(msg.sender, jobID, deliverableCID);
-        
-        if (job.clientApproved) {
-            _releaseFunds(jobID);
-        }
-    }
-
-    function MarkClientJobCompleted(uint256 jobID) external {
-        Job storage job = _jobs[jobID];
-        require(!job.completed, "Job already completed");
-        require(msg.sender == job.client, "Only client can mark complete");
-        
-        job.clientApproved = true;
-        emit ClientJobCompleted(msg.sender, jobID);
-        
-        if (job.freelancerApproved) {
-            _releaseFunds(jobID);
-        }
-    }
-
-    function getJobByJobID(uint256 jobID) external view returns (Job memory job){
-        return _jobs[jobID];
-    }
-
-    function getJobsByClientAddress(address clientAddress) external view returns (Job[] memory){
-        uint256[] memory ids = _clientJobIDs[clientAddress];
-        Job[] memory jobs = new Job[](ids.length);
-        for(uint256 i = 0; i < ids.length; i++){
-            jobs[i] = _jobs[ids[i]];
-        }
-        return jobs;
-    }
-
-    function getJobOwner(uint256 jobID) external view returns (address client){
-        return _jobs[jobID].client;
-    }
-}
-\end{lstlisting}
+\textbf{Security Features:} Checks-Effects-Interactions pattern, zeroing amount before external call, mutual approval requirement for fund release.
 
 \subsection{ProposalsContract}
 
-\begin{lstlisting}[language=Solidity, caption={Proposals.sol - Complete Source Code}]
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+\textbf{File:} \texttt{src/Proposals.sol} (80 lines)
 
-interface IJobsContract {
-    function getJobOwner(uint256 jobID) external view returns (address);
-    function HireFreelancer(address freelancerAddress, uint256 jobID) external;
-}
+Manages proposal submission and approval workflow with automatic freelancer hiring. Key components:
+\begin{itemize}
+    \item \texttt{Proposal} struct: proposalID, proposalCID, jobID, approved, freelancer
+    \item Mappings: \texttt{\_proposals}, \texttt{\_jobProposalIDs}, \texttt{\_freelancerProposalIDs}
+    \item Functions: \texttt{CreateProposal}, \texttt{ApproveProposal}, \texttt{getProposalsByJobID}, \texttt{getFreelancersProposals}
+\end{itemize}
 
-contract ProposalsContract {
-    uint256 private proposalID_counter;
-    address public jobsContractAddress;
+\textbf{Integration:} Uses \texttt{IJobsContract} interface to verify job ownership and trigger freelancer hiring on approval.
 
-    struct Proposal {
-        uint256 proposalID;
-        string proposalCID;
-        uint256 jobID;
-        bool approved;
-        address freelancer;
-    }
+\subsection{Contract Interactions}
 
-    mapping (address freelancerAddress => uint256[]) private _freelancerProposalIDs;
-    mapping (uint256 jobID => uint256[]) private _jobProposalIDs;
-    mapping(uint256 proposalID => Proposal) private _proposals;
-    
-    event ProposalCreated(address indexed freelancerAddress, uint256 proposalID, string proposalCID, uint256 jobID);
-    event ProposalApproved(address indexed freelancerAddress, uint256 proposalID);
-
-    function setJobsContractAddress(address _address) external {
-        jobsContractAddress = _address;
-    }
-
-    function CreateProposal(string calldata proposalCID, uint256 jobID) external {
-        proposalID_counter++;
-        uint256 proposalID = proposalID_counter;
-
-        Proposal memory proposal = Proposal({
-            proposalID: proposalID,
-            proposalCID: proposalCID,
-            jobID: jobID,
-            approved: false,
-            freelancer: msg.sender
-        });
-
-        _freelancerProposalIDs[msg.sender].push(proposalID);
-        _jobProposalIDs[jobID].push(proposalID);
-        _proposals[proposalID] = proposal;
-
-        emit ProposalCreated(msg.sender, proposalID, proposalCID, jobID);
-    }
-
-    function ApproveProposal(uint256 proposalID) external {
-        Proposal storage p = _proposals[proposalID];
-        require(!p.approved, "Proposal already approved");
-        
-        address jobOwner = IJobsContract(jobsContractAddress).getJobOwner(p.jobID);
-        require(msg.sender == jobOwner, "Only job owner can approve");
-
-        p.approved = true;
-        
-        IJobsContract(jobsContractAddress).HireFreelancer(p.freelancer, p.jobID);
-        
-        emit ProposalApproved(msg.sender, proposalID);
-    }
-
-    function getFreelancersProposals(address freelancerAddress) view external returns(Proposal[] memory){
-        uint256[] memory ids = _freelancerProposalIDs[freelancerAddress];
-        Proposal[] memory proposals = new Proposal[](ids.length);
-        for(uint256 i = 0; i < ids.length; i++){
-            proposals[i] = _proposals[ids[i]];
-        }
-        return proposals;
-    }
-
-    function getProposalsByJobID(uint256 jobID) view external returns(Proposal[] memory){
-        uint256[] memory ids = _jobProposalIDs[jobID];
-        Proposal[] memory proposals = new Proposal[](ids.length);
-        for(uint256 i = 0; i < ids.length; i++){
-            proposals[i] = _proposals[ids[i]];
-        }
-        return proposals;
-    }
-
-    function getProposalByProposalID(uint256 proposalID) view external returns (Proposal memory proposal){
-        return _proposals[proposalID];
-    }
-}
-\end{lstlisting}
+The three contracts operate independently for their primary functions: UserProfile handles identity, JobsContract manages escrow and payments, and ProposalsContract orchestrates the bidding process. Cross-contract calls are minimal: ProposalsContract calls JobsContract only for hiring verification and execution.

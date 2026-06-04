@@ -2,103 +2,27 @@
 
 The project includes comprehensive test coverage using Foundry framework. Tests are organized by contract and cover all functional requirements.
 
-\subsection{Profile Contract Tests}
+\subsection{Test Coverage Summary}
 
 \begin{table}[H]
 \centering
-\caption{UserProfile Test Cases}
-\begin{tabular}{|p{5cm}|p{8cm}|}
+\caption{Test Cases by Contract}
+\begin{tabular}{|l|p{8cm}|}
 \hline
-\textbf{Test Case} & \textbf{Description} \\
+\textbf{Contract} & \textbf{Test Categories} \\
 \hline
-test\_SetProfile & Verifies profile creation with valid data \\
+UserProfile & Profile creation, retrieval, username uniqueness, validation \\
 \hline
-test\_GetProfileByAddress & Tests profile retrieval by wallet address \\
+JobsContract & Job creation with escrow, hiring, completion workflow, payment release, re-entrancy protection \\
 \hline
-test\_UsernameUniqueness & Validates username uniqueness enforcement \\
-\hline
-test\_UpdateProfile & Tests profile updates while maintaining constraints \\
-\hline
-test\_InvalidUsername & Validates rejection of empty usernames \\
-\hline
-test\_InvalidCID & Validates rejection of empty CIDs \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Jobs Contract Tests}
-
-\begin{table}[H]
-\centering
-\caption{JobsContract Test Cases}
-\begin{tabular}{|p{5cm}|p{8cm}|}
-\hline
-\textbf{Test Case} & \textbf{Description} \\
-\hline
-test\_CreateJob & Validates job creation functionality \\
-\hline
-test\_CreateJobWithFunds & Tests escrow validation (requires ETH) \\
-\hline
-test\_HireFreelancer & Verifies freelancer assignment \\
-\hline
-test\_CompleteJob & Tests completion workflow \\
-\hline
-test\_PaymentRelease & Validates payment transfer to freelancer \\
-\hline
-test\_ReentrancyProtection & Ensures re-entrancy attack prevention \\
-\hline
-test\_DoubleApproval & Prevents duplicate approvals \\
-\hline
-\end{tabular}
-\end{table}
-
-\subsection{Proposals Contract Tests}
-
-\begin{table}[H]
-\centering
-\caption{ProposalsContract Test Cases}
-\begin{tabular}{|p{5cm}|p{8cm}|}
-\hline
-\textbf{Test Case} & \textbf{Description} \\
-\hline
-test\_CreateProposal & Tests proposal submission \\
-\hline
-test\_ApproveProposal & Validates proposal approval flow \\
-\hline
-test\_OnlyJobOwnerCanApprove & Enforces access control \\
-\hline
-test\_GetProposalsByJobID & Tests proposal queries \\
-\hline
-test\_DoubleApprovalPrevention & Prevents approving already approved proposals \\
-\hline
-test\_AutoHireOnApproval & Verifies automatic hiring upon approval \\
+ProposalsContract & Proposal submission, approval flow, access control, automatic hiring verification \\
 \hline
 \end{tabular}
 \end{table}
 
 \section{Test Execution}
 
-\subsection{Running Tests}
-
-\begin{lstlisting}[language=bash, caption={Test Execution Commands}]
-# Run all tests
-forge test
-
-# Run with gas reporting
-forge test --gas-report
-
-# Run specific test file
-forge test --match-path test/Jobs.t.sol
-
-# Run specific test
-forge test --match-test test_CreateJob
-
-# Run with verbosity
-forge test -vvv
-
-# Run with coverage
-forge coverage
-\end{lstlisting}
+Tests are executed using Foundry commands: \texttt{forge test} runs all tests, \texttt{forge test --gas-report} provides gas analysis, and \texttt{forge coverage} generates coverage reports.
 
 \subsection{Test Coverage Results}
 
@@ -160,36 +84,7 @@ External security audit & $\square$ & Recommended for mainnet \\
 
 \section{Integration Testing}
 
-\subsection{End-to-End Workflow Testing}
-
-Integration tests verify the complete workflow:
-
-\begin{enumerate}
-    \item \textbf{User Registration Flow}
-    \begin{itemize}
-        \item Create client profile
-        \item Create freelancer profile
-        \item Verify profile retrieval
-    \end{itemize}
-    
-    \item \textbf{Job Lifecycle Flow}
-    \begin{itemize}
-        \item Client creates job with escrow
-        \item Freelancer submits proposal
-        \item Client approves proposal
-        \item Freelancer marks complete
-        \item Client marks complete
-        \item Verify payment release
-    \end{itemize}
-    
-    \item \textbf{Error Scenarios}
-    \begin{itemize}
-        \item Attempt to create job without funds
-        \item Attempt to approve own proposal
-        \item Attempt to mark complete without hiring
-        \item Attempt double payment release
-    \end{itemize}
-\end{enumerate}
+End-to-end workflow tests verify the complete job lifecycle: user registration, job creation with escrow, proposal submission, approval and hiring, completion marking by both parties, and payment release. Error scenarios tested include jobs without funds, unauthorized operations, and duplicate approvals.
 
 \section{Performance Testing}
 
@@ -197,38 +92,29 @@ Integration tests verify the complete workflow:
 
 \begin{table}[H]
 \centering
-\caption{Gas Cost Analysis}
+\caption{Gas Cost Summary}
 \begin{tabular}{|l|c|c|}
 \hline
-\textbf{Operation} & \textbf{Average Gas} & \textbf{Cost @ 20 Gwei} \\
+\textbf{Operation} & \textbf{Gas} & \textbf{Cost @ 20 Gwei (ETH)} \\
 \hline
-Create Profile & 65,000 & 0.0013 ETH \\
+Create Profile & 65,000 & 0.0013 \\
 \hline
-Create Job & 120,000 & 0.0024 ETH \\
+Create Job & 120,000 & 0.0024 \\
 \hline
-Submit Proposal & 85,000 & 0.0017 ETH \\
+Submit Proposal & 85,000 & 0.0017 \\
 \hline
-Approve Proposal & 95,000 & 0.0019 ETH \\
+Approve Proposal & 95,000 & 0.0019 \\
 \hline
-Mark Complete (FL) & 45,000 & 0.0009 ETH \\
+Mark Complete & 47,500 & 0.0010 \\
 \hline
-Mark Complete (Client) & 50,000 & 0.0010 ETH \\
-\hline
-Release Funds & 35,000 & 0.0007 ETH \\
+Release Funds & 35,000 & 0.0007 \\
 \hline
 \end{tabular}
 \end{table}
 
 \subsection{Load Testing}
 
-Load testing was performed to ensure system stability:
-
-\begin{itemize}
-    \item \textbf{Concurrent Users:} System handles 100+ concurrent wallet connections.
-    \item \textbf{Transaction Throughput:} Processes 50+ transactions per minute.
-    \item \textbf{Response Time:} Average UI response time under 2 seconds.
-    \item \textbf{IPFS Operations:} Concurrent uploads/downloads tested with 20+ files.
-\end{itemize}
+Load testing confirmed system stability with 100+ concurrent wallet connections, 50+ transactions per minute throughput, sub-2-second UI response time, and concurrent IPFS operations with 20+ files.
 
 \section{Validation Results}
 

@@ -1,0 +1,40 @@
+\section{Overview}
+
+While the current implementation provides a solid functional foundation, several enhancements are planned to broaden the platform's capabilities, harden its security posture, and improve its economics at scale. The roadmap is organised into three streams: \textit{advanced features} that extend the core product, \textit{scalability improvements} that reduce cost and improve responsiveness, and \textit{business enhancements} that build a sustainable platform around the core protocol.
+
+\section{Advanced Features}
+
+\begin{enumerate}
+    \item \textbf{The Graph Integration:} A subgraph would replace event-scanning from the frontend with efficient GraphQL queries, materially improving load times for list views and reducing RPC pressure.
+    \item \textbf{ERC-20 Support:} Accepting stablecoins such as USDC and DAI for escrow would shield both parties from price volatility over the lifetime of a job.
+    \item \textbf{Reputation System:} An on-chain rating and review mechanism, written immutably at job completion, would let participants build portable reputations that cannot be silently censored.
+    \item \textbf{Versioned Profiles:} Storing the historical sequence of profile CIDs would let users showcase the evolution of their portfolio over time.
+    \item \textbf{IPFS Media Uploads:} Extending the upload helper to handle binary attachments would let freelancers post portfolio images and document deliverables with the same content-addressed integrity guarantees.
+    \item \textbf{Push Notifications:} XMTP or Push Protocol integration would deliver real-time alerts without sacrificing the decentralized character of the platform.
+    \item \textbf{Decentralized Dispute Resolution:} Integration with a system such as Kleros would provide an opt-in arbitration path for contested jobs.
+    \item \textbf{Multi-signature Wallets:} Optional multi-signature approval for high-value jobs would let teams operate as clients without concentrating authority in a single key.
+\end{enumerate}
+
+\section{Scalability Improvements}
+
+\begin{enumerate}
+    \item \textbf{Layer 2 Integration:} Deploying on a rollup such as Arbitrum, Optimism, or Base would reduce gas costs by roughly an order of magnitude while inheriting Ethereum's security guarantees --- the single most impactful change for everyday usability.
+    \item \textbf{Batch Operations:} Multi-job creation, batch proposal submission, and batch approval would amortize per-transaction overhead.
+    \item \textbf{Further Gas Optimization:} Additional storage packing, calldata compression, and tighter event encoding would reduce per-transaction cost further.
+    \item \textbf{Caching Layer:} A Redis or Cloudflare KV cache in front of the IPFS gateway would serve frequently-viewed content from low-latency edge caches without compromising content-addressing guarantees.
+    \item \textbf{CDN Integration:} Distributing IPFS content through a global CDN would improve load times for users distant from the Pinata gateway region.
+\end{enumerate}
+
+\section{Business Enhancements}
+
+\begin{enumerate}
+    \item \textbf{Subscription Model:} A premium tier could fund ongoing protocol development by offering analytics, featured-job placement, and priority gateway access, while leaving core functionality permissionless and free.
+    \item \textbf{Skills Verification:} Integration with third-party credentialing services (Gitcoin Passport, on-chain certificate issuers, traditional identity providers) would let freelancers attach verified credentials to their profiles.
+    \item \textbf{Milestone Payments:} Splitting the escrowed amount into a sequence of milestones --- each released on its own mutual approval --- would make the platform viable for long-running projects.
+    \item \textbf{Time Tracking:} Integrated time logging combined with hourly-rate escrow would extend the platform to cover the substantial hourly-contract market.
+    \item \textbf{Team Collaboration:} Multi-freelancer projects with proportional payment splits computed on-chain at completion would broaden reach into agency- and DAO-style work arrangements.
+\end{enumerate}
+
+\section{Roadmap Summary}
+
+The roadmap is structured to deliver the highest-impact improvements first. Layer 2 deployment and ERC-20 support together address the most common user concerns (cost and volatility). The Graph integration and IPFS caching improve responsiveness without changing the trust model. The reputation system, dispute resolution, and milestone payments together extend the platform from a transactional tool into a comprehensive marketplace. Each change is independently shippable, preserving the option of reordering the roadmap as user feedback accumulates.

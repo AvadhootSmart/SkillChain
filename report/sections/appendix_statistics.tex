@@ -1,111 +1,29 @@
-\begin{table}[H]
-\centering
-\caption{Project Statistics Summary}
-\begin{tabular}{|l|c|}
-\hline
-\textbf{Metric} & \textbf{Value} \\
-\hline
-\textbf{Smart Contract Lines of Code} & 294 lines (Solidity) \\
-\hline
-\textbf{Frontend Lines of Code} & $\sim$3,500 lines (TypeScript/React) \\
-\hline
-\textbf{Test Lines of Code} & $\sim$800 lines (Solidity) \\
-\hline
-\textbf{Number of Smart Contracts} & 3 \\
-\hline
-\textbf{Number of Test Files} & 3 \\
-\hline
-\textbf{Test Coverage} & 100\% of contract functions \\
-\hline
-\textbf{Technology Stack Components} & 15+ libraries/frameworks \\
-\hline
-\textbf{Development Time} & 6 months (phased development) \\
-\hline
-\textbf{Git Commits} & 150+ \\
-\hline
-\textbf{Files Changed} & 200+ \\
-\hline
-\textbf{Number of Pages in Report} & 80+ \\
-\hline
-\textbf{Number of Chapters} & 8 \\
-\hline
-\textbf{Number of Appendices} & 3 \\
-\hline
-\textbf{Number of Tables} & 25+ \\
-\hline
-\textbf{Number of Figures/Diagrams} & 10+ \\
-\hline
-\textbf{Number of Code Listings} & 20+ \\
-\hline
-\end{tabular}
-\end{table}
-
-\section{Smart Contract Breakdown}
+\section{Technology Stack}
 
 \begin{table}[H]
 \centering
-\caption{Smart Contract Details}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Contract} & \textbf{Lines} & \textbf{Functions} & \textbf{Events} \\
-\hline
-UserProfile.sol & 50 & 3 & 1 \\
-\hline
-Jobs.sol & 120 & 7 & 5 \\
-\hline
-Proposals.sol & 80 & 5 & 2 \\
-\hline
-\textbf{Total} & \textbf{250} & \textbf{15} & \textbf{8} \\
-\hline
-\end{tabular}
-\end{table}
-
-\section{Technology Stack Details}
-
-\begin{table}[H]
-\centering
-\caption{Frontend Dependencies}
+\caption{Key Dependencies}
 \begin{tabular}{|l|l|l|}
 \hline
-\textbf{Package} & \textbf{Version} & \textbf{Purpose} \\
+\textbf{Component} & \textbf{Technology} & \textbf{Version} \\
 \hline
-next & 16.1.1 & React framework \\
+Frontend Framework & Next.js & 16.1.1 \\
 \hline
-react & 19.2.3 & UI library \\
+UI Library & React & 19.2.3 \\
 \hline
-react-dom & 19.2.3 & DOM rendering \\
+Styling & Tailwind CSS & 4.1.18 \\
 \hline
-typescript & 5.7.3 & Type safety \\
+State Management & Zustand & 5.0.9 \\
 \hline
-tailwindcss & 4.1.18 & Styling \\
+Blockchain & wagmi & 3.4.1 \\
 \hline
-wagmi & 3.4.1 & Blockchain interaction \\
+Wallet & RainbowKit & 2.2.10 \\
 \hline
-@rainbow-me/rainbowkit & 2.2.10 & Wallet connection \\
+Smart Contracts & Solidity & 0.8.24+ \\
 \hline
-viem & 2.27.1 & Ethereum utilities \\
+Testing & Foundry & Latest \\
 \hline
-@tanstack/react-query & 5.90.16 & Data fetching \\
-\hline
-zustand & 5.0.9 & State management \\
-\hline
-framer-motion & 12.24.8 & Animations \\
-\hline
-lucide-react & 0.475.0 & Icons \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\centering
-\caption{Smart Contract Dependencies}
-\begin{tabular}{|l|l|l|}
-\hline
-\textbf{Package} & \textbf{Version} & \textbf{Purpose} \\
-\hline
-forge-std & Latest & Testing framework \\
-\hline
-@openzeppelin/contracts & 4.9.3 & Security patterns \\
+Storage & IPFS/Pinata & - \\
 \hline
 \end{tabular}
 \end{table}
@@ -114,8 +32,8 @@ forge-std & Latest & Testing framework \\
 
 \begin{table}[H]
 \centering
-\caption{Project Development Phases}
-\begin{tabular}{|c|p{6cm}|c|}
+\caption{Project Phases}
+\begin{tabular}{|c|l|c|}
 \hline
 \textbf{Phase} & \textbf{Description} & \textbf{Duration} \\
 \hline
@@ -131,8 +49,6 @@ forge-std & Latest & Testing framework \\
 \hline
 6 & Final Testing and Deployment & 1 week \\
 \hline
-\textbf{Total} & \textbf{Complete Development Cycle} & \textbf{18 weeks} \\
-\hline
 \end{tabular}
 \end{table}
 
@@ -140,86 +56,24 @@ forge-std & Latest & Testing framework \\
 
 \begin{table}[H]
 \centering
-\caption{Estimated Gas Costs (at 20 Gwei)}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Operation} & \textbf{Gas Units} & \textbf{ETH Cost} & \textbf{USD Cost*} \\
-\hline
-Create Profile & 65,000 & 0.0013 & $\$3.90$ \\
-\hline
-Create Job & 120,000 & 0.0024 & $\$7.20$ \\
-\hline
-Submit Proposal & 85,000 & 0.0017 & $\$5.10$ \\
-\hline
-Approve Proposal & 95,000 & 0.0019 & $\$5.70$ \\
-\hline
-Mark Complete (FL) & 45,000 & 0.0009 & $\$2.70$ \\
-\hline
-Mark Complete (Client) & 50,000 & 0.0010 & $\$3.00$ \\
-\hline
-Release Funds & 35,000 & 0.0007 & $\$2.10$ \\
-\hline
-\textbf{Total per Job} & \textbf{495,000} & \textbf{0.0099} & \textbf{$\$29.70$} \\
-\hline
-\multicolumn{4}{|l|}{* Assumes ETH price of $\$3,000$ USD} \\
-\hline
-\end{tabular}
-\end{table}
-
-\section{Code Quality Metrics}
-
-\begin{table}[H]
-\centering
-\caption{Code Quality Analysis}
+\caption{Estimated Gas Costs (at 20 Gwei, ETH = \$3,000)}
 \begin{tabular}{|l|c|c|}
 \hline
-\textbf{Metric} & \textbf{Smart Contracts} & \textbf{Frontend} \\
+\textbf{Operation} & \textbf{Gas} & \textbf{USD Cost} \\
 \hline
-Lines of Code & 294 & 3,500 \\
+Create Profile & 65,000 & \$3.90 \\
 \hline
-Functions & 15 & 120+ \\
+Create Job & 120,000 & \$7.20 \\
 \hline
-Comments/Documentation & 30\% & 25\% \\
+Submit Proposal & 85,000 & \$5.10 \\
 \hline
-Test Coverage & 100\% & N/A \\
+Approve Proposal & 95,000 & \$5.70 \\
 \hline
-Code Duplication & $<$5\% & $<$10\% \\
+Complete Job & 47,500 & \$2.85 \\
 \hline
-Complexity Score & Low & Medium \\
+Release Funds & 35,000 & \$2.10 \\
 \hline
-Security Issues & 0 Critical & 0 Critical \\
+\textbf{Total per Job} & \textbf{495,000} & \textbf{\$29.70} \\
 \hline
 \end{tabular}
 \end{table}
-
-\section{Repository Statistics}
-
-\begin{lstlisting}[language=bash, caption={Git Repository Summary}]
-# Total commits
-git rev-list --count HEAD
-Output: 150+
-
-# Total contributors
-git shortlog -sn
-Output: 4 contributors
-
-# Lines of code by language
-git ls-files | xargs wc -l
-Output: 
-  - Solidity: 294 lines
-  - TypeScript: 3,500 lines
-  - JavaScript: 200 lines
-  - CSS: 150 lines
-  - Markdown: 1,118 lines
-  - Total: ~5,262 lines
-
-# File count by extension
-find . -type f | sed 's/.*\.//' | sort | uniq -c
-Output: 
-  - .sol files: 6
-  - .ts/.tsx files: 45
-  - .js files: 8
-  - .css files: 5
-  - .json files: 12
-  - .md files: 3
-\end{lstlisting}
