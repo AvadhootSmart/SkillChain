@@ -8,15 +8,39 @@ import { parseEther } from "viem";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { config } from "@/providers/provider";
 import { toast } from "sonner";
-import { Loader2, PlusCircle, UserPlus } from "lucide-react";
+import { Loader2, PlusCircle, UserPlus, Wand2, EyeOff, Briefcase, User } from "lucide-react";
 import { useConnection } from "wagmi";
 import { useUserStore } from "@/store/user.store";
+import { useMockStore } from "@/store/mock.store";
+import { getMockProfile } from "@/lib/mock-data";
+import { UserRole } from "@/types/user.types";
 
 export function DevTestingButtons() {
   const [isClientLoading, setIsClientLoading] = useState(false);
   const [isFreelancerLoading, setIsFreelancerLoading] = useState(false);
   const { address } = useConnection();
   const { setUser } = useUserStore();
+  const { mockEnabled, mockRole, enableMock, disableMock, setMockRole } =
+    useMockStore();
+
+  const toggleMockData = () => {
+    if (mockEnabled) {
+      disableMock();
+      toast.info("Mock data disabled");
+    } else {
+      setUser(getMockProfile(mockRole));
+      enableMock();
+      toast.success("Mock data enabled — UI filled with static data");
+    }
+  };
+
+  const switchMockRole = (role: UserRole) => {
+    setMockRole(role);
+    setUser(getMockProfile(role));
+    toast.info(
+      `Mock entity: ${role === UserRole.Client ? "Client" : "Freelancer"}`
+    );
+  };
 
   const setupClientAndJob = async () => {
     setIsClientLoading(true);
@@ -173,6 +197,41 @@ export function DevTestingButtons() {
           )}
           Setup Freelancer & Proposal
         </Button>
+        <Button
+          variant={mockEnabled ? "default" : "outline"}
+          size="sm"
+          className="justify-start gap-2 rounded-xl border-primary/20 hover:bg-primary/5 h-10"
+          onClick={toggleMockData}
+        >
+          {mockEnabled ? (
+            <EyeOff className="size-4" />
+          ) : (
+            <Wand2 className="size-4 text-purple-500" />
+          )}
+          {mockEnabled ? "Disable Mock Data" : "Mock UI"}
+        </Button>
+        {mockEnabled && (
+          <div className="flex gap-2">
+            <Button
+              variant={mockRole === UserRole.Client ? "default" : "outline"}
+              size="sm"
+              className="flex-1 justify-center gap-1.5 rounded-xl border-primary/20 h-9 text-xs"
+              onClick={() => switchMockRole(UserRole.Client)}
+            >
+              <Briefcase className="size-3.5" />
+              Client
+            </Button>
+            <Button
+              variant={mockRole === UserRole.Freelancer ? "default" : "outline"}
+              size="sm"
+              className="flex-1 justify-center gap-1.5 rounded-xl border-primary/20 h-9 text-xs"
+              onClick={() => switchMockRole(UserRole.Freelancer)}
+            >
+              <User className="size-3.5" />
+              Freelancer
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

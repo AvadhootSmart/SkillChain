@@ -36,13 +36,22 @@ import { IconEthereum } from "@/icons/ethereum";
 import { JobCard } from "@/components/job-card";
 
 import { useUserStore } from "@/store/user.store";
+import { useMockStore } from "@/store/mock.store";
+import {
+  mockJobs,
+  mockProposals,
+  getMockProfile,
+  getMockAddress,
+} from "@/lib/mock-data";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow } from "date-fns";
 
 const DashboardPage = () => {
-  const { isConnected, address } = useConnection();
+  const { isConnected, address: walletAddress } = useConnection();
   const [searchQuery, setSearchQuery] = React.useState("");
   const { setUser } = useUserStore();
+  const { mockEnabled, mockRole } = useMockStore();
+  const address = mockEnabled ? getMockAddress(mockRole) : walletAddress;
 
   const [profile, setProfile] = React.useState<IUser>({
     username: "",
@@ -67,7 +76,7 @@ const DashboardPage = () => {
     functionName: "getProfileByAddress",
     args: address ? [address] : undefined,
     query: {
-      enabled: !!address,
+      enabled: !!address && !mockEnabled,
     },
   });
 
@@ -81,7 +90,11 @@ const DashboardPage = () => {
     functionName: "getJobsByClientAddress",
     args: address ? [address] : undefined,
     query: {
-      enabled: !!address && hasProfile && profile.role === UserRole.Client,
+      enabled:
+        !!address &&
+        !mockEnabled &&
+        hasProfile &&
+        profile.role === UserRole.Client,
     },
   });
 
@@ -95,12 +108,28 @@ const DashboardPage = () => {
     functionName: "getFreelancersProposals",
     args: address ? [address] : undefined,
     query: {
-      enabled: !!address && hasProfile && profile.role === UserRole.Freelancer,
+      enabled:
+        !!address &&
+        !mockEnabled &&
+        hasProfile &&
+        profile.role === UserRole.Freelancer,
     },
   });
 
+  // Seed everything from static mock data when mock mode is on
+  React.useEffect(() => {
+    if (!mockEnabled) return;
+    const mockProfile = getMockProfile(mockRole);
+    setProfile(mockProfile);
+    setUser(mockProfile);
+    setHasProfile(true);
+    setAllJobs(mockJobs);
+    setAllProposals(mockProposals);
+  }, [mockEnabled, mockRole, setUser]);
+
   // Handle profile data
   React.useEffect(() => {
+    if (mockEnabled) return;
     if (profileData && !profileLoading && !profileError) {
       const userProfile = profileData as IUser;
       setProfile({
@@ -247,7 +276,7 @@ const DashboardPage = () => {
     calculateEarnings();
   };
 
-  if (!isConnected) {
+  if (!isConnected && !mockEnabled) {
     return (
       <div className="container mx-auto max-w-7xl pt-20 px-4">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">
@@ -269,7 +298,7 @@ const DashboardPage = () => {
     );
   }
 
-  if (!hasProfile && !profileLoading) {
+  if (!hasProfile && !profileLoading && !mockEnabled) {
     return (
       <div className="container mx-auto max-w-7xl pt-20 px-4">
         <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6">

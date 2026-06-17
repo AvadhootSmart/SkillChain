@@ -36,6 +36,8 @@ import { formatDistanceToNow } from "date-fns";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
+import { useMockStore } from "@/store/mock.store";
+import { getMockJobById } from "@/lib/mock-data";
 import { toast } from "sonner";
 import { simulateContract, writeContract } from "@wagmi/core";
 import { config } from "@/providers/provider";
@@ -66,6 +68,7 @@ const JobDetailsPage = () => {
     hash: txHash,
   });
   const { user } = useUserStore();
+  const { mockEnabled } = useMockStore();
 
   // Contract Read for job metadata
   const { data: jobData } = useReadContract({
@@ -73,11 +76,16 @@ const JobDetailsPage = () => {
     functionName: "getJobByJobID",
     args: id ? [BigInt(id as string)] : undefined,
     query: {
-      enabled: !!id,
+      enabled: !!id && !mockEnabled,
     },
   });
 
   React.useEffect(() => {
+    if (mockEnabled) {
+      setJob(getMockJobById(id) as unknown as IJob);
+      setLoading(false);
+      return;
+    }
     async function getJobDetails() {
       if (jobData) {
         try {
@@ -98,7 +106,7 @@ const JobDetailsPage = () => {
       }
     }
     getJobDetails();
-  }, [jobData]);
+  }, [jobData, mockEnabled, id]);
 
   React.useEffect(() => {
     if (isSuccess) {

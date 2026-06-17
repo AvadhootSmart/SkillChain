@@ -36,6 +36,8 @@ import { simulateContract, writeContract } from "@wagmi/core";
 import { config } from "@/providers/provider";
 import Link from "next/link";
 import { IJob } from "@/types/job.types";
+import { useMockStore } from "@/store/mock.store";
+import { getMockJobById, getMockAddress } from "@/lib/mock-data";
 
 // --- Components ---
 
@@ -287,7 +289,11 @@ const ContractStatusSidebar = ({ job }: { job: IJob }) => (
 const DeliverPage = () => {
   const { id } = useParams();
   const router = useRouter();
-  const { address, isConnected } = useConnection();
+  const { address: walletAddress, isConnected } = useConnection();
+  const { mockEnabled, mockRole } = useMockStore();
+  const address = mockEnabled
+    ? getMockAddress(mockRole)
+    : walletAddress;
   const [job, setJob] = useState<IJob | null>(null);
   const [loading, setLoading] = useState(true);
   const [fetchingMetadata, setFetchingMetadata] = useState(false);
@@ -305,11 +311,19 @@ const DeliverPage = () => {
     functionName: "getJobByJobID",
     args: id ? [BigInt(id as string)] : undefined,
     query: {
-      enabled: !!id,
+      enabled: !!id && !mockEnabled,
     },
   });
 
+  // Seed job from static mock data when mock mode is on
   useEffect(() => {
+    if (!mockEnabled) return;
+    setJob(getMockJobById(id) as unknown as IJob);
+    setLoading(false);
+  }, [mockEnabled, id]);
+
+  useEffect(() => {
+    if (mockEnabled) return;
     const fetchMetadata = async () => {
       if (jobData) {
         console.log("jobData", jobData);

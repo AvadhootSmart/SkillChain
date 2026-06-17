@@ -22,6 +22,8 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useMockStore } from "@/store/mock.store";
+import { mockJobs } from "@/lib/mock-data";
 
 // Type for IPFS metadata
 interface IJobMetadata {
@@ -49,6 +51,7 @@ const CATEGORIES = [
 
 const ExploreJobsPage = () => {
   const publicClient = usePublicClient();
+  const { mockEnabled } = useMockStore();
   const [allJobs, setAllJobs] = React.useState<IJob[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -56,6 +59,12 @@ const ExploreJobsPage = () => {
 
   // Fetch all past JobCreated events
   React.useEffect(() => {
+    if (mockEnabled) {
+      setAllJobs(mockJobs as unknown as IJob[]);
+      setLoading(false);
+      return;
+    }
+
     async function fetchAllJobs() {
       if (!publicClient) return;
 
@@ -126,7 +135,7 @@ const ExploreJobsPage = () => {
     }
 
     fetchAllJobs();
-  }, [publicClient]);
+  }, [publicClient, mockEnabled]);
 
   // Watch for new jobs
   useWatchContractEvent({

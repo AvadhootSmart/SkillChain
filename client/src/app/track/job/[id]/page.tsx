@@ -45,6 +45,13 @@ import {
 import { config } from "@/providers/provider";
 import { IJob } from "@/types/job.types";
 import { ContractStatusSidebar } from "@/components/contract-status-card";
+import { useMockStore } from "@/store/mock.store";
+import {
+  getMockJobById,
+  getMockTrackProposals,
+  getMockAddress,
+  mockDeliverables,
+} from "@/lib/mock-data";
 
 interface ProposalMetadata {
   freelancerName: string;
@@ -65,7 +72,9 @@ interface ProposalWithMetadata {
 
 const TrackJobPage = () => {
   const { id } = useParams();
-  const { isConnected, address } = useConnection();
+  const { isConnected, address: walletAddress } = useConnection();
+  const { mockEnabled, mockRole } = useMockStore();
+  const address = mockEnabled ? getMockAddress(mockRole) : walletAddress;
   const [job, setJob] = useState<IJob | null>(null);
   const [proposals, setProposals] = useState<ProposalWithMetadata[]>([]);
   const [deliverables, setDeliverables] = useState<Record<
@@ -95,7 +104,7 @@ const TrackJobPage = () => {
     ...jobsContract,
     functionName: "getJobByJobID",
     args: id ? [BigInt(id as string)] : undefined,
-    query: { enabled: !!id },
+    query: { enabled: !!id && !mockEnabled },
   });
 
   const {
@@ -106,7 +115,7 @@ const TrackJobPage = () => {
     ...proposalsContract,
     functionName: "getProposalsByJobID",
     args: id ? [BigInt(id as string)] : undefined,
-    query: { enabled: !!id },
+    query: { enabled: !!id && !mockEnabled },
   });
 
   // console.log(
@@ -126,8 +135,18 @@ const TrackJobPage = () => {
   //   isProposalsError,
   // );
 
+  // Seed everything from static mock data when mock mode is on
+  useEffect(() => {
+    if (!mockEnabled) return;
+    setJob(getMockJobById(id) as unknown as IJob);
+    setProposals(getMockTrackProposals(id) as any);
+    setDeliverables(mockDeliverables);
+    setLoading(false);
+  }, [mockEnabled, id]);
+
   //fetches job details
   useEffect(() => {
+    if (mockEnabled) return;
     if (isJobFetched && jobData) {
       const typedJob = jobData as any;
       fetchFromPinata(typedJob.jobCID).then((metadata) => {
@@ -200,14 +219,15 @@ const TrackJobPage = () => {
   });
 
   useEffect(() => {
-    if (!isConnected) {
+    if (!isConnected && !mockEnabled) {
       toast.error("Please connect your wallet");
     }
-  }, [isConnected]);
+  }, [isConnected, mockEnabled]);
 
   // const isClient = user?.role === 1;
   const isOwner =
-    address && job?.clientAddress?.toLowerCase() === address.toLowerCase();
+    mockEnabled ||
+    (address && job?.clientAddress?.toLowerCase() === address.toLowerCase());
 
   const handleApprove = async (proposalID: bigint) => {
     if (!isConnected) {
@@ -333,7 +353,7 @@ const TrackJobPage = () => {
     );
   }
 
-  if (!isConnected) {
+  if (!isConnected && !mockEnabled) {
     return (
       <div className="pt-32 container mx-auto px-4 max-w-6xl">
         <Card className="max-w-md mx-auto">
@@ -744,7 +764,9 @@ const TrackJobPage = () => {
                 </CardContent>
               </Card>
             </motion.div>
-            <ContractStatusSidebar job={jobData as IJob} />
+            <ContractStatusSidebar
+              job={(mockEnabled ? job : jobData) as IJob}
+            />
           </div>
         </div>
       </div>
