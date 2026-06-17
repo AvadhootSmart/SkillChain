@@ -1,45 +1,31 @@
-graph TB
-    subgraph Actors
-        Client((Client))
-        Freelancer((Freelancer))
-        System[(Smart Contracts)]
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '16px', 'primaryColor': '#c8e6c9', 'primaryBorderColor': '#388e3c', 'lineColor': '#333333'}}}%%
+graph LR
+    classDef actor fill:#ffffff,stroke:#388e3c,stroke-width:2px,font-weight:bold,font-size:15px
+    classDef usecase fill:#c8e6c9,stroke:#388e3c,stroke-width:1.5px,font-size:14px
+
+    Client(["Client"]):::actor
+    Freelancer(["Freelancer"]):::actor
+
+    subgraph sys["SkillChain Platform"]
+        direction TB
+        UC1([Register Profile]):::usecase
+        UC2([Post Job]):::usecase
+        UC3([View Proposals]):::usecase
+        UC4([Approve Proposal]):::usecase
+        UC5([Mark Job Complete]):::usecase
+        UC6([Browse Open Jobs]):::usecase
+        UC7([Submit Proposal]):::usecase
+        UC8([Receive Payment]):::usecase
     end
 
-    subgraph UseCases["Use Cases"]
-        UC1[Register Profile]
-        UC2[Create Job]
-        UC3[View Posted Jobs]
-        UC4[Browse Jobs]
-        UC5[Submit Proposal]
-        UC6[Review Proposals]
-        UC7[Approve Proposal]
-        UC8[Mark Job Complete<br/>Client]
-        UC9[Mark Job Complete<br/>Freelancer]
-        UC10[Receive Payment]
-        UC11[Upload Deliverables]
-        UC12[Manage Escrow]
-    end
+    Client --- UC1
+    Client --- UC2
+    Client --- UC3
+    Client --- UC4
+    Client --- UC5
 
-    Client --> UC1
-    Client --> UC2
-    Client --> UC3
-    Client --> UC6
-    Client --> UC7
-    Client --> UC8
-
-    Freelancer --> UC1
-    Freelancer --> UC4
-    Freelancer --> UC5
-    Freelancer --> UC9
-    Freelancer --> UC10
-    Freelancer --> UC11
-
-    UC2 -->|Lock Funds| UC12
-    UC7 -->|Auto Hire| UC12
-    UC8 -->|Approve| UC12
-    UC9 -->|Approve| UC12
-    UC12 -->|Release| UC10
-
-    System -->|Enforce| UC12
-    System -->|Validate| UC2
-    System -->|Validate| UC5
+    UC1 --- Freelancer
+    UC6 --- Freelancer
+    UC7 --- Freelancer
+    UC5 --- Freelancer
+    UC8 --- Freelancer

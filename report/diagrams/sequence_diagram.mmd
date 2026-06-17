@@ -1,3 +1,21 @@
+%%{init: {'theme': 'base', 'themeVariables': {
+    'actorBkg': '#c8e6c9',
+    'actorBorder': '#388e3c',
+    'actorTextColor': '#1b5e20',
+    'actorLineColor': '#388e3c',
+    'signalColor': '#2e7d32',
+    'signalTextColor': '#333333',
+    'labelBoxBkgColor': '#e8f5e9',
+    'labelBoxBorderColor': '#388e3c',
+    'labelTextColor': '#1b5e20',
+    'noteBkgColor': '#e8f5e9',
+    'noteBorderColor': '#388e3c',
+    'noteTextColor': '#1b5e20',
+    'activationBkgColor': '#a5d6a7',
+    'activationBorderColor': '#2e7d32',
+    'loopTextColor': '#1b5e20',
+    'fontSize': '14px'
+}}}%%
 sequenceDiagram
     participant C as Client
     participant F as Frontend
@@ -7,28 +25,28 @@ sequenceDiagram
     participant B as Blockchain
 
     Note over C,B: Job Creation Flow
-    
+
     C->>F: Open Create Job Form
     F->>C: Display Form
     C->>F: Fill Form Details
     F->>F: Validate Inputs
-    
+
     F->>I: Upload Job Metadata
     I-->>F: Return CID
-    
+
     F->>W: Request Transaction
     W->>C: Confirm + ETH Amount
     C->>W: Approve Transaction
-    
+
     W->>S: CreateJob(CID) + ETH
-    S->>S: Validate msg.value >0
+    S->>S: Validate msg.value > 0
     S->>S: Generate jobID
     S->>S: Create Job Struct
     S->>S: Lock Escrow Funds
-    
+
     S->>B: Store Job State
     S->>B: Emit JobCreated Event
-    
+
     B-->>F: Transaction Confirmed
     F->>C: Show Success Message
     F->>F: Update Job Listings

@@ -1,28 +1,20 @@
-graph TB
-    subgraph External Entities
-        Client[Client User]
-        Freelancer[Freelancer User]
-    end
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '16px', 'lineColor': '#333333'}}}%%
+flowchart LR
+    classDef entity fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,font-weight:bold,font-size:15px
+    classDef process fill:#2e7d32,stroke:#1b5e20,stroke-width:3px,color:#ffffff,font-weight:bold,font-size:16px
 
-    subgraph System["SkillChain System"]
-        Process[Freelance Marketplace DApp]
-    end
+    Client["Client"]:::entity
+    Freelancer["Freelancer"]:::entity
+    ETH["Ethereum\nBlockchain"]:::entity
+    IPFS["IPFS\nStorage"]:::entity
 
-    subgraph DataStores
-        Blockchain[(Ethereum Blockchain)]
-        IPFS[(IPFS Storage)]
-    end
+    SC(["SkillChain\nSystem"]):::process
 
-    Client -->|Job Creation Request| Process
-    Client -->|ETH Deposit| Process
-    Client -->|Approve Proposal| Process
-    Client -->|Mark Complete| Process
-    
-    Freelancer -->|Submit Proposal| Process
-    Freelancer -->|Upload Deliverables| Process
-    Freelancer -->|Mark Complete| Process
-    
-    Process -->|Store Contract State| Blockchain
-    Process -->|Store Metadata| IPFS
-    Process -->|Retrieve Metadata| IPFS
-    Blockchain -->|Read State| Process
+    Client -->|"Job Data & ETH Deposit"| SC
+    SC -->|"Job Status & Confirmations"| Client
+    SC -->|"Payment Release"| Freelancer
+    Freelancer -->|"Proposals & Deliverables"| SC
+    ETH -->|"Contract State"| SC
+    SC -->|"Signed Transactions"| ETH
+    IPFS -->|"Content Retrieval"| SC
+    SC -->|"Metadata Storage"| IPFS

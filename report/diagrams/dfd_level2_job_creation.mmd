@@ -1,9 +1,25 @@
-graph TB
-    Client[Client] -->|Job Details| Validate[Validate Input]
-    Client -->|ETH| Escrow[Lock Escrow Funds]
-    Validate -->|Valid| CreateJob[Create Job Struct]
-    Escrow -->|Funds Locked| CreateJob
-    CreateJob -->|Store| Jobs[(Jobs)]
-    CreateJob -->|Emit| Event[JobCreated Event]
-    Jobs -->|Display| Marketplace[Job Listed]
-    Event -->|Notify| User[User Notification]
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '15px', 'lineColor': '#333333'}}}%%
+flowchart LR
+    classDef entity fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,font-weight:bold,font-size:14px
+    classDef process fill:#2e7d32,stroke:#2e7d32,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:14px
+    classDef store fill:#ffffff,stroke:#388e3c,stroke-width:2px,font-weight:bold,font-size:13px
+
+    Client["Client"]:::entity
+    IPFS["IPFS\nStorage"]:::store
+    D2["D2: Jobs\n& Escrow"]:::store
+
+    P1(("Validate\nInput")):::process
+    P2(("Upload\nto IPFS")):::process
+    P3(("Lock ETH\nin Escrow")):::process
+    P4(("Create\nJob Record")):::process
+    P5(("Emit\nJobCreated")):::process
+
+    Client -->|"Job Details + ETH"| P1
+    P1 -->|"Valid Data"| P2
+    P1 -->|"Valid ETH"| P3
+    P2 -->|"Metadata"| IPFS
+    IPFS -->|"IPFS CID"| P4
+    P3 -->|"Funds Locked"| P4
+    P4 -->|"Store Record"| D2
+    P4 -->|"Trigger"| P5
+    P5 -->|"Confirmation"| Client

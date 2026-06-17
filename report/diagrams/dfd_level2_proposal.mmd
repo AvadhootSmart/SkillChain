@@ -1,49 +1,28 @@
-graph TB
-    subgraph Input
-        Freelancer[Freelancer]
-        ProposalData[Proposal Data<br/>Cover Letter, Bid Amount]
-        JobID[Job ID Reference]
-    end
+%%{init: {'theme': 'default', 'themeVariables': {'fontSize': '15px', 'lineColor': '#333333'}}}%%
+flowchart LR
+    classDef entity fill:#c8e6c9,stroke:#388e3c,stroke-width:2px,font-weight:bold,font-size:14px
+    classDef process fill:#2e7d32,stroke:#2e7d32,stroke-width:4px,color:#ffffff,font-weight:bold,font-size:14px
+    classDef store fill:#ffffff,stroke:#388e3c,stroke-width:2px,font-weight:bold,font-size:13px
 
-    subgraph P3_Proposal["Process 3.0: Proposal Management"]
-        direction TB
-        P3_1[3.1 Validate Job Exists]
-        P3_2[3.2 Check User Not Client]
-        P3_3[3.3 Generate Proposal ID]
-        P3_4[3.4 Create Proposal Struct]
-        P3_5[3.5 Store Proposal]
-        P3_6[3.6 Link to Job]
-        P3_7[3.7 Link to Freelancer]
-        P3_8[3.8 Emit Event]
-    end
+    Freelancer["Freelancer"]:::entity
+    Client["Client"]:::entity
+    IPFS["IPFS\nStorage"]:::store
+    D3["D3:\nProposals"]:::store
+    D2["D2: Jobs\n& Escrow"]:::store
 
-    Freelancer -->|Submit| ProposalData
-    JobID -->|Reference| P3_1
-    ProposalData -->|Input| P3_1
+    P1(("Validate\nJob & Role")):::process
+    P2(("Store\nProposal")):::process
+    P3(("Review &\nApprove")):::process
+    P4(("Hire\nFreelancer")):::process
 
-    P3_1 -->|Valid Job| P3_2
-    P3_2 -->|Is Freelancer| P3_3
-    P3_3 -->|Proposal ID| P3_4
-    P3_4 -->|Struct| P3_5
-    P3_5 -->|Stored| P3_6
-    P3_6 -->|Linked| P3_7
-    P3_7 -->|Updated| P3_8
-
-    P3_5 -->|Write| D3[(D3: Proposals)]
-    P3_6 -->|Append| D6[(D6: Job Proposals)]
-    P3_7 -->|Append| D7[(D7: Freelancer Proposals)]
-
-    subgraph Approval["Approval Flow"]
-        Client[Client]
-        P3_9[3.9 Verify Job Owner]
-        P3_10[3.10 Check Not Approved]
-        P3_11[3.11 Mark Approved]
-        P3_12[3.12 Call Hire Function]
-    end
-
-    D3 -->|Proposal Data| P3_9
-    Client -->|Approve| P3_9
-    P3_9 -->|Is Owner| P3_10
-    P3_10 -->|Not Approved| P3_11
-    P3_11 -->|Updated| P3_12
-    P3_12 -->|Trigger| P2[Job Management<br/>Set Freelancer]
+    Freelancer -->|"Cover Letter + Bid"| P1
+    P1 -->|"Validated"| P2
+    P2 -->|"Metadata"| IPFS
+    IPFS -->|"IPFS CID"| P2
+    P2 -->|"Store CID"| D3
+    D3 -->|"Proposal Data"| P3
+    Client -->|"Approve"| P3
+    P3 -->|"Approved"| P4
+    P4 -->|"Update Job"| D2
+    P4 -->|"Payment"| Freelancer
+    P4 -->|"Notification"| Client
