@@ -4,20 +4,20 @@ import ClientRoot from "@/lib/config";
 import { ThemeProvider } from "next-themes";
 
 export default function RootLayout({
-  children,
+    children,
 }: {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }) {
-  return (
-    <html lang="en">
-      <body suppressHydrationWarning={true}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          <ClientRoot>
-            <Navbar />
-            {children}
-          </ClientRoot>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" suppressHydrationWarning>
+            <body suppressHydrationWarning={true}>
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+                    <ClientRoot>
+                        <Navbar />
+                        {children}
+                    </ClientRoot>
+                </ThemeProvider>
+            </body>
+        </html>
+    );
 }

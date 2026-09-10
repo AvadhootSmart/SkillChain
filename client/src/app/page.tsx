@@ -1,8 +1,9 @@
 "use client";
 import { FeaturesSectionWithHoverEffects } from "@/components/blocks/feature-section-with-hover-effects";
+import { HowItWorks } from "@/components/blocks/how-it-works";
 import Page from "@/components/pageWrapper";
 import { Hero } from "@/components/ui/animated-hero";
-import { DevTestingButtons } from "@/components/dev-testing-buttons";
+import { Footer } from "@/components/footer";
 
 export default function HomePage() {
 
@@ -11,7 +12,8 @@ export default function HomePage() {
       <Page>
         <Hero />
         <FeaturesSectionWithHoverEffects />
-        <DevTestingButtons />
+        <HowItWorks />
+        <Footer />
       </Page>
     </>
   );

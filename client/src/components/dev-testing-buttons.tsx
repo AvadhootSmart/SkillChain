@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { profileContract, jobsContract, proposalsContract } from "@/abi";
 import { uploadJSONToPinata } from "@/lib/pinata";
 import { parseEther } from "viem";
-import { simulateContract, writeContract } from "@wagmi/core";
+import { simulateContract, writeContract, waitForTransactionReceipt } from "@wagmi/core";
 import { config } from "@/providers/provider";
 import { toast } from "sonner";
 import { Loader2, PlusCircle, UserPlus, Wand2, EyeOff, Briefcase, User } from "lucide-react";
@@ -68,6 +68,10 @@ export function DevTestingButtons() {
       });
       const profileHash = await writeContract(config, profileRequest);
       console.log("Profile created:", profileHash);
+
+      // Wait for the profile tx to be mined before sending the next tx,
+      // otherwise the wallet reuses a stale nonce and the second tx is dropped.
+      await waitForTransactionReceipt(config, { hash: profileHash });
 
       // 2. Create Job
       const jobData = {
@@ -134,6 +138,10 @@ export function DevTestingButtons() {
       const profileHash = await writeContract(config, profileRequest);
       console.log("Profile created:", profileHash);
 
+      // Wait for the profile tx to be mined before sending the next tx,
+      // otherwise the wallet reuses a stale nonce and the second tx is dropped.
+      await waitForTransactionReceipt(config, { hash: profileHash });
+
       // 2. Create Proposal (for Job ID 1)
       const proposalData = {
         freelancerName: freelancerData.username,
@@ -164,7 +172,7 @@ export function DevTestingButtons() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+    <div className="flex flex-col gap-2">
       <div className="bg-background/80 backdrop-blur-md p-3 rounded-2xl border border-primary/20 shadow-xl flex flex-col gap-2">
         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground px-2">
           Dev Tools
